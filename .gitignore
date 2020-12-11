@@ -1,0 +1,10 @@
+/**/__Previews
+/**/Debug
+/**/Release
+/**/.launches
+/**/.config
+/**/targetConfigs
+/**/__pycache__
+/**/.idea
+/**/node_modules
+/**/venv
