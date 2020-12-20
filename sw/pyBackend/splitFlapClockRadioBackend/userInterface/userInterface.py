@@ -1,0 +1,47 @@
+import time
+from queue import Queue
+from threading import Thread
+
+from flask_socketio import SocketIO
+
+from splitFlapClockRadioBackend.userInterface.rotary import rotary
+from splitFlapClockRadioBackend.userInterface.switch import switch
+
+
+class UserInterface():
+
+    def __init__(self):
+        # Create VOL rotary
+        vol_rotary = rotary(A=24, B=25, callback=self.vol_rotary_callback)
+
+        # Create VOL switch
+        vol_switch = switch(I=23) # 23
+        vol_switch.setup_switch(long_press=True, sw_short_callback=self.vol_sw_short, sw_long_callback=self.vol_sw_long)
+
+        # Create CTRL rotary
+        #ctl_rotary = rotary(A=12, B=16, G=13, callback=self.ctrl_rotary_callback)
+
+        # Create CTRL switch
+        #ctrl_switch = switch(I=9)
+        #ctrl_switch.setup_switch(long_press=True, sw_short_callback=self.ctrl_sw_short, sw_long_callback=self.ctrl_sw_long)
+
+    def set_sio(self, sio : SocketIO):
+        self.sio = sio
+
+    def vol_rotary_callback(self, direction):
+        print("[UI] VOL_ROTARY:", direction)
+
+    def vol_sw_short(self):
+        print("[UI] VOL_SW SHORT")
+
+    def vol_sw_long(self):
+        print("[UI] VOL_SW LONG")
+
+    def ctrl_rotary_callback(self, direction):
+        print("[UI] CTRL_ROTARY:", direction)
+
+    def ctrl_sw_short(self):
+        print("[UI] VOL_SW SHORT")
+
+    def ctrl_sw_long(self):
+        print("[UI] VOL_SW LONG")
