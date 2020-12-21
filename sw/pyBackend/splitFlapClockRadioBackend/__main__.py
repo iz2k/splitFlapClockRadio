@@ -4,24 +4,11 @@ import time
 
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
-from splitFlapClockRadioBackend.userInterface.rotary import rotary
-from splitFlapClockRadioBackend.userInterface.switch import switch
 from splitFlapClockRadioBackend.userInterface.userInterface import UserInterface
 from splitFlapClockRadioBackend.weatherStation.weatherStationThread import WeatherStationThread
 from splitFlapClockRadioBackend.webServer.webServer import webServerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
 
-
-def vol_rotary_callback(direction):
-    print("[UI] VOL_ROTARY:", direction)
-
-
-def vol_sw_short():
-    print("[UI] VOL_SW SHORT")
-
-
-def vol_sw_long():
-    print("[UI] VOL_SW LONG")
 
 def main():
 
@@ -32,11 +19,8 @@ def main():
 
     args = parser.parse_args()
 
-    #dbCtl = dbController()
+    dbCtl = dbController()
     userInterface = UserInterface()
-
-    while True:
-        time.sleep(1)
 
     # Define threads
     webserverTh = webServerThread(log=False)

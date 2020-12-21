@@ -22,17 +22,10 @@ class rotary:
         self.pi.set_mode(self.Enc_B, pigpio.INPUT)
         self.pi.set_pull_up_down(self.Enc_B, pigpio.PUD_UP)
 
-        # Set fake ground if specified
-        if G is not None:
-            self.pi.set_mode(G, pigpio.OUTPUT)
-            self.pi.write(G, 0)
-
-
         self.pi.callback(self.Enc_A, pigpio.EITHER_EDGE, self.rotary_interrupt)
         self.pi.callback(self.Enc_B, pigpio.EITHER_EDGE, self.rotary_interrupt)
 
-    def rotary_interrupt(self, gpio, level, tim):
-        print('rotary interrpt')
+    def rotary_interrupt(self, gpio, level, tick):
         if gpio == self.Enc_A:
             self.last_A = level
         else:

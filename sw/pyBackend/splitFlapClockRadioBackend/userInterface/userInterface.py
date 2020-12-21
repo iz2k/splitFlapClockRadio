@@ -15,15 +15,15 @@ class UserInterface():
         vol_rotary = rotary(A=24, B=25, callback=self.vol_rotary_callback)
 
         # Create VOL switch
-        vol_switch = switch(I=23) # 23
+        vol_switch = switch(I=23)
         vol_switch.setup_switch(long_press=True, sw_short_callback=self.vol_sw_short, sw_long_callback=self.vol_sw_long)
 
         # Create CTRL rotary
-        #ctl_rotary = rotary(A=12, B=16, G=13, callback=self.ctrl_rotary_callback)
+        ctl_rotary = rotary(A=27, B=22, callback=self.ctrl_rotary_callback)
 
         # Create CTRL switch
-        #ctrl_switch = switch(I=9)
-        #ctrl_switch.setup_switch(long_press=True, sw_short_callback=self.ctrl_sw_short, sw_long_callback=self.ctrl_sw_long)
+        ctrl_switch = switch(I=9)
+        ctrl_switch.setup_switch(long_press=True, sw_short_callback=self.ctrl_sw_short, sw_long_callback=self.ctrl_sw_long)
 
     def set_sio(self, sio : SocketIO):
         self.sio = sio
@@ -41,7 +41,7 @@ class UserInterface():
         print("[UI] CTRL_ROTARY:", direction)
 
     def ctrl_sw_short(self):
-        print("[UI] VOL_SW SHORT")
+        print("[UI] CTRL_SW SHORT")
 
     def ctrl_sw_long(self):
-        print("[UI] VOL_SW LONG")
+        print("[UI] CTRL_SW LONG")
