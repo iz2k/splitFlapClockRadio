@@ -2,7 +2,9 @@
 import argparse
 import time
 
+from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
+from splitFlapClockRadioBackend.mainControl import MainControlThread
 from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
 from splitFlapClockRadioBackend.userInterface.userInterface import UserInterface
 from splitFlapClockRadioBackend.weatherStation.weatherStationThread import WeatherStationThread
@@ -14,20 +16,22 @@ def main():
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="iz2k's split-clock controller.")
-
     parser.add_argument("-port", default='8081', help=" port used for web server")
-
     args = parser.parse_args()
 
     dbCtl = dbController()
     userInterface = UserInterface()
+    audio = Audio()
 
     # Define threads
-    webserverTh = webServerThread(log=False)
     osInfoTh = osInfoThread()
     weatherStationTh = WeatherStationThread(dbCtl=dbCtl)
     lightStripTh = RgbStripThread()
+    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh)
 
+    userInterface.set_mainControlQueue(mainControlTh.queue)
+
+    webserverTh = webServerThread(log=False)
     webserverTh.define_webroutes(weather = weatherStationTh.weatherStation,
                                  dbCtl=dbCtl)
 
@@ -41,11 +45,10 @@ def main():
         osInfoTh.start()
         #weatherStationTh.start()
         lightStripTh.start()
+        mainControlTh.start()
         webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 
-        # Testing
-        lightStripTh.queue.put(['test', 0])
-
+        # Wait while server running
         webserverTh.join()
 
         # When server ends, stop threads

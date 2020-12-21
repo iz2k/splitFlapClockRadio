@@ -22,9 +22,16 @@ class NeoStrip:
         # Intialize the library (must be called once before other functions).
         self.strip.begin()
 
-    def test(self):
+    def clearBuffer(self):
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, Color(0, 0, 0))
 
-        print('start showing strip')  # Press Ctrl+F8 to toggle the breakpoint.
+    def clear(self):
+        self.clearBuffer()
+        self.strip.show()
+
+
+    def test(self):
         for r in range(255):
             for i in range(self.strip.numPixels()):
                 self.strip.setPixelColor(i, Color(r, 0, 0))
@@ -51,5 +58,22 @@ class NeoStrip:
             for i in range(self.strip.numPixels()):
                 self.strip.setPixelColor(i, Color(0, 0, 255 - b))
             self.strip.show()
-        print('end showing strip')  # Press Ctrl+F8 to toggle the breakpoint.
+
+    def vol_update(self, volume):
+        volumePosition = int(volume*(self.strip.numPixels()-1)/100)
+        print(volumePosition)
+        self.clearBuffer()
+        for i in range(volumePosition):
+            self.strip.setPixelColor(i, Color(0, 0, 20))
+
+        # Color up
+        for i in range(23):
+            self.strip.setPixelColor(volumePosition, Color(0, 0, 25+i*10))
+            self.strip.show()
+
+        # Color down
+        for i in range(23):
+            self.strip.setPixelColor(volumePosition, Color(0, 0, 255 - i * 10))
+            self.strip.show()
+
 
