@@ -8,6 +8,7 @@ from flask_socketio import SocketIO
 from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
+from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 
 
 class MainControlThread(Thread):
@@ -18,12 +19,14 @@ class MainControlThread(Thread):
     audio : Audio = None
     lightStripTh : RgbStripThread= None
     sio : SocketIO = None
+    spotifyPlayer : SpotifyPlayer = None
 
-    def __init__(self, dbCtl, audio, lightStripTh):
+    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer):
         Thread.__init__(self)
         self.dbCtl = dbCtl
         self.audio = audio
         self.lightStripTh = lightStripTh
+        self.spotifyPlayer = spotifyPlayer
 
     def start(self):
         Thread.start(self)
@@ -48,7 +51,7 @@ class MainControlThread(Thread):
                 if q_msg == 'quit':
                     run_app=False
                 if q_msg == 'startup':
-                    self.audio.say_text('Iniciando reloj.', lang='es')
+                    #self.audio.say_text('Iniciando reloj.', lang='es')
                     self.lightStripTh.test()
                 if q_msg == 'volume_rotary':
                     if self.queue.empty():
@@ -67,14 +70,16 @@ class MainControlThread(Thread):
                 if q_msg == 'control_rotary':
                     print("[MAIN] CTL_ROTARY " + str(q_data))
                     if q_data == 1:
-                        self.audio.volume_up()
+                        self.spotifyPlayer.next()
+                        self.audio.play('beep')
                     if q_data == -1:
-                        self.audio.volume_down()
+                        self.spotifyPlayer.previous()
+                        self.audio.play('beep')
                 if q_msg == 'control_switch':
                     print("[MAIN] CTL_SWITCH " + str(q_data))
                     if q_data == 'short':
-                        pass
+                        self.spotifyPlayer.play()
                     if q_data == 'long':
-                        pass
+                        self.spotifyPlayer.pause()
 
             time.sleep(0.1)

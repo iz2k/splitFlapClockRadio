@@ -8,7 +8,7 @@ from splitFlapClockRadioBackend.userInterface.rotary import rotary
 from splitFlapClockRadioBackend.userInterface.switch import switch
 
 
-class UserInterface():
+class UserInterface:
 
     mainControlQueue = None
 

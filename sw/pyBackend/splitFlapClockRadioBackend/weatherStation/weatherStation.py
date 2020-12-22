@@ -21,7 +21,7 @@ class WeatherStation:
 
     def __init__(self, dbctl : dbController):
         self.loadConfig()
-        self.printConfig()
+        #self.printConfig()
         self.bme = SimpleBME680()
         self.sgp = SimpleSGP30([int(self.config['baselineEco2']), int(self.config['baselineTvoc'])])
         self.openWeather = OpenWeatherMap(apiKey=self.config['openWeatherApi'],
