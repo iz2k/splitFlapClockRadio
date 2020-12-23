@@ -25,3 +25,8 @@ def stop_service(service):
     print('Stopping ' + service + ' service')
     cmd = 'sudo service ' + service + ' stop'
     subprocess.run(cmd.split(), capture_output=True)
+
+def execute(cmd):
+    p = subprocess.Popen(cmd.split(), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    output, error = p.communicate()
+    return output.decode("utf-8")

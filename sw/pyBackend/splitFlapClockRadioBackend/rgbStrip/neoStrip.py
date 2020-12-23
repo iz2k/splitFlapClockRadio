@@ -61,7 +61,6 @@ class NeoStrip:
 
     def vol_update(self, volume):
         volumePosition = int(volume*(self.strip.numPixels()-1)/100)
-        print(volumePosition)
         self.clearBuffer()
         for i in range(volumePosition):
             self.strip.setPixelColor(i, Color(0, 0, 20))

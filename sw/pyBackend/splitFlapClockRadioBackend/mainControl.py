@@ -55,28 +55,23 @@ class MainControlThread(Thread):
                     self.lightStripTh.test()
                 if q_msg == 'volume_rotary':
                     if self.queue.empty():
-                        print("[MAIN] VOL_ROTARY " + str(q_data))
                         if q_data == 1:
                             self.audio.volume_up()
                         if q_data == -1:
                             self.audio.volume_down()
                         self.lightStripTh.vol_update(self.audio.volume)
                 if q_msg == 'volume_switch':
-                    print("[MAIN] VOL_SWITCH " + str(q_data))
                     if q_data == 'short':
                         pass
                     if q_data == 'long':
                         pass
                 if q_msg == 'control_rotary':
-                    print("[MAIN] CTL_ROTARY " + str(q_data))
+                    self.audio.play('beep')
                     if q_data == 1:
                         self.spotifyPlayer.next()
-                        self.audio.play('beep')
                     if q_data == -1:
                         self.spotifyPlayer.previous()
-                        self.audio.play('beep')
                 if q_msg == 'control_switch':
-                    print("[MAIN] CTL_SWITCH " + str(q_data))
                     if q_data == 'short':
                         self.spotifyPlayer.play()
                     if q_data == 'long':

@@ -1,28 +1,36 @@
 import subprocess
 
+from splitFlapClockRadioBackend.tools.osTools import execute
+
+
 class SpotifyPlayer:
+
+	currentTrack = 'None'
 
 	def __init__(self):
 		self.set_local_device()
 		self.pause()
 
 	def set_local_device(self):
-		print('[spotify] Setting Spotify device to Raspotify.')
-		raw_cmd = '/home/pi/.local/bin/spotify device -s raspotify'
-		subprocess.call(raw_cmd, shell=True)
+		output=execute('/home/pi/.local/bin/spotify device -s Split-Flap-Clock-Radio')
+		print('[spotify] Setting Spotify device to Raspotify: ' + output.splitlines()[0])
 
 	def pause(self):
-		raw_cmd = '/home/pi/.local/bin/spotify pause'
-		subprocess.call(raw_cmd, shell=True)
+		output=execute('/home/pi/.local/bin/spotify pause')
+		self.currentTrack = output.splitlines()[1].lstrip()
+		print('[spotify] PAUSE: ' + self.currentTrack)
 
 	def play(self):
-		raw_cmd = '/home/pi/.local/bin/spotify play'
-		subprocess.call(raw_cmd, shell=True)
+		output=execute('/home/pi/.local/bin/spotify play')
+		self.currentTrack = output.splitlines()[1].lstrip()
+		print('[spotify] PLAY: ' + self.currentTrack)
 
 	def next(self):
-		raw_cmd = '/home/pi/.local/bin/spotify next'
-		subprocess.call(raw_cmd, shell=True)
+		output=execute('/home/pi/.local/bin/spotify next')
+		self.currentTrack = output.splitlines()[1].lstrip()
+		print('[spotify] NEXT: ' + self.currentTrack)
 
 	def previous(self):
-		raw_cmd = '/home/pi/.local/bin/spotify previous'
-		subprocess.call(raw_cmd, shell=True)
+		output=execute('/home/pi/.local/bin/spotify previous')
+		self.currentTrack = output.splitlines()[1].lstrip()
+		print('[spotify] PREVIOUS: ' + self.currentTrack)

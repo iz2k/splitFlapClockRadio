@@ -14,7 +14,6 @@ class Audio:
         self.mixer = alsaaudio.Mixer('Master')
         self.volume = self.mixer.getvolume()[0]
         self.bindir = os.path.dirname(os.path.realpath(__file__))
-        print(self.volume)
 
     def play(self, wavfile):
         # Open PCM file
