@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 import time
 from queue import Queue
 from threading import Thread
@@ -7,6 +6,7 @@ from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
+from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 
@@ -20,13 +20,15 @@ class MainControlThread(Thread):
     lightStripTh : RgbStripThread= None
     sio : SocketIO = None
     spotifyPlayer : SpotifyPlayer = None
+    radioTunerTh : RadioTunerThread = None
 
-    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer):
+    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh):
         Thread.__init__(self)
         self.dbCtl = dbCtl
         self.audio = audio
         self.lightStripTh = lightStripTh
         self.spotifyPlayer = spotifyPlayer
+        self.radioTunerTh = radioTunerTh
 
     def start(self):
         Thread.start(self)
@@ -68,13 +70,17 @@ class MainControlThread(Thread):
                 if q_msg == 'control_rotary':
                     self.audio.play('beep')
                     if q_data == 1:
-                        self.spotifyPlayer.next()
+                        #self.spotifyPlayer.next()
+                        self.radioTunerTh.next()
                     if q_data == -1:
-                        self.spotifyPlayer.previous()
+                        #self.spotifyPlayer.previous()
+                        self.radioTunerTh.previous()
                 if q_msg == 'control_switch':
                     if q_data == 'short':
-                        self.spotifyPlayer.play()
+                        #self.spotifyPlayer.play()
+                        self.radioTunerTh.play(97.2)
                     if q_data == 'long':
-                        self.spotifyPlayer.pause()
+                        #self.spotifyPlayer.pause()
+                        self.radioTunerTh.stop()
 
             time.sleep(0.1)

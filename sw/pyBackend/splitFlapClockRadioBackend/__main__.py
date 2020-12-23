@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import argparse
-import time
 
 from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.mainControl import MainControlThread
 from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
+from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 from splitFlapClockRadioBackend.userInterface.userInterface import UserInterface
 from splitFlapClockRadioBackend.weatherStation.weatherStationThread import WeatherStationThread
@@ -29,7 +29,8 @@ def main():
     osInfoTh = osInfoThread()
     weatherStationTh = WeatherStationThread(dbCtl=dbCtl)
     lightStripTh = RgbStripThread()
-    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer)
+    radioTunerTh = RadioTunerThread()
+    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh)
 
     userInterface.set_mainControlQueue(mainControlTh.queue)
 
@@ -47,6 +48,7 @@ def main():
         osInfoTh.start()
         #weatherStationTh.start()
         lightStripTh.start()
+        radioTunerTh.start()
         mainControlTh.start()
         webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 
