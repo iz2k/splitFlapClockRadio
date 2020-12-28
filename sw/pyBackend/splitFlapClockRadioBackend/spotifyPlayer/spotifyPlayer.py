@@ -17,7 +17,10 @@ class SpotifyPlayer:
 
 	def pause(self):
 		output=execute('/home/pi/.local/bin/spotify pause')
-		self.currentTrack = output.splitlines()[1].lstrip()
+		if len(output.splitlines())>0:
+			self.currentTrack = output.splitlines()[1].lstrip()
+		else:
+			self.currentTrack = 'N/A'
 		print('[spotify] PAUSE: ' + self.currentTrack)
 
 	def play(self):

@@ -9,14 +9,23 @@ struct StepperDef
     GpoDef gpoDefs[4];
 };
 
+typedef enum {
+    ClockWise,
+    AntiClockWise
+} StepperDirection;
+
 class Stepper {
   private:
     Gpo gpo[4];
+    StepperDirection direction;
+    uint8_t idxStep;
 
   public:
     Stepper();
-    Stepper(StepperDef);
+    Stepper(StepperDef, StepperDirection);
     void test();
+    void move();
+    void stop();
 };
 
 
