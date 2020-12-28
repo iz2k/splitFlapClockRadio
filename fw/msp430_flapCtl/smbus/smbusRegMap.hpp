@@ -19,7 +19,7 @@ struct SmbusRegister
 };
 
 
-void defineSmbusRegisterMap(Stepper, Stepper, Stepper);
+void defineSmbusRegisterMap(Stepper*, Stepper*, Stepper*);
 
 void addSmbusRegister(SmbusRegister);
 

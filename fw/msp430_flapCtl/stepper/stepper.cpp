@@ -16,7 +16,7 @@ Stepper::Stepper(StepperDef stepperGpoDefs, StepperDirection stepperDirection,
     this->pHallThreshold = hall_threshold;
     this->pHallDigit = hall_digit;
     this->currentIR = 0;
-    this->currentHall = 0;
+    this->currentHall = 11;
 };
 
 void Stepper::test() {
@@ -57,3 +57,18 @@ void Stepper::stop() {
     this->idxStep=0;
 };
 
+void Stepper::updateIR(uint16_t newIR)
+{
+    this->currentIR = newIR;
+}
+
+void Stepper::updateHall(uint16_t newHall)
+{
+    this->currentHall = newHall;
+}
+
+void Stepper::run()
+{
+    __delay_cycles(10);
+    //this->move();
+}

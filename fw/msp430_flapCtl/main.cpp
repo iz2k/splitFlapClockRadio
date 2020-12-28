@@ -1,10 +1,12 @@
 #include <msp430.h>
 #include <board.hpp>
+#include <detector/adc.h>
 #include <smbus/smbusSlave.hpp>
 #include <smbus/smbusRegMap.hpp>
 #include <system/cs.hpp>
 #include <system/sysTimer.hpp>
 #include <stepper/stepper.hpp>
+#include <detector/sensor.h>
 
 #define VAR_DECLS
 #include <nvm/nvm.hpp>
@@ -25,6 +27,12 @@ int main(void)
     initCS();
     initSysTimer();
 
+    // Create ADC controller
+    Adc adc = Adc();
+
+    // Create Sensor controller
+    Sensor sensor = Sensor();
+
     // Create stepper objects
     stepperHH = Stepper(hhStepperDef, ClockWise,
                         &hh_ir_threshold, &hh_hall_threshold, &hh_hall_digit);
@@ -34,7 +42,7 @@ int main(void)
                         &ww_ir_threshold, &ww_hall_threshold, &ww_hall_digit);
 
     // Register SMBUS map
-    defineSmbusRegisterMap(stepperHH, stepperMM, stepperWW);
+    defineSmbusRegisterMap(&stepperHH, &stepperMM, &stepperWW);
 
     // Initialize SMBus slave
     initSmbusSlave();
@@ -45,7 +53,6 @@ int main(void)
     // Enable Global Interrupts
     __bis_SR_register(GIE);
 
-    int tmp=0;
     // Endless loop
     while(true)
     {
@@ -54,18 +61,21 @@ int main(void)
             // Deassert flag
             flagSysTimer = false;
 
-            if(tmp++<0){
-                stepperHH.move();
-                stepperMM.move();
-                stepperWW.move();
-            }else if(tmp<2000){
-                stepperHH.stop();
-                stepperMM.stop();
-                stepperWW.stop();
+            // Update ADC
+            sensor.enableSensorAll();
+            __delay_cycles(10000);
+            stepperHH.updateHall(adc.measChannel(4));
+            stepperHH.updateIR(adc.measChannel(5));
+            stepperMM.updateHall(adc.measChannel(6));
+            stepperMM.updateIR(adc.measChannel(7));
+            stepperWW.updateHall(adc.measChannel(0));
+            stepperWW.updateIR(adc.measChannel(1));
+            sensor.disableSensorAll();
 
-            }else{
-                tmp=0;
-            }
+            // Run steppers
+            stepperHH.run();
+            stepperMM.run();
+            stepperWW.run();
         }
 
     }

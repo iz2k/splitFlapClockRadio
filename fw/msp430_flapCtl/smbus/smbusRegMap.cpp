@@ -13,7 +13,7 @@
 SmbusRegister smbusRegisters[MAX_SMB_REGS];
 
 
-void defineSmbusRegisterMap(Stepper stpHH, Stepper stpMM, Stepper stpWW)
+void defineSmbusRegisterMap(Stepper *stpHH, Stepper *stpMM, Stepper *stpWW)
 {
     /* FW VERSION */
     addSmbusRegister({
@@ -39,27 +39,27 @@ void defineSmbusRegisterMap(Stepper stpHH, Stepper stpMM, Stepper stpWW)
 
     addSmbusRegister({
         .smbusAddress=4,
-        .mcuAddress=(void*) &stpHH.currentDigit,
+        .mcuAddress=(void*) &(*stpHH).currentDigit,
         .length=1});
 
     addSmbusRegister({
         .smbusAddress=5,
-        .mcuAddress=(void*) &stpHH.desiredDigit,
+        .mcuAddress=(void*) &(*stpHH).desiredDigit,
         .length=1});
 
     addSmbusRegister({
         .smbusAddress=6,
-        .mcuAddress=(void*) &stpHH.currentIR,
+        .mcuAddress=(void*) &(*stpHH).currentIR,
         .length=2});
 
     addSmbusRegister({
         .smbusAddress=7,
-        .mcuAddress=(void*) &stpHH.currentHall,
+        .mcuAddress=(void*) &(*stpHH).currentHall,
         .length=2});
 
     addSmbusRegister({
         .smbusAddress=8,
-        .mcuAddress=(void*) &stpHH.syncTrigger,
+        .mcuAddress=(void*) &(*stpHH).syncTrigger,
         .length=1});
 
     /* MM */
@@ -80,27 +80,27 @@ void defineSmbusRegisterMap(Stepper stpHH, Stepper stpMM, Stepper stpWW)
 
     addSmbusRegister({
         .smbusAddress=14,
-        .mcuAddress=(void*) &stpMM.currentDigit,
+        .mcuAddress=(void*) &(*stpMM).currentDigit,
         .length=1});
 
     addSmbusRegister({
         .smbusAddress=15,
-        .mcuAddress=(void*) &stpMM.desiredDigit,
+        .mcuAddress=(void*) &(*stpMM).desiredDigit,
         .length=1});
 
     addSmbusRegister({
         .smbusAddress=16,
-        .mcuAddress=(void*) &stpMM.currentIR,
+        .mcuAddress=(void*) &(*stpMM).currentIR,
         .length=2});
 
     addSmbusRegister({
         .smbusAddress=17,
-        .mcuAddress=(void*) &stpMM.currentHall,
+        .mcuAddress=(void*) &(*stpMM).currentHall,
         .length=2});
 
     addSmbusRegister({
         .smbusAddress=18,
-        .mcuAddress=(void*) &stpMM.syncTrigger,
+        .mcuAddress=(void*) &(*stpMM).syncTrigger,
         .length=1});
 
     /* WW */
@@ -121,27 +121,27 @@ void defineSmbusRegisterMap(Stepper stpHH, Stepper stpMM, Stepper stpWW)
 
     addSmbusRegister({
         .smbusAddress=24,
-        .mcuAddress=(void*) &stpWW.currentDigit,
+        .mcuAddress=(void*) &(*stpWW).currentDigit,
         .length=1});
 
     addSmbusRegister({
         .smbusAddress=25,
-        .mcuAddress=(void*) &stpWW.desiredDigit,
+        .mcuAddress=(void*) &(*stpWW).desiredDigit,
         .length=1});
 
     addSmbusRegister({
         .smbusAddress=26,
-        .mcuAddress=(void*) &stpWW.currentIR,
+        .mcuAddress=(void*) &(*stpWW).currentIR,
         .length=2});
 
     addSmbusRegister({
         .smbusAddress=27,
-        .mcuAddress=(void*) &stpWW.currentHall,
+        .mcuAddress=(void*) &(*stpWW).currentHall,
         .length=2});
 
     addSmbusRegister({
         .smbusAddress=28,
-        .mcuAddress=(void*) &stpWW.syncTrigger,
+        .mcuAddress=(void*) &(*stpWW).syncTrigger,
         .length=1});
 }
 

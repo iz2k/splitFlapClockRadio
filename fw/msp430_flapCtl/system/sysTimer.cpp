@@ -9,7 +9,7 @@
 #include <system/sysTimer.hpp>
 
 #define SYSTIMER_SRC_FREQ       32768
-#define SYSTIMER_PERIOD_MS      1
+#define SYSTIMER_PERIOD_MS      3
 
 bool flagSysTimer;
 
