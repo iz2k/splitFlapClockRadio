@@ -21,6 +21,8 @@ class Stepper {
     uint8_t idxStep;
 
   public:
+    uint8_t currentDigit;
+    uint8_t desiredDigit;
     Stepper();
     Stepper(StepperDef, StepperDirection);
     void test();

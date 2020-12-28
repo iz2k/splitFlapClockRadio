@@ -31,7 +31,7 @@ int main(void)
     stepperWW = Stepper(wwStepperDef, ClockWise);
 
     // Register SMBUS map
-    defineSmbusRegisterMap();
+    defineSmbusRegisterMap(stepperHH, stepperMM, stepperWW);
 
     // Initialize SMBus slave
     initSmbusSlave();

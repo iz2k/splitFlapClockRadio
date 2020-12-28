@@ -3,7 +3,9 @@ MSP430_REGS = {
     '1': {'name': 'FW_VERSION', 'type': 'msp43xFwVersion', 'len' : 2},
     '2': {'name': 'HH_HALL_THRESHOLD', 'type': int, 'len' : 2},
     '3': {'name': 'HH_HALL_DIGIT', 'type': int, 'len' : 1},
-    '4': {'name': 'HH_IR_THRESHOLD', 'type': int, 'len' : 2}
+    '4': {'name': 'HH_IR_THRESHOLD', 'type': int, 'len' : 2},
+    '5': {'name': 'HH_CURRENT_DIGIT', 'type': int, 'len' : 1},
+    '6': {'name': 'HH_DESIRED_DIGIT', 'type': int, 'len' : 1}
 }
 
 

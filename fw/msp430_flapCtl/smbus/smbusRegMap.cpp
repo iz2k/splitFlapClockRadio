@@ -5,6 +5,7 @@
  *      Author: IbonZalbide
  */
 #include <smbus/smbusRegMap.hpp>
+#include <stepper/stepper.hpp>
 #include <nvm/nvm.hpp>
 
 #define MAX_SMB_REGS 32
@@ -12,7 +13,7 @@
 SmbusRegister smbusRegisters[MAX_SMB_REGS];
 
 
-void defineSmbusRegisterMap()
+void defineSmbusRegisterMap(Stepper stpHH, Stepper stpMM, Stepper stpWW)
 {
     addSmbusRegister({
         .smbusAddress=1,
@@ -33,6 +34,16 @@ void defineSmbusRegisterMap()
         .smbusAddress=4,
         .mcuAddress=(void*) &hh_ir_threshold,
         .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=5,
+        .mcuAddress=(void*) &stpHH.currentDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=6,
+        .mcuAddress=(void*) &stpHH.desiredDigit,
+        .length=1});
 }
 
 void addSmbusRegister(SmbusRegister smbReg)

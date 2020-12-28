@@ -9,6 +9,7 @@
 #define SMBUS_SMBUSREGMAP_HPP_
 
 #include <stdint.h>
+#include <stepper/stepper.hpp>
 
 struct SmbusRegister
 {
@@ -18,7 +19,7 @@ struct SmbusRegister
 };
 
 
-void defineSmbusRegisterMap();
+void defineSmbusRegisterMap(Stepper, Stepper, Stepper);
 
 void addSmbusRegister(SmbusRegister);
 

@@ -9,6 +9,8 @@ Stepper::Stepper(StepperDef stepperGpoDefs, StepperDirection stepperDirection) {
     }
     this->idxStep=0;
     this->direction = stepperDirection;
+    this->currentDigit = 0;
+    this->desiredDigit = 1;
 };
 
 void Stepper::test() {
