@@ -1,3 +1,7 @@
+import time
+from enum import Enum
+
+import pigpio
 import smbus
 from termcolor import colored
 
@@ -7,9 +11,23 @@ from splitFlapClockRadioBackend.tools.menuTools import getKeyFromDictionarySubit
 
 class smbusMsp430:
 
+    class HW(Enum):
+        I2C_ADDRESS=0x16
+        RST_GPIO = 12
+
     def __init__(self, SMBusChannel=1, i2cAddress=0x16):
         self.bus = smbus.SMBus(SMBusChannel)
         self.i2c_address = i2cAddress
+
+        # Set HW clock to feed REFCLK
+        self.pi = pigpio.pi()
+
+        # Reset the device
+        self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.OUTPUT)
+        self.pi.write(self.HW.RST_GPIO.value, 0)
+        time.sleep(0.1)
+        self.pi.write(self.HW.RST_GPIO.value, 1)
+        time.sleep(0.1)
 
     def read_register(self, key):
         data = self.bus.read_i2c_block_data(self.i2c_address, int(key) + SMBUS_OPS['SMB_OP_READ'], MSP430_REGS[key]['len'])

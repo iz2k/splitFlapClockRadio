@@ -26,9 +26,12 @@ int main(void)
     initSysTimer();
 
     // Create stepper objects
-    stepperHH = Stepper(hhStepperDef, ClockWise);
-    stepperMM = Stepper(mmStepperDef, AntiClockWise);
-    stepperWW = Stepper(wwStepperDef, ClockWise);
+    stepperHH = Stepper(hhStepperDef, ClockWise,
+                        &hh_ir_threshold, &hh_hall_threshold, &hh_hall_digit);
+    stepperMM = Stepper(mmStepperDef, AntiClockWise,
+                        &mm_ir_threshold, &mm_hall_threshold, &mm_hall_digit);
+    stepperWW = Stepper(wwStepperDef, ClockWise,
+                        &ww_ir_threshold, &ww_hall_threshold, &ww_hall_digit);
 
     // Register SMBUS map
     defineSmbusRegisterMap(stepperHH, stepperMM, stepperWW);

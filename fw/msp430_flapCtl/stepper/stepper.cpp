@@ -3,7 +3,8 @@
 Stepper::Stepper() {
 };
 
-Stepper::Stepper(StepperDef stepperGpoDefs, StepperDirection stepperDirection) {
+Stepper::Stepper(StepperDef stepperGpoDefs, StepperDirection stepperDirection,
+                 uint16_t *ir_threshold, uint16_t *hall_threshold, uint8_t *hall_digit) {
     for(int i=3; i>=0; i--){
         this->gpo[i] = Gpo(stepperGpoDefs.gpoDefs[i]);
     }
@@ -11,6 +12,11 @@ Stepper::Stepper(StepperDef stepperGpoDefs, StepperDirection stepperDirection) {
     this->direction = stepperDirection;
     this->currentDigit = 0;
     this->desiredDigit = 1;
+    this->pIrThreshold = ir_threshold;
+    this->pHallThreshold = hall_threshold;
+    this->pHallDigit = hall_digit;
+    this->currentIR = 0;
+    this->currentHall = 0;
 };
 
 void Stepper::test() {

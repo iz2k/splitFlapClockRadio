@@ -118,7 +118,7 @@ class Si4731:
         self.pi.set_mode(self.HW.SEN_GPIO.value, pigpio.OUTPUT)
         self.pi.write(self.HW.RST_GPIO.value, 0)
         self.pi.write(self.HW.SEN_GPIO.value, 1)
-        self.logger.debug("RST adn SEN GPIOs initialized.")
+        self.logger.debug("RST and SEN GPIOs initialized.")
 
         self.pi.hardware_clock(self.HW.RECLK_GPIO.value, self.HW.REFCLK_FREQ.value)
         self.logger.debug("REFCLK enabled @" + str(self.HW.REFCLK_FREQ.value) + 'Hz')

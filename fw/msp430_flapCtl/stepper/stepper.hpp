@@ -21,13 +21,25 @@ class Stepper {
     uint8_t idxStep;
 
   public:
+    // Properties
     uint8_t currentDigit;
     uint8_t desiredDigit;
+    uint16_t currentIR;
+    uint16_t *pIrThreshold;
+    uint16_t currentHall;
+    uint16_t *pHallThreshold;
+    uint8_t *pHallDigit;
+    uint8_t syncTrigger;
+
+    // Methods
     Stepper();
-    Stepper(StepperDef, StepperDirection);
+    Stepper(StepperDef, StepperDirection, uint16_t*, uint16_t*, uint8_t*);
     void test();
     void move();
     void stop();
+    void updateIR(uint16_t);
+    void updateHall(uint16_t);
+    void run();
 };
 
 
