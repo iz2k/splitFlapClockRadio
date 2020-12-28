@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include <board.hpp>
 #include <smbus/smbusSlave.hpp>
+#include <smbus/smbusRegMap.hpp>
 #include <system/cs.hpp>
 #include <system/sysTimer.hpp>
 #include <stepper/stepper.hpp>
@@ -10,6 +11,7 @@ extern bool flagSysTimer;
 Stepper stepperHH;
 Stepper stepperMM;
 Stepper stepperWW;
+
 
 int main(void)
 {
@@ -24,6 +26,9 @@ int main(void)
     stepperHH = Stepper(hhStepperDef, ClockWise);
     stepperMM = Stepper(mmStepperDef, AntiClockWise);
     stepperWW = Stepper(wwStepperDef, ClockWise);
+
+    // Register SMBUS map
+    defineSmbusRegisterMap();
 
     // Initialize SMBus slave
     initSmbusSlave();

@@ -6,16 +6,12 @@
  */
 #include <msp430.h>
 #include <smbus/smbusSlave.hpp>
+#include <smbus/smbusRegMap.hpp>
 
-const uint16_t  reg_fw_version = 1;
-
-uint16_t  hh_hall_threshold = 20;
-uint8_t  hh_hall_digit = 0;
-uint16_t  hh_ir_threshold = 150;
 
 /* Used to track the state of the software state machine*/
 i2cStateMachine slaveState = RX_REG_ADDRESS_MODE;
-smbusRegMap  smbus_reg;
+uint8_t  smbus_reg;
 smbusOperation  smbus_op;
 
 /* The Register Address/Command to use*/
@@ -64,22 +60,22 @@ void I2C_Slave_ProcessCMD(uint8_t cmd)
     smbusOperation op = (smbusOperation) (cmd & SMB_OP_MASK);
 
     // Extract addess from cmd
-    smbusRegMap address = (smbusRegMap) (cmd & ~SMB_OP_MASK);
+    uint8_t address = (cmd & ~SMB_OP_MASK);
 
     switch(op)
     {
     case SMB_OP_READ:
         slaveState = TX_DATA_MODE;
-        TXByteCtr = get_reg_len(address);
+        TXByteCtr = getRegLength(address);
         // Fill out the TransmitBuffer
-        TransmitBuffer = get_reg_pointer(address);
+        TransmitBuffer = getRegPointer(address);
         // Switch to TX
         UCB0IE &= ~UCRXIE;
         UCB0IE |= UCTXIE;
         break;
     case SMB_OP_WRITE:
         slaveState = RX_DATA_MODE;
-        RXByteCtr = get_reg_len(address);
+        RXByteCtr = getRegLength(address);
         // Switch to RX
         UCB0IE &= ~UCTXIE;
         UCB0IE |= UCRXIE;
@@ -90,37 +86,6 @@ void I2C_Slave_ProcessCMD(uint8_t cmd)
 
 }
 
-uint8_t *get_reg_pointer(smbusRegMap address)
-{
-    switch (address)
-    {
-    case SMB_FW_VERSION:
-        return (uint8_t*) &reg_fw_version;
-    case SMB_HH_HALL_THRESHOLD:
-        return (uint8_t*) &hh_hall_threshold;
-    case SMB_HH_HALL_DIGIT:
-        return (uint8_t*) &hh_hall_digit;
-    case SMB_HH_IR_THRESHOLD:
-        return (uint8_t*) &hh_ir_threshold;
-    default:
-        return 0;
-    }
-}
-
-uint8_t get_reg_len(smbusRegMap address)
-{
-    switch (address)
-    {
-    case SMB_FW_VERSION:
-    case SMB_HH_HALL_THRESHOLD:
-    case SMB_HH_IR_THRESHOLD:
-        return 2;
-    case SMB_HH_HALL_DIGIT:
-        return 1;
-    default:
-        return 0;
-    }
-}
 
 /* The transaction between the slave and master is completed. Uses cmd
  * to do post transaction operations. (Place data from ReceiveBuffer
@@ -135,14 +100,14 @@ void I2C_Slave_TransactionDone(uint8_t cmd)
     smbusOperation op = (smbusOperation) (cmd & SMB_OP_MASK);
 
     // Extract addess from cmd
-    smbusRegMap address = (smbusRegMap) (cmd & ~SMB_OP_MASK);
+    uint8_t address = (cmd & ~SMB_OP_MASK);
 
     switch(op)
     {
     case SMB_OP_READ: // DO NOTHING FOR NOW
         break;
     case SMB_OP_WRITE: // UPDATE REGISTER
-        CopyArray(ReceiveBuffer, get_reg_pointer(address) , get_reg_len(address));
+        CopyArray(ReceiveBuffer, getRegPointer(address) , getRegLength(address));
         break;
     }
 

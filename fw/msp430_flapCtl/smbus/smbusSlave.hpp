@@ -13,13 +13,6 @@
 #define I2C_BUFFER_LENGTH 6
 #define I2C_SLAVE_ADDR 0x16
 
-typedef enum {
-    SMB_NONE                = 0,
-    SMB_FW_VERSION          = 1,
-    SMB_HH_HALL_THRESHOLD   = 2,
-    SMB_HH_HALL_DIGIT       = 3,
-    SMB_HH_IR_THRESHOLD     = 4
-} smbusRegMap;
 
 typedef enum{
     SMB_OP_NONE     = 0b00000000,
@@ -45,10 +38,6 @@ void initSmbusSlave();
 void I2C_Slave_ProcessCMD(uint8_t cmd);
 void I2C_Slave_TransactionDone(uint8_t cmd);
 void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count);
-
-uint8_t *get_reg_pointer(smbusRegMap address);
-uint8_t get_reg_len(smbusRegMap address);
-
 
 
 #endif /* DRIVERS_SMBUS_SLAVE_H_ */
