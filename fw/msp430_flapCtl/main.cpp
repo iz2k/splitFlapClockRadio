@@ -6,6 +6,9 @@
 #include <system/sysTimer.hpp>
 #include <stepper/stepper.hpp>
 
+#define VAR_DECLS
+#include <nvm/nvm.hpp>
+
 extern bool flagSysTimer;
 
 Stepper stepperHH;

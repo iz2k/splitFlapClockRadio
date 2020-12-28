@@ -5,15 +5,11 @@
  *      Author: IbonZalbide
  */
 #include <smbus/smbusRegMap.hpp>
+#include <nvm/nvm.hpp>
 
 #define MAX_SMB_REGS 32
 
 SmbusRegister smbusRegisters[MAX_SMB_REGS];
-
-const uint16_t  reg_fw_version = 1;
-uint16_t  hh_hall_threshold = 20;
-uint8_t  hh_hall_digit = 0;
-uint16_t  hh_ir_threshold = 150;
 
 
 void defineSmbusRegisterMap()
