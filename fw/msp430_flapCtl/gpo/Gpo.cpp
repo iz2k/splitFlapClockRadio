@@ -1,13 +1,13 @@
-#include <stepper/gpo.hpp>
+#include <gpo/Gpo.h>
 
 
 Gpo::Gpo() {
 };
 
-Gpo::Gpo(GpoDef gpoDef) {
-    this->pDir = gpoDef.pDir;
-    this->pOut = gpoDef.pOut;
-    this->pBit = gpoDef.pBit;
+Gpo::Gpo(const GpoDef *gpoDef) {
+    this->pDir = (*gpoDef).pDir;
+    this->pOut = (*gpoDef).pOut;
+    this->pBit = (*gpoDef).pBit;
 
     //Set pin to output direction
     *this->pDir |= this->pBit;

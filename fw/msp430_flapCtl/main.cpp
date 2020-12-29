@@ -1,22 +1,14 @@
 #include <msp430.h>
-#include <board.hpp>
-#include <detector/adc.h>
-#include <smbus/smbusSlave.hpp>
-#include <smbus/smbusRegMap.hpp>
-#include <system/cs.hpp>
-#include <system/sysTimer.hpp>
-#include <stepper/stepper.hpp>
-#include <detector/sensor.h>
+#include <board.h>
+#include <system/cs.h>
+#include <system/sysTimer.h>
+#include <adc/Adc.h>
+#include <smbus/smbusSlave.h>
+#include <splitFlap/SplitFlap.h>
 
-#define VAR_DECLS
-#include <nvm/nvm.hpp>
 
+void defineSmbusRegisterMap(SplitFlap*, SplitFlap*, SplitFlap*);
 extern bool flagSysTimer;
-
-Stepper stepperHH;
-Stepper stepperMM;
-Stepper stepperWW;
-
 
 int main(void)
 {
@@ -30,19 +22,13 @@ int main(void)
     // Create ADC controller
     Adc adc = Adc();
 
-    // Create Sensor controller
-    Sensor sensor = Sensor();
-
     // Create stepper objects
-    stepperHH = Stepper(hhStepperDef, ClockWise,
-                        &hh_ir_threshold, &hh_hall_threshold, &hh_hall_digit);
-    stepperMM = Stepper(mmStepperDef, AntiClockWise,
-                        &mm_ir_threshold, &mm_hall_threshold, &mm_hall_digit);
-    stepperWW = Stepper(wwStepperDef, ClockWise,
-                        &ww_ir_threshold, &ww_hall_threshold, &ww_hall_digit);
+    SplitFlap hhSplitFlap = SplitFlap(&hhSplitFlapDef, &adc);
+    SplitFlap mmSplitFlap = SplitFlap(&mmSplitFlapDef, &adc);
+    SplitFlap wwSplitFlap = SplitFlap(&wwSplitFlapDef, &adc);
 
     // Register SMBUS map
-    defineSmbusRegisterMap(&stepperHH, &stepperMM, &stepperWW);
+    defineSmbusRegisterMap(&hhSplitFlap, &mmSplitFlap, &wwSplitFlap);
 
     // Initialize SMBus slave
     initSmbusSlave();
@@ -61,23 +47,152 @@ int main(void)
             // Deassert flag
             flagSysTimer = false;
 
-            // Update ADC
-            sensor.enableSensorAll();
-            __delay_cycles(10000);
-            stepperHH.updateHall(adc.measChannel(4));
-            stepperHH.updateIR(adc.measChannel(5));
-            stepperMM.updateHall(adc.measChannel(6));
-            stepperMM.updateIR(adc.measChannel(7));
-            stepperWW.updateHall(adc.measChannel(0));
-            stepperWW.updateIR(adc.measChannel(1));
-            sensor.disableSensorAll();
+            // Enable detectors if needed
+            hhSplitFlap.enableDetectorIfNeeded();
+            mmSplitFlap.enableDetectorIfNeeded();
+            wwSplitFlap.enableDetectorIfNeeded();
+
+            // Wait for detection signal stabilization
+            __delay_cycles(15000);
 
             // Run steppers
-            stepperHH.run();
-            stepperMM.run();
-            stepperWW.run();
+            hhSplitFlap.run();
+            mmSplitFlap.run();
+            wwSplitFlap.run();
         }
 
     }
 
+}
+
+void defineSmbusRegisterMap(SplitFlap *sfHH, SplitFlap *sfMM, SplitFlap *sfWW)
+{
+    /* FW VERSION */
+    addSmbusRegister({
+        .smbusAddress=0,
+        .mcuAddress=(void*) &fw_version,
+        .length=2});
+
+    /* HH */
+    addSmbusRegister({
+        .smbusAddress=1,
+        .mcuAddress=(void*) &hh_ir_threshold,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=2,
+        .mcuAddress=(void*) &hh_hall_threshold,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=3,
+        .mcuAddress=(void*) &hh_hall_digit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=4,
+        .mcuAddress=(void*) &(*sfHH).currentDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=5,
+        .mcuAddress=(void*) &(*sfHH).desiredDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=6,
+        .mcuAddress=(void*) &(*sfHH).currentIR,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=7,
+        .mcuAddress=(void*) &(*sfHH).currentHall,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=8,
+        .mcuAddress=(void*) &(*sfHH).syncTrigger,
+        .length=1});
+
+    /* MM */
+    addSmbusRegister({
+        .smbusAddress=11,
+        .mcuAddress=(void*) &mm_ir_threshold,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=12,
+        .mcuAddress=(void*) &mm_hall_threshold,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=13,
+        .mcuAddress=(void*) &mm_hall_digit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=14,
+        .mcuAddress=(void*) &(*sfMM).currentDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=15,
+        .mcuAddress=(void*) &(*sfMM).desiredDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=16,
+        .mcuAddress=(void*) &(*sfMM).currentIR,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=17,
+        .mcuAddress=(void*) &(*sfMM).currentHall,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=18,
+        .mcuAddress=(void*) &(*sfMM).syncTrigger,
+        .length=1});
+
+    /* WW */
+    addSmbusRegister({
+        .smbusAddress=21,
+        .mcuAddress=(void*) &ww_ir_threshold,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=22,
+        .mcuAddress=(void*) &ww_hall_threshold,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=23,
+        .mcuAddress=(void*) &ww_hall_digit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=24,
+        .mcuAddress=(void*) &(*sfWW).currentDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=25,
+        .mcuAddress=(void*) &(*sfWW).desiredDigit,
+        .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=26,
+        .mcuAddress=(void*) &(*sfWW).currentIR,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=27,
+        .mcuAddress=(void*) &(*sfWW).currentHall,
+        .length=2});
+
+    addSmbusRegister({
+        .smbusAddress=28,
+        .mcuAddress=(void*) &(*sfWW).syncTrigger,
+        .length=1});
 }

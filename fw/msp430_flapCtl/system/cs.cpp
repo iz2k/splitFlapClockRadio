@@ -6,7 +6,7 @@
  */
 
 #include <msp430.h>
-#include <system/cs.hpp>
+#include <system/cs.h>
 
 // MCLK = 8MHz
 #define MCLK_FREQ_MHZ 8

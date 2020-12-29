@@ -6,7 +6,7 @@
  */
 
 #include <msp430.h>
-#include <system/sysTimer.hpp>
+#include <system/sysTimer.h>
 
 #define SYSTIMER_SRC_FREQ       32768
 #define SYSTIMER_PERIOD_MS      3

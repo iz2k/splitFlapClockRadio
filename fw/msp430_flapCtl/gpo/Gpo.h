@@ -19,7 +19,7 @@ class Gpo {
 
   public:
     Gpo();
-    Gpo(GpoDef);
+    Gpo(const GpoDef*);
     void set();
     void clear();
     void toggle();

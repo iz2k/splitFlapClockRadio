@@ -13,6 +13,8 @@
 #define I2C_BUFFER_LENGTH 6
 #define I2C_SLAVE_ADDR 0x16
 
+#define MAX_SMB_REGS 32
+
 
 typedef enum{
     SMB_OP_NONE     = 0b00000000,
@@ -33,11 +35,22 @@ typedef enum i2cStateMachine{
     TIMEOUT_MODE
 } i2cStateMachine;
 
+struct SmbusRegister
+{
+    uint8_t smbusAddress;
+    void * mcuAddress;
+    uint8_t length;
+};
+
 void initSmbusSlave();
 
 void I2C_Slave_ProcessCMD(uint8_t cmd);
 void I2C_Slave_TransactionDone(uint8_t cmd);
 void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count);
+
+void addSmbusRegister(SmbusRegister);
+uint8_t* getRegPointer(uint8_t);
+uint8_t getRegLength(uint8_t);
 
 
 #endif /* DRIVERS_SMBUS_SLAVE_H_ */

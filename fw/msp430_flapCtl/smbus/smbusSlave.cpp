@@ -5,8 +5,7 @@
  *      Author: IbonZalbide
  */
 #include <msp430.h>
-#include <smbus/smbusSlave.hpp>
-#include <smbus/smbusRegMap.hpp>
+#include <smbus/smbusSlave.h>
 
 
 /* Used to track the state of the software state machine*/
@@ -210,4 +209,34 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
         break;                      // Interrupt Vector: I2C Mode: UCTXIFG
     default: break;
   }
+}
+
+
+SmbusRegister smbusRegisters[MAX_SMB_REGS];
+void addSmbusRegister(SmbusRegister smbReg)
+{
+    if (smbReg.smbusAddress < MAX_SMB_REGS)
+    {
+        smbusRegisters[smbReg.smbusAddress] = smbReg;
+    }
+}
+
+uint8_t* getRegPointer(uint8_t smbAddress)
+{
+    if (smbAddress < MAX_SMB_REGS)
+    {
+        return (uint8_t*) smbusRegisters[smbAddress].mcuAddress;
+    }else{
+        return 0;
+    }
+}
+
+uint8_t getRegLength(uint8_t smbAddress)
+{
+    if (smbAddress < MAX_SMB_REGS)
+    {
+        return smbusRegisters[smbAddress].length;
+    }else{
+        return 0;
+    }
 }
