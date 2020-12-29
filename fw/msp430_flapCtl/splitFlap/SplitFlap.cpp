@@ -25,6 +25,7 @@ SplitFlap::SplitFlap(const SplitFlapDef *splitFlapDef, Adc *pAdc)
     this->currentIR = 0;
     this->currentHall = 0;
     this->syncTrigger = 0;
+    this->state = Idle;
 }
 
 SplitFlap::~SplitFlap()
@@ -34,14 +35,35 @@ SplitFlap::~SplitFlap()
 
 void SplitFlap::run()
 {
-    //this->stepper.move();
-    this->currentHall = this->detector.measHall();
-    this->currentIR = this->detector.measIr();
+    if (this->state != Idle){
+        this->currentHall = this->detector.measHall();
+        this->currentIR = this->detector.measIr();
+    }
     this->detector.disable();
+
+    switch (this->state)
+    {
+    case Idle:
+        this->stepper.stop();
+        if (this->currentDigit != this->desiredDigit){
+            this->state = Move;
+        }
+        break;
+    case Move:
+        this->stepper.move();
+        if (this->currentDigit == this->desiredDigit){
+            this->state = Idle;
+        }
+        break;
+    case Sync:
+        break;
+    }
 }
 
 void SplitFlap::enableDetectorIfNeeded()
 {
-    this->detector.enable();
+    if (this->state != Idle){
+        this->detector.enable();
+    }
 }
 

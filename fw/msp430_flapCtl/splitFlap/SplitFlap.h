@@ -21,6 +21,11 @@ struct SplitFlapDef
     uint8_t *pHallDigit;
 };
 
+typedef enum {
+    Idle,
+    Move,
+    Sync
+} SplitFlapState;
 
 class SplitFlap
 {
@@ -45,6 +50,7 @@ public:
 private:
     Stepper stepper;
     Detector detector;
+    SplitFlapState state;
 };
 
 #endif /* SPLITFLAP_SPLITFLAP_H_ */

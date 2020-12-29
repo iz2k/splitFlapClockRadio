@@ -13,6 +13,7 @@ struct StepperDef
 {
     GpoDef gpoDefs[4];
     StepperDirection direction;
+    uint8_t divisor;
 };
 
 
@@ -21,6 +22,8 @@ class Stepper {
     Gpo gpo[4];
     StepperDirection direction;
     uint8_t idxStep;
+    uint8_t divisor;
+    uint8_t idxDiv;
 
   public:
 
