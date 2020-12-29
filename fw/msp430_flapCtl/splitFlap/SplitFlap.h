@@ -19,6 +19,7 @@ struct SplitFlapDef
     uint16_t *pIrThreshold;
     uint16_t *pHallThreshold;
     uint8_t *pHallDigit;
+    uint8_t maxDigit;
 };
 
 typedef enum {
@@ -51,6 +52,11 @@ private:
     Stepper stepper;
     Detector detector;
     SplitFlapState state;
+    uint8_t maxDigit;
+    bool debounceInCurse;
+    uint16_t debounceCounter;
+    bool syncDone;
+    bool syncFound;
 };
 
 #endif /* SPLITFLAP_SPLITFLAP_H_ */

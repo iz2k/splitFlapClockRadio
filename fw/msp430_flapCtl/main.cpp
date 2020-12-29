@@ -47,14 +47,6 @@ int main(void)
             // Deassert flag
             flagSysTimer = false;
 
-            // Enable detectors if needed
-            hhSplitFlap.enableDetectorIfNeeded();
-            mmSplitFlap.enableDetectorIfNeeded();
-            wwSplitFlap.enableDetectorIfNeeded();
-
-            // Wait for detection signal stabilization
-            __delay_cycles(15000);
-
             // Run steppers
             hhSplitFlap.run();
             mmSplitFlap.run();

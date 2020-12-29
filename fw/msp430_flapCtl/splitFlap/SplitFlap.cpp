@@ -15,17 +15,23 @@ SplitFlap::SplitFlap()
 
 SplitFlap::SplitFlap(const SplitFlapDef *splitFlapDef, Adc *pAdc)
 {
-    this->stepper = Stepper(&(*splitFlapDef).stepperDef);
-    this->detector = Detector(&(*splitFlapDef).detectorDef, pAdc);
-    this->pIrThreshold = (*splitFlapDef).pIrThreshold;
-    this->pHallThreshold = (*splitFlapDef).pHallThreshold;
-    this->pHallDigit = (*splitFlapDef).pHallDigit;
+    this->stepper = Stepper(&splitFlapDef->stepperDef);
+    this->detector = Detector(&splitFlapDef->detectorDef, pAdc);
+    this->pIrThreshold = splitFlapDef->pIrThreshold;
+    this->pHallThreshold = splitFlapDef->pHallThreshold;
+    this->pHallDigit = splitFlapDef->pHallDigit;
+    this->maxDigit = splitFlapDef->maxDigit;
     this->currentDigit = 0;
     this->desiredDigit = 0;
     this->currentIR = 0;
     this->currentHall = 0;
     this->syncTrigger = 0;
-    this->state = Idle;
+    this->debounceInCurse = false;
+    this->debounceCounter = 0;
+    this->syncFound = true;
+    this->state = Sync;
+    this->syncDone = false;
+    this->detector.enable();
 }
 
 SplitFlap::~SplitFlap()
@@ -35,27 +41,87 @@ SplitFlap::~SplitFlap()
 
 void SplitFlap::run()
 {
+    // Check sync trigger
+    if (this->syncTrigger != 0)
+    {
+        this->state = Sync;
+        this->syncDone = false;
+        this->detector.enable();
+    }
+
+    // Analyze sensor values
     if (this->state != Idle){
         this->currentHall = this->detector.measHall();
         this->currentIR = this->detector.measIr();
-    }
-    this->detector.disable();
 
+        // Check IR sensor to count falling flaps
+        if(this->debounceInCurse == false)
+        {
+            if (this->currentIR > *this->pIrThreshold)
+            {
+                this->currentDigit++;
+                if (this->currentDigit > this->maxDigit)
+                {
+                    this->currentDigit = 0;
+                }
+                this->debounceInCurse = true;
+                this->debounceCounter = 0;
+            }
+        }else{
+            if (++this->debounceCounter > 300)
+            {
+                this->debounceInCurse = false;
+            }
+        }
+
+        // Check Hall sensor to check sync magnet
+        if (this->currentHall > *this->pHallThreshold)
+        {
+            if (this->syncFound == false)
+            {
+                this->syncFound = true;
+                if (this->syncDone == false)
+                {
+                    this->syncDone = true;
+                    this->currentDigit = *this->pHallDigit;
+                }
+            }
+        }
+
+        // Reset sync found flag when magnet far away
+        if (this->currentHall == 0)
+        {
+            this->syncFound = false;
+            this->syncDone = false;
+        }
+
+    }
+
+    // Control stepper depending on state
     switch (this->state)
     {
     case Idle:
         this->stepper.stop();
         if (this->currentDigit != this->desiredDigit){
             this->state = Move;
+            this->detector.enable();
         }
         break;
     case Move:
         this->stepper.move();
         if (this->currentDigit == this->desiredDigit){
             this->state = Idle;
+            this->detector.disable();
         }
         break;
     case Sync:
+        if (this->syncDone == false)
+        {
+            this->stepper.move();
+        }else{
+            this->syncTrigger = 0;
+            this->state = Idle;
+        }
         break;
     }
 }

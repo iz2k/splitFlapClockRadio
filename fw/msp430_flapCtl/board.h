@@ -26,7 +26,8 @@ static const SplitFlapDef hhSplitFlapDef = {
                     .chIr=5},
                 .pIrThreshold=&hh_ir_threshold,
                 .pHallThreshold=&hh_hall_threshold,
-                .pHallDigit=&hh_hall_digit
+                .pHallDigit=&hh_hall_digit,
+                .maxDigit=23
             };
 
 
@@ -44,7 +45,8 @@ static const SplitFlapDef mmSplitFlapDef = {
                    .chIr=7},
                 .pIrThreshold=&mm_ir_threshold,
                 .pHallThreshold=&mm_hall_threshold,
-                .pHallDigit=&mm_hall_digit
+                .pHallDigit=&mm_hall_digit,
+                .maxDigit=59
             };
 
 
@@ -62,7 +64,8 @@ static const SplitFlapDef wwSplitFlapDef = {
                     .chIr=1},
                 .pIrThreshold=&ww_ir_threshold,
                 .pHallThreshold=&ww_hall_threshold,
-                .pHallDigit=&ww_hall_digit
+                .pHallDigit=&ww_hall_digit,
+                .maxDigit=23
             };
 
 /* IR DETECTORS */
