@@ -25,13 +25,12 @@ SplitFlap::SplitFlap(const SplitFlapDef *splitFlapDef, Adc *pAdc)
     this->desiredDigit = 0;
     this->currentIR = 0;
     this->currentHall = 0;
-    this->syncTrigger = 0;
     this->debounceInCurse = false;
     this->debounceCounter = 0;
     this->syncFound = true;
-    this->state = Sync;
     this->syncDone = false;
-    this->detector.enable();
+    this->state = Idle;
+    this->syncTrigger = 1;
 }
 
 SplitFlap::~SplitFlap()
@@ -47,6 +46,7 @@ void SplitFlap::run()
         this->state = Sync;
         this->syncDone = false;
         this->detector.enable();
+        this->desiredDigit = *this->pHallDigit;
     }
 
     // Analyze sensor values
