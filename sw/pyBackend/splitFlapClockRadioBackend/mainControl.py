@@ -1,6 +1,7 @@
 import time
 from queue import Queue
 from threading import Thread
+from pytz import timezone
 
 from flask_socketio import SocketIO
 
@@ -8,7 +9,9 @@ from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
+from splitFlapClockRadioBackend.splitFlap.splitFlapThread import SplitFlapThread
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
+from splitFlapClockRadioBackend.tools.timeTools import getTimeZoneAwareNow
 
 
 class MainControlThread(Thread):
@@ -21,14 +24,16 @@ class MainControlThread(Thread):
     sio : SocketIO = None
     spotifyPlayer : SpotifyPlayer = None
     radioTunerTh : RadioTunerThread = None
+    splitFlapTh : SplitFlapThread = None
 
-    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh):
+    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, splitFlapTh):
         Thread.__init__(self)
         self.dbCtl = dbCtl
         self.audio = audio
         self.lightStripTh = lightStripTh
         self.spotifyPlayer = spotifyPlayer
         self.radioTunerTh = radioTunerTh
+        self.splitFlapTh = splitFlapTh
 
     def start(self):
         Thread.start(self)
@@ -53,7 +58,7 @@ class MainControlThread(Thread):
                 if q_msg == 'quit':
                     run_app=False
                 if q_msg == 'startup':
-                    #self.audio.say_text('Iniciando reloj.', lang='es')
+                    self.audio.say_text('Iniciando reloj.', lang='es')
                     self.lightStripTh.test()
                 if q_msg == 'volume_rotary':
                     if self.queue.empty():
@@ -83,4 +88,9 @@ class MainControlThread(Thread):
                         #self.spotifyPlayer.pause()
                         self.radioTunerTh.stop()
 
+            self.updateTime()
             time.sleep(0.1)
+
+    def updateTime(self):
+        curTime = getTimeZoneAwareNow(timezone('Europe/Madrid'))
+        self.splitFlapTh.update_time(curTime.hour, curTime.minute)

@@ -6,7 +6,7 @@ import pigpio
 import smbus
 from termcolor import colored
 
-from splitFlapClockRadioBackend.clock.typedef import SMBUS_OPS, MSP430_REGS
+from splitFlapClockRadioBackend.splitFlap.typedef import SMBUS_OPS, MSP430_REGS
 from splitFlapClockRadioBackend.tools.menuTools import getKeyFromDictionarySubitemName, select_value, doReturn, doMenu
 
 
@@ -31,17 +31,27 @@ class smbusMsp430:
         time.sleep(0.1)
         self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.INPUT)
 
-    def read_register(self, key):
+    def read_registerKey(self, key):
         data = self.bus.read_i2c_block_data(self.i2c_address, int(key) + SMBUS_OPS['SMB_OP_READ'], MSP430_REGS[key]['len'])
         return int.from_bytes(data, byteorder='little')
 
-    def write_register(self, key, value):
+    def write_registerKey(self, key, value):
         value_byte_array = value.to_bytes(MSP430_REGS[key]['len'], byteorder='little')
         self.bus.write_i2c_block_data(self.i2c_address, int(key) + SMBUS_OPS['SMB_OP_WRITE'], [b for b in value_byte_array])
 
+    def getKeyFromRegisterName(self, name):
+        for reg in MSP430_REGS:
+            if MSP430_REGS[reg]['name'] == name:
+                return reg
+
+    def read_registerName(self, name):
+        return self.read_registerKey(self.getKeyFromRegisterName(name))
+
+    def write_registerName(self, name, value):
+        return self.write_registerKey(self.getKeyFromRegisterName(name), value)
+
     ####    MENU IMPLEMENTATION ####
     def menu(self, preTitle):
-
         menuItems = {
             'title': preTitle + ' >> MSP430',
             'options': {
@@ -65,7 +75,7 @@ class smbusMsp430:
         return True
 
     def show_reg(self, reg):
-        raw = self.read_register(reg)
+        raw = self.read_registerKey(reg)
         if MSP430_REGS[reg]['type'] is int:
             return str(raw)
         if MSP430_REGS[reg]['type'] is 'msp43xFwVersion':
@@ -83,11 +93,11 @@ class smbusMsp430:
         value = select_value(MSP430_REGS[key])
         if value == None:
             return True
-        self.write_register(key, int(value))
+        self.write_registerKey(key, int(value))
         return True
 
     def setCurrentTime(self, preTitle):
         curTime = datetime.now()
         print(colored(preTitle + ' >> Setting current time: ' + str(curTime.hour).zfill(2) + ':' + str(curTime.minute).zfill(2), 'magenta'))
-        self.write_register('5', curTime.hour)
-        self.write_register('15', curTime.minute)
+        self.write_registerKey(self.getKeyFromRegisterName('hh_desired_digit'), curTime.hour)
+        self.write_registerKey(self.getKeyFromRegisterName('mm_desired_digit'), curTime.minute)

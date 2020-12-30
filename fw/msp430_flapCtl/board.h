@@ -56,7 +56,7 @@ static const SplitFlapDef wwSplitFlapDef = {
                     .gpoDefs[1]={&P2DIR, &P2OUT, BIT3},
                     .gpoDefs[2]={&P3DIR, &P3OUT, BIT4},
                     .gpoDefs[3]={&P3DIR, &P3OUT, BIT1},
-                    .direction=ClockWise,
+                    .direction=AntiClockWise,
                     .divisor=3},
                 .detectorDef = {
                     .enableGpoDef={&P3DIR, &P3OUT, BIT0},
@@ -65,7 +65,7 @@ static const SplitFlapDef wwSplitFlapDef = {
                 .pIrThreshold=&ww_ir_threshold,
                 .pHallThreshold=&ww_hall_threshold,
                 .pHallDigit=&ww_hall_digit,
-                .maxDigit=23
+                .maxDigit=11
             };
 
 /* IR DETECTORS */

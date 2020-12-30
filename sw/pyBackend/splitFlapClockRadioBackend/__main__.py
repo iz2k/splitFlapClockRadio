@@ -6,12 +6,12 @@ from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.mainControl import MainControlThread
 from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
 from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
+from splitFlapClockRadioBackend.splitFlap.splitFlapThread import SplitFlapThread
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 from splitFlapClockRadioBackend.userInterface.userInterface import UserInterface
 from splitFlapClockRadioBackend.weatherStation.weatherStationThread import WeatherStationThread
 from splitFlapClockRadioBackend.webServer.webServer import webServerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
-
 
 def main():
 
@@ -30,7 +30,8 @@ def main():
     weatherStationTh = WeatherStationThread(dbCtl=dbCtl)
     lightStripTh = RgbStripThread()
     radioTunerTh = RadioTunerThread()
-    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh)
+    splitFlapTh = SplitFlapThread()
+    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh, splitFlapTh=splitFlapTh)
 
     userInterface.set_mainControlQueue(mainControlTh.queue)
 
@@ -49,6 +50,7 @@ def main():
         #weatherStationTh.start()
         lightStripTh.start()
         radioTunerTh.start()
+        splitFlapTh.start()
         mainControlTh.start()
         webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 
