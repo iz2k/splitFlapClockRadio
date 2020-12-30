@@ -41,8 +41,9 @@ SplitFlap::~SplitFlap()
 void SplitFlap::run()
 {
     // Check sync trigger
-    if (this->syncTrigger != 0)
+    if (this->syncTrigger == 1)
     {
+        this->syncTrigger = 2;
         this->state = Sync;
         this->syncDone = false;
         this->detector.enable();
@@ -119,8 +120,8 @@ void SplitFlap::run()
         {
             this->stepper.move();
         }else{
-            this->syncTrigger = 0;
             this->state = Idle;
+            this->syncTrigger = 0;
         }
         break;
     }

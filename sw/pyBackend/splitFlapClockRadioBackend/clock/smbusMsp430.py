@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 from enum import Enum
 
@@ -46,6 +47,7 @@ class smbusMsp430:
             'options': {
                 '1': {'descriptor': 'Read all registers', 'function': self.readAllRegisters},
                 '2': {'descriptor': 'Write register', 'function': self.writeRegister},
+                '3': {'descriptor': 'Set current time', 'function': self.setCurrentTime},
                 'r': {'descriptor': 'return', 'function': doReturn},
             }
         }
@@ -83,3 +85,9 @@ class smbusMsp430:
             return True
         self.write_register(key, int(value))
         return True
+
+    def setCurrentTime(self, preTitle):
+        curTime = datetime.now()
+        print(colored(preTitle + ' >> Setting current time: ' + str(curTime.hour).zfill(2) + ':' + str(curTime.minute).zfill(2), 'magenta'))
+        self.write_register('5', curTime.hour)
+        self.write_register('15', curTime.minute)
