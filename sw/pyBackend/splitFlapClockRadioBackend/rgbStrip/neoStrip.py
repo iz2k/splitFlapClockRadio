@@ -22,9 +22,12 @@ class NeoStrip:
         # Intialize the library (must be called once before other functions).
         self.strip.begin()
 
-    def clearBuffer(self):
+    def setBufferToColor(self, color):
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(0, 0, 0))
+            self.strip.setPixelColor(i, color)
+
+    def clearBuffer(self):
+        self.setBufferToColor(Color(0,0,0))
 
     def clear(self):
         self.clearBuffer()
@@ -66,13 +69,34 @@ class NeoStrip:
             self.strip.setPixelColor(i, Color(0, 0, 20))
 
         # Color up
-        for i in range(23):
+        for i in range(24):
             self.strip.setPixelColor(volumePosition, Color(0, 0, 25+i*10))
             self.strip.show()
 
         # Color down
-        for i in range(23):
+        for i in range(24):
             self.strip.setPixelColor(volumePosition, Color(0, 0, 255 - i * 10))
+            self.strip.show()
+
+    def vol_toggleMute(self, mute):
+        r=0;
+        g=0;
+        b=0;
+        if mute == False:
+            g=1
+        else:
+            r=1
+
+        # Color up
+        for i in range(26):
+            intensity=i*10
+            self.setBufferToColor(Color(r*intensity, g*intensity, b*intensity))
+            self.strip.show()
+
+        # Color down
+        for i in range(26):
+            intensity=250 - i*10
+            self.setBufferToColor(Color(r*intensity, g*intensity, b*intensity))
             self.strip.show()
 
 

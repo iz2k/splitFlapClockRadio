@@ -26,6 +26,8 @@ class MainControlThread(Thread):
     radioTunerTh : RadioTunerThread = None
     splitFlapTh : SplitFlapThread = None
 
+    mediaSource = 'None'
+
     def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, splitFlapTh):
         Thread.__init__(self)
         self.dbCtl = dbCtl
@@ -58,35 +60,22 @@ class MainControlThread(Thread):
                 if q_msg == 'quit':
                     run_app=False
                 if q_msg == 'startup':
-                    self.audio.say_text('Iniciando reloj.', lang='es')
-                    self.lightStripTh.test()
+                    self.systemStartup()
                 if q_msg == 'volume_rotary':
                     if self.queue.empty():
-                        if q_data == 1:
-                            self.audio.volume_up()
-                        if q_data == -1:
-                            self.audio.volume_down()
-                        self.lightStripTh.vol_update(self.audio.volume)
+                        self.changeVolume(q_data)
                 if q_msg == 'volume_switch':
                     if q_data == 'short':
-                        pass
+                        self.toggleMute()
                     if q_data == 'long':
                         pass
                 if q_msg == 'control_rotary':
-                    self.audio.play('beep')
-                    if q_data == 1:
-                        #self.spotifyPlayer.next()
-                        self.radioTunerTh.next()
-                    if q_data == -1:
-                        #self.spotifyPlayer.previous()
-                        self.radioTunerTh.previous()
+                    self.changeMediaItem(q_data)
                 if q_msg == 'control_switch':
                     if q_data == 'short':
-                        #self.spotifyPlayer.play()
-                        self.radioTunerTh.play(97.2)
+                        pass
                     if q_data == 'long':
-                        #self.spotifyPlayer.pause()
-                        self.radioTunerTh.stop()
+                        self.changeMediaSource()
 
             self.updateTime()
             time.sleep(0.1)
@@ -94,3 +83,51 @@ class MainControlThread(Thread):
     def updateTime(self):
         curTime = getTimeZoneAwareNow(timezone('Europe/Madrid'))
         self.splitFlapTh.update_time(curTime.hour, curTime.minute)
+
+    def systemStartup(self):
+        self.audio.say_text('Iniciando reloj.', lang='es')
+        self.lightStripTh.test()
+
+    def changeVolume(self, action):
+        if (self.audio.mute == True):
+            self.toggleMute()
+        if action == 1:
+            self.audio.volume_up()
+        if action == -1:
+            self.audio.volume_down()
+        self.lightStripTh.vol_update(self.audio.volume)
+
+    def toggleMute(self):
+        self.audio.toggle_mute()
+        self.lightStripTh.vol_toggleMute(self.audio.mute)
+
+    def changeMediaSource(self):
+        if self.mediaSource == 'None':
+            self.audio.play('on')
+            self.mediaSource = 'Radio'
+            self.radioTunerTh.play(97.2)
+        elif self.mediaSource == 'Radio':
+            self.audio.play('on')
+            self.radioTunerTh.stop()
+            self.mediaSource = 'Spotify'
+            self.spotifyPlayer.play()
+        elif self.mediaSource == 'Spotify':
+            self.audio.play('off')
+            self.spotifyPlayer.pause()
+            self.mediaSource = 'None'
+
+    def changeMediaItem(self, action):
+        if self.mediaSource == 'None':
+            pass
+        elif self.mediaSource == 'Radio':
+            self.audio.play('source')
+            if action == 1:
+                self.radioTunerTh.next()
+            elif action == -1:
+                self.radioTunerTh.previous()
+        elif self.mediaSource == 'Spotify':
+            self.audio.play('source')
+            if action == 1:
+                self.spotifyPlayer.next()
+            elif action == -1:
+                self.spotifyPlayer.previous()

@@ -51,6 +51,9 @@ class RgbStripThread(Thread):
                 if q_msg == 'vol_update':
                     if self.queue.empty():
                         self.rgbStrip.vol_update(q_data)
+                if q_msg == 'vol_toggleMute':
+                    if self.queue.empty():
+                        self.rgbStrip.vol_toggleMute(q_data)
 
             if self.signalingFlag == True and self.signalingExpire < datetime.now():
                 self.signalingFlag = False
@@ -63,3 +66,6 @@ class RgbStripThread(Thread):
 
     def vol_update(self, volume):
         self.queue.put(['vol_update', volume])
+
+    def vol_toggleMute(self, mute):
+        self.queue.put(['vol_toggleMute', mute])
