@@ -39,6 +39,7 @@ public:
     uint8_t desiredDigit;
     uint16_t currentIR;
     uint16_t currentHall;
+    uint16_t maxHall;
     uint8_t syncTrigger;
 
     // Methods
@@ -57,6 +58,8 @@ private:
     uint16_t debounceCounter;
     bool syncDone;
     bool syncFound;
+
+    uint16_t filter(uint16_t, uint16_t, float);
 };
 
 #endif /* SPLITFLAP_SPLITFLAP_H_ */

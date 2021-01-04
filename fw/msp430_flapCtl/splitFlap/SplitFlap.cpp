@@ -25,6 +25,7 @@ SplitFlap::SplitFlap(const SplitFlapDef *splitFlapDef, Adc *pAdc)
     this->desiredDigit = 0;
     this->currentIR = 0;
     this->currentHall = 0;
+    this->maxHall = 0;
     this->debounceInCurse = false;
     this->debounceCounter = 0;
     this->syncFound = true;
@@ -52,7 +53,7 @@ void SplitFlap::run()
 
     // Analyze sensor values
     if (this->state != Idle){
-        this->currentHall = this->detector.measHall();
+        this->currentHall = this->filter(this->currentHall, this->detector.measHall(), 0.1);
         this->currentIR = this->detector.measIr();
 
         // Check IR sensor to count falling flaps
@@ -75,6 +76,7 @@ void SplitFlap::run()
             }
         }
 
+        /* OPTION ABSOLUTE THRESHOLD
         // Check Hall sensor to check sync magnet
         if (this->currentHall > *this->pHallThreshold)
         {
@@ -87,6 +89,26 @@ void SplitFlap::run()
                     this->currentDigit = *this->pHallDigit;
                 }
             }
+        }*/
+
+        /* OPTION TREND CHANGE */
+        // Check Hall sensor to check sync magnet
+        if ((this->currentHall + *this->pHallThreshold) < this->maxHall)
+        {
+            if (this->syncFound == false)
+            {
+                this->syncFound = true;
+                if (this->syncDone == false)
+                {
+                    this->syncDone = true;
+                    this->currentDigit = *this->pHallDigit;
+                }
+            }
+        }
+        // Update maximum Hall value
+        if(this->currentHall > this->maxHall)
+        {
+            this->maxHall = this->currentHall;
         }
 
         // Reset sync found flag when magnet far away
@@ -94,6 +116,7 @@ void SplitFlap::run()
         {
             this->syncFound = false;
             this->syncDone = false;
+            this->maxHall = 0;
         }
 
     }
@@ -134,3 +157,7 @@ void SplitFlap::enableDetectorIfNeeded()
     }
 }
 
+uint16_t SplitFlap::filter(uint16_t oldval, uint16_t newval, float speed)
+{
+    return oldval*(1-speed)+ newval*speed;
+}
