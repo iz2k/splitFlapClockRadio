@@ -13,7 +13,11 @@ class SpotifyPlayer:
 
 	def set_local_device(self):
 		output=execute('/home/pi/.local/bin/spotify device -s Split-Flap-Clock-Radio')
-		print('[spotify] Setting Spotify device to Raspotify: ' + output.splitlines()[0])
+		if len(output.splitlines())>0:
+			print('[spotify] Setting Spotify device to Raspotify: ' + output.splitlines()[0])
+		else:
+			print('[spotify] Problem during set local device: ')
+
 
 	def pause(self):
 		output=execute('/home/pi/.local/bin/spotify pause')

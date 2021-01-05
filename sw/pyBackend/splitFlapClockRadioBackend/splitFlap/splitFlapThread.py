@@ -46,8 +46,11 @@ class SplitFlapThread(Thread):
                 if q_msg == 'quit':
                     run_app=False
                 if (q_msg == 'update_time'):
-                    self.smbus430.write_registerName('hh_desired_digit', q_data[0])
-                    self.smbus430.write_registerName('mm_desired_digit', q_data[1])
+                    try:
+                        self.smbus430.write_registerName('hh_desired_digit', q_data[0])
+                        self.smbus430.write_registerName('mm_desired_digit', q_data[1])
+                    except:
+                        print('I2C error updating time')
                 if (q_msg == 'update_weather'):
                     self.smbus430.write_registerName('ww_desired_digit', q_data)
 

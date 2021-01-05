@@ -5,6 +5,7 @@ from threading import Thread
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.radioTuner.si4731 import Si4731
+from splitFlapClockRadioBackend.tools.osTools import start_service
 
 
 class RadioTunerThread(Thread):
@@ -15,6 +16,7 @@ class RadioTunerThread(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.radioTuner = Si4731()
+        start_service('i2s-pipe')
 
     def start(self):
         Thread.start(self)

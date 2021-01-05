@@ -26,6 +26,16 @@ def stop_service(service):
     cmd = 'sudo service ' + service + ' stop'
     subprocess.run(cmd.split(), capture_output=True)
 
+def start_service_async(service):
+    print('Starting ' + service + ' service')
+    cmd = 'sudo service ' + service + ' start'
+    subprocess.Popen(cmd.split())
+
+def stop_service_async(service):
+    print('Stopping ' + service + ' service')
+    cmd = 'sudo service ' + service + ' stop'
+    subprocess.Popen(cmd.split())
+
 def execute(cmd):
     p = subprocess.Popen(cmd.split(), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     output, error = p.communicate()
