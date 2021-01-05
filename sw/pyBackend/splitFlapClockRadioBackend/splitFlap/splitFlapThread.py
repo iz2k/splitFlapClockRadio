@@ -18,6 +18,7 @@ class SplitFlapThread(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.smbus430 = smbusMsp430()
+        time.sleep(1)
         self.desired_hh = self.smbus430.read_registerName('hh_desired_digit')
         self.desired_mm = self.smbus430.read_registerName('mm_desired_digit')
         self.desired_ww = self.smbus430.read_registerName('ww_desired_digit')

@@ -28,8 +28,8 @@ class smbusMsp430:
         self.pi.write(self.HW.RST_GPIO.value, 0)
         time.sleep(0.1)
         self.pi.write(self.HW.RST_GPIO.value, 1)
-        time.sleep(0.1)
-        self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.INPUT)
+        #time.sleep(0.1)
+        #self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.INPUT)
 
     def read_registerKey(self, key):
         data = self.bus.read_i2c_block_data(self.i2c_address, int(key) + SMBUS_OPS['SMB_OP_READ'], MSP430_REGS[key]['len'])

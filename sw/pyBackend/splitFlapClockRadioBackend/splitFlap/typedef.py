@@ -9,6 +9,7 @@ MSP430_REGS = {
     '6': {'name': 'hh_current_ir', 'type': int, 'len' : 2},
     '7': {'name': 'hh_current_hall', 'type': int, 'len' : 2},
     '8': {'name': 'hh_sync_trigger', 'type': int, 'len' : 1},
+    '9': {'name': 'hh_debounce', 'type': int, 'len' : 2},
     '11': {'name': 'mm_ir_threshold', 'type': int, 'len' : 2},
     '12': {'name': 'mm_hall_threshold', 'type': int, 'len' : 2},
     '13': {'name': 'mm_hall_digit', 'type': int, 'len' : 1},
@@ -17,6 +18,7 @@ MSP430_REGS = {
     '16': {'name': 'mm_current_ir', 'type': int, 'len' : 2},
     '17': {'name': 'mm_current_hall', 'type': int, 'len' : 2},
     '18': {'name': 'mm_sync_trigger', 'type': int, 'len' : 1},
+    '19': {'name': 'mm_debounce', 'type': int, 'len' : 2},
     '21': {'name': 'ww_ir_threshold', 'type': int, 'len' : 2},
     '22': {'name': 'ww_hall_threshold', 'type': int, 'len' : 2},
     '23': {'name': 'ww_hall_digit', 'type': int, 'len' : 1},
@@ -24,7 +26,8 @@ MSP430_REGS = {
     '25': {'name': 'ww_desired_digit', 'type': int, 'len' : 1},
     '26': {'name': 'ww_current_ir', 'type': int, 'len' : 2},
     '27': {'name': 'ww_current_hall', 'type': int, 'len' : 2},
-    '28': {'name': 'ww_sync_trigger', 'type': int, 'len' : 1}
+    '28': {'name': 'ww_sync_trigger', 'type': int, 'len' : 1},
+    '29': {'name': 'ww_debounce', 'type': int, 'len' : 2},
 }
 
 
