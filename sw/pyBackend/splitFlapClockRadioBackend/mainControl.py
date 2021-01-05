@@ -110,7 +110,7 @@ class MainControlThread(Thread):
             self.audio.play('on')
             self.radioTunerTh.stop()
             self.mediaSource = 'Spotify'
-            self.spotifyPlayer.play()
+            self.spotifyPlayer.play('spotify:playlist:2z7k6r8z0OlXuDsIuy80ZN')
         elif self.mediaSource == 'Spotify':
             self.audio.play('off')
             self.spotifyPlayer.pause()

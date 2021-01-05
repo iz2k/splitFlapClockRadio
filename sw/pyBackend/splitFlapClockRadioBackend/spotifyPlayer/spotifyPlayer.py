@@ -27,8 +27,11 @@ class SpotifyPlayer:
 			self.currentTrack = 'N/A'
 		print('[spotify] PAUSE: ' + self.currentTrack)
 
-	def play(self):
-		output=execute('/home/pi/.local/bin/spotify play')
+	def play(self, uri=None):
+		command = '/home/pi/.local/bin/spotify play'
+		if (uri != None):
+			command = command + ' --uri ' + uri
+		output=execute(command)
 		if len(output.splitlines())>0:
 			self.currentTrack = output.splitlines()[1].lstrip()
 		else:
