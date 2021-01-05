@@ -36,7 +36,12 @@ _DECL uint16_t  fw_version   _INIT(0x0100);
 #ifdef VAR_DECLS
 #pragma PERSISTENT
 #endif
-_DECL uint16_t  hh_ir_threshold   _INIT(250);
+_DECL uint16_t  hh_ir_threshold   _INIT(400);
+
+#ifdef VAR_DECLS
+#pragma PERSISTENT
+#endif
+_DECL uint16_t  hh_debounce   _INIT(300);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT
@@ -52,7 +57,13 @@ _DECL uint8_t  hh_hall_digit   _INIT(7);
 #ifdef VAR_DECLS
 #pragma PERSISTENT
 #endif
-_DECL uint16_t  mm_ir_threshold   _INIT(150);
+_DECL uint16_t  mm_ir_threshold   _INIT(180);
+
+#ifdef VAR_DECLS
+#pragma PERSISTENT
+#endif
+_DECL uint16_t  mm_debounce   _INIT(300);
+
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT
@@ -68,7 +79,13 @@ _DECL uint8_t  mm_hall_digit   _INIT(14);
 #ifdef VAR_DECLS
 #pragma PERSISTENT
 #endif
-_DECL uint16_t  ww_ir_threshold   _INIT(200);
+_DECL uint16_t  ww_ir_threshold   _INIT(300);
+
+#ifdef VAR_DECLS
+#pragma PERSISTENT
+#endif
+_DECL uint16_t  ww_debounce   _INIT(300);
+
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT
@@ -78,7 +95,7 @@ _DECL uint16_t  ww_hall_threshold   _INIT(50);
 #ifdef VAR_DECLS
 #pragma PERSISTENT
 #endif
-_DECL uint8_t  ww_hall_digit   _INIT(0);
+_DECL uint8_t  ww_hall_digit   _INIT(8);
 
 
 

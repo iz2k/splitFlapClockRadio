@@ -106,6 +106,13 @@ void defineSmbusRegisterMap(SplitFlap *sfHH, SplitFlap *sfMM, SplitFlap *sfWW)
         .mcuAddress=(void*) &(*sfHH).syncTrigger,
         .length=1});
 
+
+    addSmbusRegister({
+        .smbusAddress=9,
+        .mcuAddress=(void*) &hh_debounce,
+        .length=2});
+
+
     /* MM */
     addSmbusRegister({
         .smbusAddress=11,
@@ -147,6 +154,12 @@ void defineSmbusRegisterMap(SplitFlap *sfHH, SplitFlap *sfMM, SplitFlap *sfWW)
         .mcuAddress=(void*) &(*sfMM).syncTrigger,
         .length=1});
 
+    addSmbusRegister({
+        .smbusAddress=19,
+        .mcuAddress=(void*) &mm_debounce,
+        .length=2});
+
+
     /* WW */
     addSmbusRegister({
         .smbusAddress=21,
@@ -187,4 +200,10 @@ void defineSmbusRegisterMap(SplitFlap *sfHH, SplitFlap *sfMM, SplitFlap *sfWW)
         .smbusAddress=28,
         .mcuAddress=(void*) &(*sfWW).syncTrigger,
         .length=1});
+
+    addSmbusRegister({
+        .smbusAddress=29,
+        .mcuAddress=(void*) &ww_debounce,
+        .length=2});
+
 }

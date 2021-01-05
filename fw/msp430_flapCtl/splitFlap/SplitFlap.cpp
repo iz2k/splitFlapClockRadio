@@ -20,6 +20,7 @@ SplitFlap::SplitFlap(const SplitFlapDef *splitFlapDef, Adc *pAdc)
     this->pIrThreshold = splitFlapDef->pIrThreshold;
     this->pHallThreshold = splitFlapDef->pHallThreshold;
     this->pHallDigit = splitFlapDef->pHallDigit;
+    this->pDebounce = splitFlapDef->pDebounce;
     this->maxDigit = splitFlapDef->maxDigit;
     this->currentDigit = 0;
     this->desiredDigit = 0;
@@ -70,28 +71,13 @@ void SplitFlap::run()
                 this->debounceCounter = 0;
             }
         }else{
-            if (++this->debounceCounter > 300)
+            if (++this->debounceCounter > *this->pDebounce)
             {
                 this->debounceInCurse = false;
             }
         }
 
-        /* OPTION ABSOLUTE THRESHOLD
-        // Check Hall sensor to check sync magnet
-        if (this->currentHall > *this->pHallThreshold)
-        {
-            if (this->syncFound == false)
-            {
-                this->syncFound = true;
-                if (this->syncDone == false)
-                {
-                    this->syncDone = true;
-                    this->currentDigit = *this->pHallDigit;
-                }
-            }
-        }*/
 
-        /* OPTION TREND CHANGE */
         // Check Hall sensor to check sync magnet
         if ((this->currentHall + *this->pHallThreshold) < this->maxHall)
         {
@@ -132,7 +118,10 @@ void SplitFlap::run()
         }
         break;
     case Move:
-        this->stepper.move();
+        if(this->debounceInCurse == false)
+        {
+            this->stepper.move();
+        }
         if (this->currentDigit == this->desiredDigit){
             this->state = Idle;
             this->detector.disable();

@@ -27,6 +27,7 @@ static const SplitFlapDef hhSplitFlapDef = {
                 .pIrThreshold=&hh_ir_threshold,
                 .pHallThreshold=&hh_hall_threshold,
                 .pHallDigit=&hh_hall_digit,
+                .pDebounce=&hh_debounce,
                 .maxDigit=23
             };
 
@@ -46,6 +47,7 @@ static const SplitFlapDef mmSplitFlapDef = {
                 .pIrThreshold=&mm_ir_threshold,
                 .pHallThreshold=&mm_hall_threshold,
                 .pHallDigit=&mm_hall_digit,
+                .pDebounce=&mm_debounce,
                 .maxDigit=59
             };
 
@@ -65,6 +67,7 @@ static const SplitFlapDef wwSplitFlapDef = {
                 .pIrThreshold=&ww_ir_threshold,
                 .pHallThreshold=&ww_hall_threshold,
                 .pHallDigit=&ww_hall_digit,
+                .pDebounce=&ww_debounce,
                 .maxDigit=11
             };
 

@@ -19,6 +19,7 @@ struct SplitFlapDef
     uint16_t *pIrThreshold;
     uint16_t *pHallThreshold;
     uint8_t *pHallDigit;
+    uint16_t *pDebounce;
     uint8_t maxDigit;
 };
 
@@ -35,6 +36,7 @@ public:
     uint16_t *pIrThreshold;
     uint16_t *pHallThreshold;
     uint8_t *pHallDigit;
+    uint16_t *pDebounce;
     uint8_t currentDigit;
     uint8_t desiredDigit;
     uint16_t currentIR;
