@@ -67,7 +67,7 @@ class WeatherStation:
 
     def updateWeatherReport(self):
         self.weatherReport = self.openWeather.getReport()
-        print('Weather Station Report Update:')
+        print('[WeatherStation] Report Update:')
         print(prettyJson(
             {
                 'location' : self.config['location'],
@@ -77,7 +77,6 @@ class WeatherStation:
                 'weather' : self.weatherReport['current']['weather'][0]['description']
             }
         ))
-        print(self.weatherReport)
 
     def updateSensorReport(self):
         self.sensorReport = {}
@@ -90,7 +89,7 @@ class WeatherStation:
         sgpdata = self.sgp.getSensorData()
         for parameter in sgpdata:
             self.sensorReport[parameter] = sgpdata[parameter]
-        print(self.sensorReport)
+        #print(self.sensorReport)
 
     def insertToDb(self):
         myMeas = Measurement(
@@ -116,3 +115,26 @@ class WeatherStation:
         )
 
         self.dbctl.insert(myMeas)
+
+    def get_ww_idx(self):
+        dictionary = {
+            '01d' : 0,
+            '01n' : 1,
+            '02d' : 2,
+            '02n' : 3,
+            '03d' : 4,
+            '03n' : 4,
+            '04d' : 5,
+            '04n' : 5,
+            '09d' : 8,
+            '09n' : 8,
+            '10d' : 6,
+            '10n' : 7,
+            '11d' : 9,
+            '11n' : 9,
+            '13d' : 11,
+            '13n' : 11,
+            '50d' : 10,
+            '50n' : 10,
+        }
+        return dictionary[self.weatherReport['current']['weather'][0]['icon']]

@@ -67,7 +67,7 @@ class SplitFlapThread(Thread):
 
     def update_weather(self, ww):
         if (ww != self.desired_ww):
-            self.queue.put(['update_time', ww])
+            self.queue.put(['update_weather', ww])
             self.desired_ww = ww
             print('[splitFlap] Update Weather: ' + str(ww).zfill(2))
 

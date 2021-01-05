@@ -42,7 +42,7 @@ class SimpleSGP30():
 
     def adjustRH(self, RH):
         H = self.fakeRH2H(RH)
-        print('Adjusting IAQ with H: ' + str(H) + 'g/m3')
+        #print('Adjusting IAQ with H: ' + str(H) + 'g/m3')
         self.sgp30.set_iaq_humidity(H)
 
     def fakeRH2H(self, RH):

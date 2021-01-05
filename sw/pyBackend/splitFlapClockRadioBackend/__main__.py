@@ -42,12 +42,12 @@ def main():
     # Pass SIO to threads
     osInfoTh.set_sio(webserverTh.sio)
     weatherStationTh.set_sio(webserverTh.sio)
-
+    weatherStationTh.set_splitFlapTh(splitFlapTh)
 
     try:
         # Start threads
         osInfoTh.start()
-        #weatherStationTh.start()
+        weatherStationTh.start()
         lightStripTh.start()
         radioTunerTh.start()
         splitFlapTh.start()

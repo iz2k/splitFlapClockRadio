@@ -6,6 +6,7 @@ from threading import Thread
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
+from splitFlapClockRadioBackend.splitFlap.splitFlapThread import SplitFlapThread
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.timeTools import getNow
 from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
@@ -15,6 +16,7 @@ class WeatherStationThread(Thread):
 
     queue = Queue()
     weatherStation = None
+    splitFlapTh = None
 
     def __init__(self, dbCtl : dbController):
         Thread.__init__(self)
@@ -31,6 +33,9 @@ class WeatherStationThread(Thread):
 
     def set_sio(self, sio : SocketIO):
         self.sio = sio
+
+    def set_splitFlapTh(self, splitFlapTh: SplitFlapThread):
+        self.splitFlapTh = splitFlapTh
 
     def run(self):
 
@@ -57,6 +62,7 @@ class WeatherStationThread(Thread):
                 last_update = now
                 self.weatherStation.updateWeatherReport()
                 self.weatherStation.insertToDb()
+                self.splitFlapTh.update_weather(self.weatherStation.get_ww_idx())
 
             time.sleep(1)
 

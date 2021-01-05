@@ -34,7 +34,7 @@ class dbController:
         session.commit()
         session.close()
         tStop = datetime.now()
-        print('\t> Insert time: ' + str(tStop-tStart))
+        #print('\t> Insert time: ' + str(tStop-tStart))
 
     def load(self, table):
         tStart = datetime.now()
