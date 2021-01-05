@@ -8,8 +8,16 @@ class SpotifyPlayer:
 	currentTrack = 'None'
 
 	def __init__(self):
-		self.set_local_device()
+		if(self.check_local_device() == False):
+			self.set_local_device()
 		self.pause()
+
+	def check_local_device(self):
+		output=execute('/home/pi/.local/bin/spotify device')
+		if '* Split-Flap-Clock-Radio' in output:
+			return True
+		else:
+			return False
 
 	def set_local_device(self):
 		output=execute('/home/pi/.local/bin/spotify device -s Split-Flap-Clock-Radio')
@@ -20,6 +28,8 @@ class SpotifyPlayer:
 
 
 	def pause(self):
+		if(self.check_local_device() == False):
+			self.set_local_device()
 		output=execute('/home/pi/.local/bin/spotify pause')
 		if len(output.splitlines())>0:
 			self.currentTrack = output.splitlines()[1].lstrip()
@@ -28,6 +38,8 @@ class SpotifyPlayer:
 		print('[spotify] PAUSE: ' + self.currentTrack)
 
 	def play(self, uri=None):
+		if(self.check_local_device() == False):
+			self.set_local_device()
 		command = '/home/pi/.local/bin/spotify play'
 		if (uri != None):
 			command = command + ' --uri ' + uri
@@ -39,6 +51,8 @@ class SpotifyPlayer:
 		print('[spotify] PLAY: ' + self.currentTrack)
 
 	def next(self):
+		if(self.check_local_device() == False):
+			self.set_local_device()
 		output=execute('/home/pi/.local/bin/spotify next')
 		if len(output.splitlines())>0:
 			self.currentTrack = output.splitlines()[1].lstrip()
@@ -47,6 +61,8 @@ class SpotifyPlayer:
 		print('[spotify] NEXT: ' + self.currentTrack)
 
 	def previous(self):
+		if(self.check_local_device() == False):
+			self.set_local_device()
 		output=execute('/home/pi/.local/bin/spotify previous')
 		if len(output.splitlines())>0:
 			self.currentTrack = output.splitlines()[1].lstrip()
