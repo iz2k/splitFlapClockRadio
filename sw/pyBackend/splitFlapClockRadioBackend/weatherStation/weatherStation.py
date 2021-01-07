@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.weatherStation.bme680.simpleBme680 import SimpleBME680
 from splitFlapClockRadioBackend.weatherStation.sgp30.simpleSgp30 import SimpleSGP30
 from splitFlapClockRadioBackend.weatherStation.openWeatherMap.openWeatherMap import OpenWeatherMap
@@ -11,7 +12,7 @@ from splitFlapClockRadioBackend.tools.jsonTools import writeJsonFile, readJsonFi
 
 class WeatherStation:
 
-    config = {}
+    config : Config = None
     weatherReport = {}
     sensorReport = {}
 
@@ -19,64 +20,35 @@ class WeatherStation:
     sgp = None
     openWeather = None
 
-    def __init__(self, dbctl : dbController):
-        self.loadConfig()
-        #self.printConfig()
+    def __init__(self, dbctl : dbController, config):
+        self.config = config
         self.bme = SimpleBME680()
-        self.sgp = SimpleSGP30([int(self.config['baselineEco2']), int(self.config['baselineTvoc'])])
-        self.openWeather = OpenWeatherMap(apiKey=self.config['openWeatherApi'],
-                                          latitude=self.config['latitude'],
-                                          longitude=self.config['longitude'])
+        self.sgp = SimpleSGP30([int(self.config.params['weatherStation']['baselineEco2']), int(self.config.params['weatherStation']['baselineTvoc'])])
+        self.openWeather = OpenWeatherMap(apiKey=self.config.params['api']['openWeatherApi'],
+                                          latitude=self.config.params['weatherStation']['latitude'],
+                                          longitude=self.config.params['weatherStation']['longitude'])
         self.dbctl = dbctl
 
-    def saveConfig(self):
-        writeJsonFile('cfgWeatherStation.json', self.config)
-
-    def loadConfig(self):
-        self.config = readJsonFile('cfgWeatherStation.json')
-        if self.config == {}:
-            self.createDefaultConfig()
-
-    def reloadConfig(self):
-        self.loadConfig()
-        self.printConfig()
-        self.sgp.resetDevice()
-        self.sgp.initConfig([int(self.config['baselineEco2']), int(self.config['baselineTvoc'])])
-
-
-    def printConfig(self):
-        print('Weather Station Config:')
-        print(prettyJson(self.config))
-
-    def createDefaultConfig(self):
-        self.config = {
-            'openWeatherApi': '***REMOVED***',
-            'geocodeApi': '',
-            'location': '',
-            'cityAlias': '',
-            'longitude': 0,
-            'latitude': 0,
-            'baselineEco2': 34274,
-            'baselineTvoc': 34723
-                       }
-        self.saveConfig()
-
     def updateParam(self, param, value):
-        self.config[param]=value
-        self.saveConfig()
+        self.config.params[param]=value
+        self.config.saveConfig()
 
     def updateWeatherReport(self):
         self.weatherReport = self.openWeather.getReport()
-        print('[WeatherStation] Report Update:')
-        print(prettyJson(
-            {
-                'location' : self.config['location'],
-                'temperature' : str(self.weatherReport['current']['temp']) + 'C',
-                'pressure' : str(self.weatherReport['current']['pressure']) + 'mbar',
-                'humidity' : str(self.weatherReport['current']['humidity']) + '%',
-                'weather' : self.weatherReport['current']['weather'][0]['description']
-            }
-        ))
+        if (self.weatherReport != None):
+            print('[WeatherStation] Report Update:')
+            print(prettyJson(
+                {
+                    'location' : self.config.params['weatherStation']['location'],
+                    'temperature' : str(self.weatherReport['current']['temp']) + 'C',
+                    'pressure' : str(self.weatherReport['current']['pressure']) + 'mbar',
+                    'humidity' : str(self.weatherReport['current']['humidity']) + '%',
+                    'weather' : self.weatherReport['current']['weather'][0]['description']
+                }
+            ))
+        else:
+            print('[WeatherStation] Error updating report.')
+
 
     def updateSensorReport(self):
         self.sensorReport = {}
@@ -92,10 +64,11 @@ class WeatherStation:
         #print(self.sensorReport)
 
     def insertToDb(self):
-        myMeas = Measurement(
+        if(self.weatherReport != None):
+            myMeas = Measurement(
             datetime=datetime.now(),
             cityMeas=CityMeas(
-                location=self.config['location'],
+                location=self.config.params['weatherStation']['location'],
                 temperature=self.weatherReport['current']['temp'],
                 pressure=self.weatherReport['current']['pressure'],
                 humidity=self.weatherReport['current']['humidity'],
@@ -103,7 +76,7 @@ class WeatherStation:
                 wind_speed=self.weatherReport['current']['wind_speed'],
                 wind_degree=self.weatherReport['current']['wind_deg'],
                 pop=self.weatherReport['hourly'][0]['pop']
-            ),
+                ),
             homeMeas=HomeMeas(
                 temperature=self.sensorReport['temperature'],
                 pressure=self.sensorReport['pressure'],
@@ -111,10 +84,12 @@ class WeatherStation:
                 gas_resistance=self.sensorReport['gas_resistance'],
                 eco2=self.sensorReport['eCO2'],
                 tvoc=self.sensorReport['TVOC']
+                )
             )
-        )
 
-        self.dbctl.insert(myMeas)
+            self.dbctl.insert(myMeas)
+        else:
+            print('[WeatherStation] Error inserting data to DB.')
 
     def get_ww_idx(self):
         dictionary = {
@@ -137,4 +112,8 @@ class WeatherStation:
             '50d' : 10,
             '50n' : 10,
         }
-        return dictionary[self.weatherReport['current']['weather'][0]['icon']]
+
+        try:
+            return dictionary[self.weatherReport['current']['weather'][0]['icon']]
+        except:
+            return 0

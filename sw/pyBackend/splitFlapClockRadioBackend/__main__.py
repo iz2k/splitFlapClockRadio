@@ -2,6 +2,7 @@
 import argparse
 
 from splitFlapClockRadioBackend.audio.audio import Audio
+from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.mainControl import MainControlThread
 from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
@@ -16,10 +17,11 @@ from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
 def main():
 
     # Parse arguments
-    parser = argparse.ArgumentParser(description="iz2k's split-clock controller.")
+    parser = argparse.ArgumentParser(description="iz2k's split-flap-clock controller.")
     parser.add_argument("-port", default='8081', help=" port used for web server")
     args = parser.parse_args()
 
+    config = Config()
     dbCtl = dbController()
     userInterface = UserInterface()
     audio = Audio()
@@ -27,7 +29,7 @@ def main():
 
     # Define threads
     osInfoTh = osInfoThread()
-    weatherStationTh = WeatherStationThread(dbCtl=dbCtl)
+    weatherStationTh = WeatherStationThread(dbCtl=dbCtl, config=config)
     lightStripTh = RgbStripThread()
     radioTunerTh = RadioTunerThread()
     splitFlapTh = SplitFlapThread()
@@ -62,7 +64,7 @@ def main():
         weatherStationTh.stop()
 
         # Print Goodby msg
-        print('Exiting R102-DB-CTL...')
+        print('Exiting...')
 
     except KeyboardInterrupt:
         # Stop threads

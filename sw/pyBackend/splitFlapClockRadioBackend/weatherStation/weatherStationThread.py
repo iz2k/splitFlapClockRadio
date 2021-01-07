@@ -18,9 +18,9 @@ class WeatherStationThread(Thread):
     weatherStation = None
     splitFlapTh = None
 
-    def __init__(self, dbCtl : dbController):
+    def __init__(self, dbCtl : dbController, config):
         Thread.__init__(self)
-        self.weatherStation = WeatherStation(dbCtl)
+        self.weatherStation = WeatherStation(dbCtl, config)
 
     def start(self):
         Thread.start(self)

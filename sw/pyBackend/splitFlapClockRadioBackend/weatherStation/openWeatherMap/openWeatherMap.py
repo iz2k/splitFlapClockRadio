@@ -32,5 +32,8 @@ class OpenWeatherMap:
         url = url + 'lang=es&'
         url = url + 'appid=' + self._apiKey
 
-        with request.urlopen(url) as con:
-            return json.loads(con.read().decode())
+        try:
+            with request.urlopen(url) as con:
+                return json.loads(con.read().decode())
+        except:
+            return None
