@@ -25,13 +25,19 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { WeatherCurrentComponent } from './weather/weather-current/weather-current.component';
-import { HomeCurrentComponent } from './home-current/home-current.component';
+import { SensorsCurrentComponent } from './sensors/sensors-current/sensors-current.component';
 import { HistoricComponent } from './historic/historic.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {ChartsModule} from 'ng2-charts';
 import 'hammerjs';
 import 'chartjs-plugin-zoom';
 import { SensorsComponent } from './sensors/sensors.component';
+import { SensorCalibrationComponent } from './sensors/sensor-calibration/sensor-calibration.component';
+import { LocationComponent } from './location/location.component';
+import { ClockComponent } from './clock/clock.component';
+import { RadioComponent } from './radio/radio.component';
+import { SpotifyComponent } from './spotify/spotify.component';
+import { LocationConfigComponent } from './location/location-config/location-config.component';
 
 
 @NgModule({
@@ -42,9 +48,15 @@ import { SensorsComponent } from './sensors/sensors.component';
     WeatherComponent,
     DashboardComponent,
     WeatherCurrentComponent,
-    HomeCurrentComponent,
+    SensorsCurrentComponent,
     HistoricComponent,
-    SensorsComponent
+    SensorsComponent,
+    SensorCalibrationComponent,
+    LocationComponent,
+    ClockComponent,
+    RadioComponent,
+    SpotifyComponent,
+    LocationConfigComponent
   ],
   imports: [
     BrowserModule,

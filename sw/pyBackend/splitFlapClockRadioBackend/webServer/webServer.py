@@ -4,6 +4,7 @@ from flask_cors import CORS
 from queue import Queue
 from threading import Thread
 
+from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.tools.ipTools import getHostname, getIP
 from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
@@ -51,7 +52,7 @@ class webServerThread(Thread):
         # When server ends, reset flag
         self.isRunning = False
 
-    def define_webroutes(self, weather : WeatherStation, dbCtl : dbController):
+    def define_webroutes(self, weather : WeatherStation, dbCtl : dbController, config : Config):
         defineInfoRoutes(self.flaskApp, self.sio)
-        defineWeatherStationRoutes(self.flaskApp, self.sio, weather)
+        defineWeatherStationRoutes(self.flaskApp, self.sio, weather, config)
         defineDataBaseRoutes(self.flaskApp, self.sio, dbCtl)

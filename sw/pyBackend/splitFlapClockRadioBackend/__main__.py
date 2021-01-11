@@ -39,7 +39,7 @@ def main():
 
     webserverTh = webServerThread(log=False)
     webserverTh.define_webroutes(weather = weatherStationTh.weatherStation,
-                                 dbCtl=dbCtl)
+                                 dbCtl=dbCtl, config=config)
 
     # Pass SIO to threads
     osInfoTh.set_sio(webserverTh.sio)

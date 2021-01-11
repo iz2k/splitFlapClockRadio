@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../backend.service';
+import {BackendService} from '../../backend.service';
 
 @Component({
   selector: 'app-home-current',
-  templateUrl: './home-current.component.html',
-  styleUrls: ['./home-current.component.css']
+  templateUrl: './sensors-current.component.html',
+  styleUrls: ['./sensors-current.component.css']
 })
-export class HomeCurrentComponent implements OnInit {
+export class SensorsCurrentComponent implements OnInit {
 
   homeReport: any;
 

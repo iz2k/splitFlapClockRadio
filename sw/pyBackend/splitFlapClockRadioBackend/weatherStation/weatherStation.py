@@ -20,18 +20,21 @@ class WeatherStation:
     sgp = None
     openWeather = None
 
-    def __init__(self, dbctl : dbController, config):
+    def __init__(self, dbctl : dbController, config : Config):
+        self.dbctl = dbctl
         self.config = config
         self.bme = SimpleBME680()
-        self.sgp = SimpleSGP30([int(self.config.params['weatherStation']['baselineEco2']), int(self.config.params['weatherStation']['baselineTvoc'])])
+        self.sgp = SimpleSGP30([int(self.config.params['sensors']['baselineEco2']), int(self.config.params['sensors']['baselineTvoc'])])
         self.openWeather = OpenWeatherMap(apiKey=self.config.params['api']['openWeatherApi'],
-                                          latitude=self.config.params['weatherStation']['latitude'],
-                                          longitude=self.config.params['weatherStation']['longitude'])
-        self.dbctl = dbctl
+                                          latitude=self.config.params['location']['latitude'],
+                                          longitude=self.config.params['location']['longitude'])
 
-    def updateParam(self, param, value):
-        self.config.params[param]=value
-        self.config.saveConfig()
+    def reloadConfig(self):
+        self.sgp.resetDevice()
+        self.sgp.initConfig([int(self.config.params['sensors']['baselineEco2']), int(self.config.params['sensors']['baselineTvoc'])])
+        self.openWeather.setLocation(latitude=self.config.params['location']['latitude'],
+                                          longitude=self.config.params['location']['longitude'])
+        self.updateWeatherReport()
 
     def updateWeatherReport(self):
         self.weatherReport = self.openWeather.getReport()
@@ -39,7 +42,7 @@ class WeatherStation:
             print('[WeatherStation] Report Update:')
             print(prettyJson(
                 {
-                    'location' : self.config.params['weatherStation']['location'],
+                    'location' : self.config.params['location']['city'],
                     'temperature' : str(self.weatherReport['current']['temp']) + 'C',
                     'pressure' : str(self.weatherReport['current']['pressure']) + 'mbar',
                     'humidity' : str(self.weatherReport['current']['humidity']) + '%',
@@ -68,7 +71,7 @@ class WeatherStation:
             myMeas = Measurement(
             datetime=datetime.now(),
             cityMeas=CityMeas(
-                location=self.config.params['weatherStation']['location'],
+                location=self.config.params['location']['city'],
                 temperature=self.weatherReport['current']['temp'],
                 pressure=self.weatherReport['current']['pressure'],
                 humidity=self.weatherReport['current']['humidity'],

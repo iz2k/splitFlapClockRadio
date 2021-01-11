@@ -46,18 +46,32 @@ export class BackendService extends Socket {
       });
   }
 
-  getWeatherConfig(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-weather-config');
+  getApiConfig(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-api-config');
+  }
+
+  getLocationConfig(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-location-config');
+  }
+
+  getSensorsConfig(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-sensors-config');
   }
 
   getWeather(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/get-weather');
   }
 
-  setWeatherParameters(arglist): Observable<any> {
+  setApiParameters(arglist): Observable<any> {
     let paramsString = '';
     arglist.forEach(arg => paramsString = paramsString + arg.parameter.toString() + '=' +  arg.value.toString() + '&');
-    return this.http.get<any>(this.urlEndPoint + '/set-weather-config?' + paramsString);
+    return this.http.get<any>(this.urlEndPoint + '/set-api?' + paramsString);
+  }
+
+  setLocationParameters(arglist): Observable<any> {
+    let paramsString = '';
+    arglist.forEach(arg => paramsString = paramsString + arg.parameter.toString() + '=' +  arg.value.toString() + '&');
+    return this.http.get<any>(this.urlEndPoint + '/set-location?' + paramsString);
   }
 
   getHome(): Observable<any> {

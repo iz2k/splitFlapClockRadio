@@ -19,12 +19,22 @@ class Config:
     def reloadConfig(self):
         self.loadConfig()
         self.printConfig()
-        self.sgp.resetDevice()
-        self.sgp.initConfig([int(self.params['baselineEco2']), int(self.params['baselineTvoc'])])
 
     def printConfig(self):
         print('SplitFlapClockRadio configuration:')
         print(prettyJson(self.params))
+
+    def updateApiParam(self, param, value):
+        self.params['api'][param] = value
+        self.saveConfig()
+
+    def updateLocationParam(self, param, value):
+        self.params['location'][param] = value
+        self.saveConfig()
+
+    def updateSensorParam(self, param, value):
+        self.params['sensors'][param] = value
+        self.saveConfig()
 
     def createDefaultConfig(self):
         self.params = {
@@ -35,10 +45,12 @@ class Config:
             'clock' : {
                 'timeZone' : ''
             },
-            'weatherStation' : {
+            'location' : {
                 'location' : '',
                 'latitude' : '',
-                'longitude' : '',
+                'longitude' : ''
+            },
+            'sensors' : {
                 'baselineEco2': 34274,
                 'baselineTvoc': 34723
             },

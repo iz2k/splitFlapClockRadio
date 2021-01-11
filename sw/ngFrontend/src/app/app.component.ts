@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'iz2k\'s Flip Clock';
+  title = 'iz2k\'s Split Flap Clock Radio';
 }
