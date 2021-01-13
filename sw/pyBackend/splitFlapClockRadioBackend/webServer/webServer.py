@@ -8,6 +8,7 @@ from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.tools.ipTools import getHostname, getIP
 from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
+from splitFlapClockRadioBackend.webServer.routesClock import defineClockRoutes
 from splitFlapClockRadioBackend.webServer.routesConfig import defineConfigRoutes
 from splitFlapClockRadioBackend.webServer.routesDataBase import defineDataBaseRoutes
 from splitFlapClockRadioBackend.webServer.routesInfo import defineInfoRoutes
@@ -58,3 +59,4 @@ class webServerThread(Thread):
         defineConfigRoutes(self.flaskApp, config)
         defineWeatherStationRoutes(self.flaskApp, weather)
         defineDataBaseRoutes(self.flaskApp, dbCtl)
+        defineClockRoutes(self.flaskApp)

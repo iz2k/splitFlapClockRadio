@@ -38,6 +38,9 @@ import { ClockComponent } from './clock/clock.component';
 import { RadioComponent } from './radio/radio.component';
 import { SpotifyComponent } from './spotify/spotify.component';
 import { LocationConfigComponent } from './location/location-config/location-config.component';
+import { ClockCurrentComponent } from './clock/clock-current/clock-current.component';
+import { ClockCalibrateComponent } from './clock/clock-calibrate/clock-calibrate.component';
+import { ClockAlarmsComponent } from './clock/clock-alarms/clock-alarms.component';
 
 
 @NgModule({
@@ -56,7 +59,10 @@ import { LocationConfigComponent } from './location/location-config/location-con
     ClockComponent,
     RadioComponent,
     SpotifyComponent,
-    LocationConfigComponent
+    LocationConfigComponent,
+    ClockCurrentComponent,
+    ClockCalibrateComponent,
+    ClockAlarmsComponent
   ],
   imports: [
     BrowserModule,
