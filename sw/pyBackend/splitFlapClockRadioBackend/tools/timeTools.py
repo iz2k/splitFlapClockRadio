@@ -5,20 +5,25 @@ from datetime import datetime
 import pytz
 from babel.localtime import get_localzone
 
-def getTimeZoneAwareNow(timezone):
+from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
+
+
+def getTimeZoneAwareNow(timeZone):
     t_utc = datetime.utcnow()
     t_loc = pytz.timezone("UTC").localize(t_utc)
-    t_norm = timezone.normalize(t_loc)
+    t_norm = pytz.timezone(timeZone).normalize(t_loc)
     return t_norm
 
 
 def getNow():
-    timezone = get_localzone()
+    timezone = get_localzone().zone
     return getTimeZoneAwareNow(timezone)
 
-def getDateTime():
-    timezone = get_localzone()
+def getDateTime(timezone=None):
+    if timezone == None:
+        timezone = get_localzone().zone
     now = getTimeZoneAwareNow(timezone)
+    print(prettyJson(now))
     return {'year': now.year,
             'month': now.month,
             'day': now.day,

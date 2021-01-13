@@ -60,3 +60,10 @@ def defineConfigRoutes(app : Flask, config : Config):
         except Exception as e:
             print(e)
             return 'Invalid parameters'
+
+    @app.route('/set-timezone', methods=['POST'])
+    def setTimezone():
+        content = flask_request.get_json(silent=True)
+        if (content != None):
+            config.updateClockParam('timeZone', content['nameValue'])
+        return prettyJson({'status' : 'Timezone modified!'})

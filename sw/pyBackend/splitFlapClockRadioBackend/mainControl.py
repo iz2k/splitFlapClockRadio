@@ -6,6 +6,7 @@ from pytz import timezone
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.audio.audio import Audio
+from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
@@ -25,10 +26,11 @@ class MainControlThread(Thread):
     spotifyPlayer : SpotifyPlayer = None
     radioTunerTh : RadioTunerThread = None
     splitFlapTh : SplitFlapThread = None
+    config : Config = None
 
     mediaSource = 'None'
 
-    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, splitFlapTh):
+    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, splitFlapTh, config):
         Thread.__init__(self)
         self.dbCtl = dbCtl
         self.audio = audio
@@ -36,6 +38,7 @@ class MainControlThread(Thread):
         self.spotifyPlayer = spotifyPlayer
         self.radioTunerTh = radioTunerTh
         self.splitFlapTh = splitFlapTh
+        self.config = config
 
     def start(self):
         Thread.start(self)
@@ -81,7 +84,7 @@ class MainControlThread(Thread):
             time.sleep(0.1)
 
     def updateTime(self):
-        curTime = getTimeZoneAwareNow(timezone('Europe/Madrid'))
+        curTime = getTimeZoneAwareNow(self.config.params['clock']['timeZone'])
         self.splitFlapTh.update_time(curTime.hour, curTime.minute)
 
     def systemStartup(self):

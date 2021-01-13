@@ -59,4 +59,4 @@ class webServerThread(Thread):
         defineConfigRoutes(self.flaskApp, config)
         defineWeatherStationRoutes(self.flaskApp, weather)
         defineDataBaseRoutes(self.flaskApp, dbCtl)
-        defineClockRoutes(self.flaskApp)
+        defineClockRoutes(self.flaskApp, config)

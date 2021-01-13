@@ -36,6 +36,10 @@ class Config:
         self.params['sensors'][param] = value
         self.saveConfig()
 
+    def updateClockParam(self, param, value):
+        self.params['clock'][param] = value
+        self.saveConfig()
+
     def createDefaultConfig(self):
         self.params = {
             'api' : {

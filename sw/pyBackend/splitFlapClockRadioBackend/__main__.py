@@ -33,7 +33,7 @@ def main():
     lightStripTh = RgbStripThread()
     radioTunerTh = RadioTunerThread()
     splitFlapTh = SplitFlapThread()
-    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh, splitFlapTh=splitFlapTh)
+    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh, splitFlapTh=splitFlapTh, config=config)
 
     userInterface.set_mainControlQueue(mainControlTh.queue)
 

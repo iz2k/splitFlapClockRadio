@@ -1,11 +1,24 @@
-<div width="550px" class="align-content-center">
-  <JSB-flipclock
-    [HoursTensPlace]=HoursTensPlace
-    [HoursOnesPlace]=HoursOnesPlace
-    [MinutesTensPlace]=MinutesTensPlace
-    [MinutesOnesPlace]=MinutesOnesPlace
-    [SecondsTensPlace]=SecondsTensPlace
-    [SecondsOnesPlace]=SecondsOnesPlace
-    >
-  </JSB-flipclock>
+<div width="550px" class="align-content-center" [formGroup]="tzFormGroup">
+
+  <div class="text-xl-center w50">
+    {{DateText}}
+  </div>
+  <div class="w50">
+    <ng-moment-timezone-picker class="tzonepicker"
+      [formControlName]="'timezone'"
+      [customPlaceholderText]="'Timezone'">
+    </ng-moment-timezone-picker>
+  </div>
+
+  <div class="w100 h-50">
+    <JSB-flipclock
+      [HoursTensPlace]=HoursTensPlace
+      [HoursOnesPlace]=HoursOnesPlace
+      [MinutesTensPlace]=MinutesTensPlace
+      [MinutesOnesPlace]=MinutesOnesPlace
+      [SecondsTensPlace]=SecondsTensPlace
+      [SecondsOnesPlace]=SecondsOnesPlace
+      >
+    </JSB-flipclock>
+  </div>
 </div>
