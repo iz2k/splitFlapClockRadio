@@ -29,11 +29,13 @@ class WeatherStation:
                                           latitude=self.config.params['location']['latitude'],
                                           longitude=self.config.params['location']['longitude'])
 
-    def reloadConfig(self):
+    def reloadSensors(self):
         self.sgp.resetDevice()
         self.sgp.initConfig([int(self.config.params['sensors']['baselineEco2']), int(self.config.params['sensors']['baselineTvoc'])])
+
+    def reloadWeather(self):
         self.openWeather.setLocation(latitude=self.config.params['location']['latitude'],
-                                          longitude=self.config.params['location']['longitude'])
+                                     longitude=self.config.params['location']['longitude'])
         self.updateWeatherReport()
 
     def updateWeatherReport(self):

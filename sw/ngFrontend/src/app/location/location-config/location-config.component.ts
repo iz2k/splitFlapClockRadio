@@ -98,6 +98,7 @@ export class LocationConfigComponent implements OnInit {
       ]).subscribe(json =>
     {
       this.parseLocationConfig(json);
+      this.backend.reloadWeather().subscribe();
     });
   }
 

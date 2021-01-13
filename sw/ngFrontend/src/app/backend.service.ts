@@ -74,8 +74,14 @@ export class BackendService extends Socket {
     return this.http.get<any>(this.urlEndPoint + '/set-location?' + paramsString);
   }
 
+  setSensorsParameters(arglist): Observable<any> {
+    let paramsString = '';
+    arglist.forEach(arg => paramsString = paramsString + arg.parameter.toString() + '=' +  arg.value.toString() + '&');
+    return this.http.get<any>(this.urlEndPoint + '/set-sensors?' + paramsString);
+  }
+
   getHome(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-home');
+    return this.http.get<any>(this.urlEndPoint + '/get-sensors');
   }
 
   getMeasurements(filter): Observable<any> {
@@ -88,10 +94,14 @@ export class BackendService extends Socket {
   }
 
   resetBaseline(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/reset-baseline');
+    return this.http.get<any>(this.urlEndPoint + '/reset-sensors-baseline');
   }
 
   reloadSensors(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/reload-sensors');
+  }
+
+  reloadWeather(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/reload-weather');
   }
 }

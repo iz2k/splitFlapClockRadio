@@ -1,11 +1,10 @@
-from flask import Flask
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.osInfo.osInfoThread import getReport
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 
 
-def defineInfoRoutes(app : Flask, sio : SocketIO):
+def defineInfoRoutes(sio : SocketIO):
 
     @sio.on('connect')
     def onconnect_event():

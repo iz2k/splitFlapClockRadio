@@ -39,7 +39,7 @@ export class SensorCalibrationComponent implements OnInit {
   }
 
   saveBaselines(): void {
-    this.backend.setApiParameters(
+    this.backend.setSensorsParameters(
       [
         {parameter: 'baselineEco2', value: this.currentBaselineEco2},
         {parameter: 'baselineTvoc', value: this.currentBaselineTvoc},
