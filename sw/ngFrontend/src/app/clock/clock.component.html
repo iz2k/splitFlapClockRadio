@@ -7,7 +7,7 @@
 
     <div class="card-body w100">
       <app-clock-current  *ngIf="!calibrationMode"></app-clock-current>
-      <div  *ngIf="calibrationMode" class="font-weight-bold text-xl-center text-danger"> CALIBRATION MODE ACTIVE</div>
+      <div  *ngIf="calibrationMode" class="font-weight-bold text-center text-danger"> CALIBRATION MODE ACTIVE</div>
     </div>
   </div>
 
@@ -24,9 +24,8 @@
       </div>
     </div>
 
-    <div class="card-body w100">
-      <app-clock-calibrate *ngIf="calibrationMode"></app-clock-calibrate>
-      <div  *ngIf="!calibrationMode" class="font-weight-bold text-xl-center text-success"> Calibration disabled during normal operation</div>
+    <div class="card-body w100" *ngIf="calibrationMode">
+      <app-clock-calibrate ></app-clock-calibrate>
     </div>
   </div>
 
