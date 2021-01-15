@@ -1,6 +1,6 @@
 import subprocess
 
-from splitFlapClockRadioBackend.tools.osTools import execute
+from splitFlapClockRadioBackend.tools.osTools import execute, restart_service
 
 
 class SpotifyPlayer:
@@ -8,8 +8,7 @@ class SpotifyPlayer:
 	currentTrack = 'None'
 
 	def __init__(self):
-		if(self.check_local_device() == False):
-			self.set_local_device()
+		self.set_local_device()
 		self.pause()
 
 	def check_local_device(self):
@@ -17,6 +16,7 @@ class SpotifyPlayer:
 		if '* Split-Flap-Clock-Radio' in output:
 			return True
 		else:
+			restart_service('raspotify')
 			return False
 
 	def set_local_device(self):

@@ -21,6 +21,11 @@ def start_service(service):
     cmd = 'sudo service ' + service + ' start'
     subprocess.run(cmd.split(), capture_output=True)
 
+def restart_service(service):
+    print('Restarting ' + service + ' service')
+    cmd = 'sudo service ' + service + ' restart'
+    subprocess.run(cmd.split(), capture_output=True)
+
 def stop_service(service):
     print('Stopping ' + service + ' service')
     cmd = 'sudo service ' + service + ' stop'
