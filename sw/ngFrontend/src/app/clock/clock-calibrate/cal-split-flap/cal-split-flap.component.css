@@ -1,3 +1,9 @@
 .updateButton:hover {
   color: greenyellow;
 }
+.inputContainer {
+  width: 140px;
+}
+.mainContainer{
+  min-width: 225px;
+}

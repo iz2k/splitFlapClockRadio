@@ -1,24 +1,40 @@
-<div width="550px" class="align-content-center" [formGroup]="tzFormGroup">
+<div [formGroup]="tzFormGroup">
 
-  <div class="text-xl-center w50">
+  <div class=" row">
+    <div class="column flex-fill">
+    </div>
+     <div class="column tzonepicker">
+      <ng-moment-timezone-picker
+        [formControlName]="'timezone'"
+        [customPlaceholderText]="'Timezone'">
+      </ng-moment-timezone-picker>
+    </div>
+    <div class="column flex-fill">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column flex-fill">
+    </div>
+    <div class="column jsbflipclock">
+      <JSB-flipclock
+        [HoursTensPlace]=HoursTensPlace
+        [HoursOnesPlace]=HoursOnesPlace
+        [MinutesTensPlace]=MinutesTensPlace
+        [MinutesOnesPlace]=MinutesOnesPlace
+        [SecondsTensPlace]=SecondsTensPlace
+        [SecondsOnesPlace]=SecondsOnesPlace
+        >
+      </JSB-flipclock>
+    </div>
+    <div class="column flex-fill">
+    </div>
+  </div>
+
+  <div class="column bigdate">
     {{DateText}}
   </div>
-  <div class="w50">
-    <ng-moment-timezone-picker class="tzonepicker"
-      [formControlName]="'timezone'"
-      [customPlaceholderText]="'Timezone'">
-    </ng-moment-timezone-picker>
-  </div>
 
-  <div class="w100 h-50">
-    <JSB-flipclock
-      [HoursTensPlace]=HoursTensPlace
-      [HoursOnesPlace]=HoursOnesPlace
-      [MinutesTensPlace]=MinutesTensPlace
-      [MinutesOnesPlace]=MinutesOnesPlace
-      [SecondsTensPlace]=SecondsTensPlace
-      [SecondsOnesPlace]=SecondsOnesPlace
-      >
-    </JSB-flipclock>
-  </div>
+
+
 </div>
