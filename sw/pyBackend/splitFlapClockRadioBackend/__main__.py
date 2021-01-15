@@ -2,12 +2,12 @@
 import argparse
 
 from splitFlapClockRadioBackend.audio.audio import Audio
+from splitFlapClockRadioBackend.clock.clockThread import ClockThread
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.mainControl import MainControlThread
 from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
 from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
-from splitFlapClockRadioBackend.splitFlap.splitFlapThread import SplitFlapThread
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 from splitFlapClockRadioBackend.userInterface.userInterface import UserInterface
 from splitFlapClockRadioBackend.weatherStation.weatherStationThread import WeatherStationThread
@@ -32,19 +32,19 @@ def main():
     weatherStationTh = WeatherStationThread(dbCtl=dbCtl, config=config)
     lightStripTh = RgbStripThread()
     radioTunerTh = RadioTunerThread()
-    splitFlapTh = SplitFlapThread()
-    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh, splitFlapTh=splitFlapTh, config=config)
+    clockTh = ClockThread(config=config)
+    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh, clockTh=clockTh, config=config)
 
     userInterface.set_mainControlQueue(mainControlTh.queue)
 
     webserverTh = webServerThread(log=False)
     webserverTh.define_webroutes(weather = weatherStationTh.weatherStation,
-                                 dbCtl=dbCtl, config=config)
+                                 dbCtl=dbCtl, config=config, clockTh=clockTh)
 
     # Pass SIO to threads
     osInfoTh.set_sio(webserverTh.sio)
     weatherStationTh.set_sio(webserverTh.sio)
-    weatherStationTh.set_splitFlapTh(splitFlapTh)
+    weatherStationTh.set_clockTh(clockTh)
 
     try:
         # Start threads
@@ -52,7 +52,7 @@ def main():
         weatherStationTh.start()
         lightStripTh.start()
         radioTunerTh.start()
-        splitFlapTh.start()
+        clockTh.start()
         mainControlTh.start()
         webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 

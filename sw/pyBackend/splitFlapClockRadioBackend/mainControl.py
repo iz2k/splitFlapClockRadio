@@ -1,18 +1,16 @@
 import time
 from queue import Queue
 from threading import Thread
-from pytz import timezone
 
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.audio.audio import Audio
+from splitFlapClockRadioBackend.clock.clockThread import ClockThread
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
-from splitFlapClockRadioBackend.splitFlap.splitFlapThread import SplitFlapThread
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
-from splitFlapClockRadioBackend.tools.timeTools import getTimeZoneAwareNow
 
 
 class MainControlThread(Thread):
@@ -25,19 +23,19 @@ class MainControlThread(Thread):
     sio : SocketIO = None
     spotifyPlayer : SpotifyPlayer = None
     radioTunerTh : RadioTunerThread = None
-    splitFlapTh : SplitFlapThread = None
+    clockTh : ClockThread = None
     config : Config = None
 
     mediaSource = 'None'
 
-    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, splitFlapTh, config):
+    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, clockTh, config):
         Thread.__init__(self)
         self.dbCtl = dbCtl
         self.audio = audio
         self.lightStripTh = lightStripTh
         self.spotifyPlayer = spotifyPlayer
         self.radioTunerTh = radioTunerTh
-        self.splitFlapTh = splitFlapTh
+        self.clockTh = clockTh
         self.config = config
 
     def start(self):
@@ -54,6 +52,9 @@ class MainControlThread(Thread):
         self.sio = sio
 
     def run(self):
+
+        # TODO: REMOVE. Just to autostart radio during development.
+        self.changeMediaSource()
         # Main loop
         run_app=True
         while(run_app):
@@ -80,12 +81,7 @@ class MainControlThread(Thread):
                     if q_data == 'long':
                         self.changeMediaSource()
 
-            self.updateTime()
             time.sleep(0.1)
-
-    def updateTime(self):
-        curTime = getTimeZoneAwareNow(self.config.params['clock']['timeZone'])
-        self.splitFlapTh.update_time(curTime.hour, curTime.minute)
 
     def systemStartup(self):
         self.audio.say_text('Iniciando reloj.', lang='es')

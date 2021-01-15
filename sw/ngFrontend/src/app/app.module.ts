@@ -41,6 +41,7 @@ import { LocationConfigComponent } from './location/location-config/location-con
 import { ClockCurrentComponent } from './clock/clock-current/clock-current.component';
 import { ClockCalibrateComponent } from './clock/clock-calibrate/clock-calibrate.component';
 import { ClockAlarmsComponent } from './clock/clock-alarms/clock-alarms.component';
+import {CalSplitFlapComponent} from "./clock/clock-calibrate/cal-split-flap/cal-split-flap.component";
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { ClockAlarmsComponent } from './clock/clock-alarms/clock-alarms.componen
     LocationConfigComponent,
     ClockCurrentComponent,
     ClockCalibrateComponent,
-    ClockAlarmsComponent
+    ClockAlarmsComponent,
+    CalSplitFlapComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,24 @@
+<div class="w100"  align="center" *ngIf="statusArray != undefined">
+  <div class="card border-dark w80">
+    <div class="text-center bg-cardtitle pt-2">
+        <h4>{{status['FLAP_TYPE']}}</h4>
+    </div>
+    <div class="card-body" >
+      <div class="row m-0" *ngFor="let field of statusArray; let i = index">
+        <div class="m-auto" align="center">
+          <div class="column" style="display: inline-block; text-align: center" align="center">
+            <mat-form-field>
+                <mat-label>{{field.description}}</mat-label>
+                <input matInput placeholder="digit number" [(ngModel)]="field.value">
+            </mat-form-field>
+          </div>
+          <div class="column px-3" >
+            <button class="updateButton" mat-mini-fab color="primary" (click)="setParameter(field.description,field.value)">
+              <mat-icon aria-label="Example icon-button with a heart icon">publish</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

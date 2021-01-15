@@ -21,20 +21,20 @@ export class BackendService extends Socket {
     return this.http.get<any>(this.urlEndPoint + '/get-time');
   }
 
-  getStatus(type): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-status?type=' + type);
+  getClockMode(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-clock-mode');
   }
 
-  getMode(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-mode');
+  setClockMode(value): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/set-clock-mode?mode=' + value);
   }
 
-  setMode(value): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/set-mode?mode=' + value);
+  getClockStatus(type): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-clock-status?type=' + type);
   }
 
-  setParameter(type, parameter, value): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/set-parameter?type=' + type + '&parameter=' + parameter + '&value=' + value);
+  setClockParameter(type, parameter, value): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/set-clock-parameter?type=' + type + '&parameter=' + parameter + '&value=' + value);
   }
 
   setTimeZone(timezone): Observable<any> {

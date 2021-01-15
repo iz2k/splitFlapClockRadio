@@ -6,17 +6,27 @@
     </div>
 
     <div class="card-body w100">
-      <app-clock-current></app-clock-current>
+      <app-clock-current  *ngIf="!calibrationMode"></app-clock-current>
+      <div  *ngIf="calibrationMode" class="font-weight-bold text-xl-center text-danger"> CALIBRATION MODE ACTIVE</div>
     </div>
   </div>
 
   <div class="card border-dark w100 my-2">
     <div class="text-center bg-cardtitle pt-2">
-      <h4>Clock Calibration</h4>
+      <div class="column w10">&nbsp;</div>
+      <div class="column w80">
+        <h4>Clock calibration</h4>
+      </div>
+      <div class="column w10">
+        <mat-slide-toggle (toggleChange)="applyCalibrationMode(!calibrationMode)"
+                    [checked]="calibrationMode">
+        </mat-slide-toggle>
+      </div>
     </div>
 
     <div class="card-body w100">
-      <app-clock-calibrate></app-clock-calibrate>
+      <app-clock-calibrate *ngIf="calibrationMode"></app-clock-calibrate>
+      <div  *ngIf="!calibrationMode" class="font-weight-bold text-xl-center text-success"> Calibration disabled during normal operation</div>
     </div>
   </div>
 

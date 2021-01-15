@@ -19,8 +19,6 @@ export class ClockCurrentComponent implements OnInit {
   SecondsOnesPlace = 0;
   DateText = '';
 
-  calibrationMode = false;
-
   tzFormGroup: FormGroup;
   timezone = new FormControl('');
 
@@ -46,9 +44,7 @@ export class ClockCurrentComponent implements OnInit {
     setInterval
       (_ => {
         this.incrementClockTime();
-        if (!this.calibrationMode) {
-          this.updateFlipClockWidget();
-        }
+        this.updateFlipClockWidget();
       }, 1000);
   }
 

@@ -4,24 +4,29 @@ from threading import Thread
 
 from flask_socketio import SocketIO
 
-from splitFlapClockRadioBackend.splitFlap.smbusMsp430 import smbusMsp430
+from splitFlapClockRadioBackend.clock.smbusMsp430 import smbusMsp430
+from splitFlapClockRadioBackend.config.config import Config
+from splitFlapClockRadioBackend.tools.timeTools import getTimeZoneAwareNow
 
 
-class SplitFlapThread(Thread):
+class ClockThread(Thread):
 
     queue = Queue()
     smbusMsp430 = None
     desired_hh = None
     desired_mm = None
     desired_ww = None
+    config : Config = None
+    mode = 'clock'
 
-    def __init__(self):
+    def __init__(self, config):
         Thread.__init__(self)
         self.smbus430 = smbusMsp430()
         time.sleep(1)
         self.desired_hh = self.smbus430.read_registerName('hh_desired_digit')
         self.desired_mm = self.smbus430.read_registerName('mm_desired_digit')
         self.desired_ww = self.smbus430.read_registerName('ww_desired_digit')
+        self.config = config
 
     def start(self):
         Thread.start(self)
@@ -36,6 +41,8 @@ class SplitFlapThread(Thread):
         self.sio = sio
 
     def run(self):
+
+        self.smbus430.getFlapStatus('hh')
 
         # Main loop
         run_app=True
@@ -54,6 +61,11 @@ class SplitFlapThread(Thread):
                         print('I2C error updating time')
                 if (q_msg == 'update_weather'):
                     self.smbus430.write_registerName('ww_desired_digit', q_data)
+
+            # Keep track of time
+            if self.mode == 'clock':
+                curTime = getTimeZoneAwareNow(self.config.params['clock']['timeZone'])
+                self.update_time(curTime.hour, curTime.minute)
 
             time.sleep(0.1)
 

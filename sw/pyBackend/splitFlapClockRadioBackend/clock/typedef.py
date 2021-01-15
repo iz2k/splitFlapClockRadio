@@ -30,6 +30,47 @@ MSP430_REGS = {
     '29': {'name': 'ww_debounce', 'type': int, 'len' : 2},
 }
 
+FLAP_REGS = {
+    'hh' : {
+                'IR_THRESHOLD': '1',
+                'HALL_THRESHOLD': '2',
+                'HALL_DIGIT': '3',
+                'CURRENT_DIGIT': '4',
+                'DESIRED_DIGIT': '5',
+                'CURRENT_IR': '6',
+                'CURRENT_HALL': '7',
+                'SYNC_TRIGGER': '8',
+                'DEBOUNCE': '9'
+            },
+    'mm' : {
+                'IR_THRESHOLD': '11',
+                'HALL_THRESHOLD': '12',
+                'HALL_DIGIT': '13',
+                'CURRENT_DIGIT': '14',
+                'DESIRED_DIGIT': '15',
+                'CURRENT_IR': '16',
+                'CURRENT_HALL': '17',
+                'SYNC_TRIGGER': '18',
+                'DEBOUNCE': '19'
+            },
+    'ww' : {
+                'IR_THRESHOLD': '21',
+                'HALL_THRESHOLD': '22',
+                'HALL_DIGIT': '23',
+                'CURRENT_DIGIT': '24',
+                'DESIRED_DIGIT': '25',
+                'CURRENT_IR': '26',
+                'CURRENT_HALL': '27',
+                'SYNC_TRIGGER': '28',
+                'DEBOUNCE': '29'
+            }
+}
+
+FLAP_IDX = {
+    'hh': 'Hours',
+    'mm': 'Minutes',
+    'ww': 'Weather'
+}
 
 SMBUS_OPS = {
     'SMB_OP_NONE': 0b00000000,

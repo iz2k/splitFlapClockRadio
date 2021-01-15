@@ -1,12 +1,12 @@
-from datetime import datetime
 import time
+from datetime import datetime
 from enum import Enum
 
 import pigpio
 import smbus
 from termcolor import colored
 
-from splitFlapClockRadioBackend.splitFlap.typedef import SMBUS_OPS, MSP430_REGS
+from splitFlapClockRadioBackend.clock.typedef import SMBUS_OPS, MSP430_REGS, FLAP_REGS, FLAP_IDX
 from splitFlapClockRadioBackend.tools.menuTools import getKeyFromDictionarySubitemName, select_value, doReturn, doMenu
 
 
@@ -16,20 +16,20 @@ class smbusMsp430:
         I2C_ADDRESS=0x16
         RST_GPIO = 12
 
-    def __init__(self, SMBusChannel=1, i2cAddress=0x16):
+    def __init__(self, SMBusChannel=1, i2cAddress=0x16, skipReset=True):
         self.bus = smbus.SMBus(SMBusChannel)
         self.i2c_address = i2cAddress
 
-        # Set HW clock to feed REFCLK
         self.pi = pigpio.pi()
 
-        # Reset the device
-        self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.OUTPUT)
-        self.pi.write(self.HW.RST_GPIO.value, 0)
-        time.sleep(0.1)
-        self.pi.write(self.HW.RST_GPIO.value, 1)
-        #time.sleep(0.1)
-        #self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.INPUT)
+        if not skipReset:
+            # Reset the device
+            self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.OUTPUT)
+            self.pi.write(self.HW.RST_GPIO.value, 0)
+            time.sleep(0.1)
+            self.pi.write(self.HW.RST_GPIO.value, 1)
+            #time.sleep(0.1)
+            #self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.INPUT)
 
     def read_registerKey(self, key):
         data = self.bus.read_i2c_block_data(self.i2c_address, int(key) + SMBUS_OPS['SMB_OP_READ'], MSP430_REGS[key]['len'])
@@ -101,3 +101,13 @@ class smbusMsp430:
         print(colored(preTitle + ' >> Setting current time: ' + str(curTime.hour).zfill(2) + ':' + str(curTime.minute).zfill(2), 'magenta'))
         self.write_registerKey(self.getKeyFromRegisterName('hh_desired_digit'), curTime.hour)
         self.write_registerKey(self.getKeyFromRegisterName('mm_desired_digit'), curTime.minute)
+
+    def getFlapStatus(self, idx):
+        status = {'FLAP_TYPE': FLAP_IDX[idx]}
+        for reg in FLAP_REGS[idx]:
+            status[reg] = self.show_reg(FLAP_REGS[idx][reg])
+        return status
+
+    def setFlapParameter(self, idx, param, value):
+        self.write_registerKey(FLAP_REGS[idx][param], value)
+        return self.getFlapStatus(idx)

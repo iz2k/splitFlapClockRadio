@@ -1,13 +1,18 @@
 
 from termcolor import colored
 
-from splitFlapClockRadioBackend.splitFlap.smbusMsp430 import smbusMsp430
+from splitFlapClockRadioBackend.clock.smbusMsp430 import smbusMsp430
 from splitFlapClockRadioBackend.tools.menuTools import doMenu
 
 
 def main():
     # Create instance of msp430smbus
     smbus430=smbusMsp430()
+    hhFlaps = smbus430.getFlapStatus('hh')
+    print(hhFlaps)
+    smbus430.setFlapParameter('hh', 'DESIRED_DIGIT', int(hhFlaps['CURRENT_DIGIT'])+1)
+    hhFlaps = smbus430.getFlapStatus('hh')
+    print(hhFlaps)
 
     menuItems = {
         'title' : '>> MAIN MENU',
