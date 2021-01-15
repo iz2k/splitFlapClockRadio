@@ -20,7 +20,7 @@ export class SensorCalibrationComponent implements OnInit {
       console.log(json);
       this.parseSensorsConfig(json);
     });
-    this.backend.ioSocket.on('homeData', json => this.parseHome(JSON.parse(json)));
+    this.backend.ioSocket.on('sensorData', json => this.parseHome(JSON.parse(json)));
   }
 
   parseSensorsConfig(json): void {

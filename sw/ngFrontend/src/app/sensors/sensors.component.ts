@@ -8,8 +8,13 @@ import {BackendService} from '../backend.service';
 })
 export class SensorsComponent implements OnInit {
 
+  calibrationMode = false;
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  applyCalibrationMode(calibrationMode): void {
+    this.calibrationMode = calibrationMode;
   }
 }

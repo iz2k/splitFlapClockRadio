@@ -12,10 +12,18 @@
 
   <div class="card border-dark w100 my-2 locationContainer">
     <div class="text-center bg-cardtitle pt-2">
-      <h4>Calibration</h4>
+      <div class="column w10">&nbsp;</div>
+      <div class="column w80">
+        <h4>Sensor calibration</h4>
+      </div>
+      <div class="column w10">
+        <mat-slide-toggle (toggleChange)="applyCalibrationMode(!calibrationMode)"
+                    [checked]="calibrationMode">
+        </mat-slide-toggle>
+      </div>
     </div>
 
-    <div class="card-body w100">
+    <div class="card-body w100" *ngIf="calibrationMode">
       <app-sensor-calibration></app-sensor-calibration>
     </div>
   </div>

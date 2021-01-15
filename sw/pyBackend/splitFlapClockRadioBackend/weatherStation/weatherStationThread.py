@@ -67,4 +67,4 @@ class WeatherStationThread(Thread):
             time.sleep(1)
 
     def emit(self):
-        self.sio.emit('homeData', prettyJson(self.weatherStation.sensorReport))
+        self.sio.emit('sensorData', prettyJson(self.weatherStation.sensorReport))

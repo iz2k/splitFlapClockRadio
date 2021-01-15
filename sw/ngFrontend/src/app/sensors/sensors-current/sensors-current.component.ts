@@ -16,7 +16,7 @@ export class SensorsCurrentComponent implements OnInit {
     this.backend.getHome().subscribe(json => {
       this.parseHome(json);
     });
-    this.backend.ioSocket.on('homeData', json => this.parseHome(JSON.parse(json)));
+    this.backend.ioSocket.on('sensorData', json => this.parseHome(JSON.parse(json)));
   }
 
   parseHome(json): void {
