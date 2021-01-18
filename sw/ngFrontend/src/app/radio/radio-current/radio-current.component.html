@@ -1,5 +1,5 @@
 <div *ngIf="fmRadioReport != undefined">
-  <div class="row">
+  <div class="row" *ngIf="fmRadioReport.on">
     <div class="w10"></div>
     <div class="w10">
       <button mat-button (click)=seekDown($event)>
@@ -17,13 +17,13 @@
     <div class="w10"></div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="fmRadioReport.on">
     <div class="w100 radio_ps">
       {{fmRadioReport.PS}}
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="fmRadioReport.on">
     <div class="w100 radio_ta">
       {{fmRadioReport.RadioTextA}}
     </div>
@@ -32,7 +32,8 @@
   <div class="row">
     <div class="w10"></div>
     <div class="w30 text-center">
-      <ngx-gauge type=arch
+      <ngx-gauge  *ngIf="fmRadioReport.on"
+                  type=arch
              cap="butt"
              foregroundColor="rgba(0, 0, 150, 1)"
              value={{fmRadioReport.SNR}}
@@ -53,7 +54,8 @@
       </button>
     </div>
     <div class="w30 text-center">
-      <ngx-gauge type=arch
+      <ngx-gauge  *ngIf="fmRadioReport.on"
+                  type=arch
              form="Flat"
              foregroundColor="rgba(0, 150, 0, 1)"
              value={{fmRadioReport.RSSI}}
