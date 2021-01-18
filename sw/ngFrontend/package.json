@@ -33,6 +33,7 @@
     "jsb-angular-flip-clock": "0.0.2",
     "moment-timezone-picker": "^2.0.0",
     "ng2-charts": "^2.4.2",
+    "ngx-gauge": "^1.1.0",
     "ngx-socket-io": "^3.2.0",
     "ol": "^6.4.3",
     "popper.js": "^1.16.1",

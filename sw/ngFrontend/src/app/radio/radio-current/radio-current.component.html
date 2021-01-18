@@ -1,0 +1,71 @@
+<div *ngIf="fmRadioReport != undefined">
+  <div class="row">
+    <div class="w10"></div>
+    <div class="w10">
+      <button mat-button (click)=seekDown($event)>
+        <mat-icon class="radio_freq">skip_previous</mat-icon>
+      </button>
+    </div>
+    <div class="w60 radio_freq">
+      {{fmRadioReport.freq}} MHz
+    </div>
+    <div class="w10">
+      <button mat-button (click)=seekUp($event)>
+        <mat-icon class="radio_freq">skip_next</mat-icon>
+      </button>
+    </div>
+    <div class="w10"></div>
+  </div>
+
+  <div class="row">
+    <div class="w100 radio_ps">
+      {{fmRadioReport.PS}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="w100 radio_ta">
+      {{fmRadioReport.RadioTextA}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="w10"></div>
+    <div class="w30 text-center">
+      <ngx-gauge type=arch
+             cap="butt"
+             foregroundColor="rgba(0, 0, 150, 1)"
+             value={{fmRadioReport.SNR}}
+             label="SNR"
+             append="dB"
+             thick="10"
+             min="-5"
+             max="30"
+             size="100">
+      </ngx-gauge>
+    </div>
+    <div class="w20 text-center">
+      <button mat-button class="button-class" (click)=turnOn($event) *ngIf="fmRadioReport.on == false">
+        <mat-icon style="-webkit-text-fill-color:burlywood">play_arrow</mat-icon>
+      </button>
+      <button mat-button class="button-class" (click)=turnOff($event) *ngIf="fmRadioReport.on == true">
+        <mat-icon style="-webkit-text-fill-color:burlywood">stop</mat-icon>
+      </button>
+    </div>
+    <div class="w30 text-center">
+      <ngx-gauge type=arch
+             form="Flat"
+             foregroundColor="rgba(0, 150, 0, 1)"
+             value={{fmRadioReport.RSSI}}
+             label="RSSI"
+             append="dBm"
+             thick="10"
+             min="00"
+             max="50"
+             size="100">
+      </ngx-gauge>
+    </div>
+    <div class="w10"></div>
+  </div>
+
+</div>

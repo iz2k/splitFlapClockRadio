@@ -1,11 +1,14 @@
 import time
+from datetime import timedelta
 from queue import Queue
 from threading import Thread
 
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.radioTuner.si4731 import Si4731
+from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.osTools import start_service
+from splitFlapClockRadioBackend.tools.timeTools import getNow
 
 
 class RadioTunerThread(Thread):
@@ -32,6 +35,9 @@ class RadioTunerThread(Thread):
 
     def run(self):
 
+        interval_seconds = 0.5
+
+        last_update = getNow() - timedelta(seconds=interval_seconds)
         # Main loop
         run_app=True
         while(run_app):
@@ -49,9 +55,10 @@ class RadioTunerThread(Thread):
                 [q_msg, q_data] = self.queue.get()
                 if q_msg == 'quit':
                     run_app=False
+                if (q_msg == 'tune'):
+                    self.radioTuner.fm_tune(q_data)
                 if (q_msg == 'turn_on'):
                     self.radioTuner.turn(True)
-                    self.radioTuner.fm_tune(q_data)
                 if (q_msg == 'turn_off'):
                     self.radioTuner.turn(False)
                 if (q_msg == 'seek_up'):
@@ -59,17 +66,25 @@ class RadioTunerThread(Thread):
                 if (q_msg == 'seek_down'):
                     self.radioTuner.fm_seek_down()
 
+            now = getNow()
+            next_update = last_update + timedelta(seconds=interval_seconds)
+            if now > next_update:
+                last_update = now
+                self.emitFmRadioReport()
             time.sleep(0.1)
 
 
-    def stop(self):
-        self.queue.put(['turn_off', 0])
-        print('[radio] STOP')
-
-
-    def play(self, freq):
-        self.queue.put(['turn_on', freq])
+    def tune(self, freq):
+        self.queue.put(['tune', freq])
         print('[radio] TUNE ' + str(freq) + 'MHz')
+
+    def play(self):
+        self.queue.put(['turn_on', 0])
+        print('[radio] PLAY')
+
+    def pause(self):
+        self.queue.put(['turn_off', 0])
+        print('[radio] PAUSE')
 
 
     def next(self):
@@ -80,3 +95,6 @@ class RadioTunerThread(Thread):
     def previous(self):
         self.queue.put(['seek_down', 0])
         print('[radio] SEEK DOWN')
+
+    def emitFmRadioReport(self):
+        self.sio.emit('fmRadioReport', prettyJson(self.radioTuner.get_info_obj()))

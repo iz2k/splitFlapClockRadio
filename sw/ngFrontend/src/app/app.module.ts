@@ -41,7 +41,10 @@ import { LocationConfigComponent } from './location/location-config/location-con
 import { ClockCurrentComponent } from './clock/clock-current/clock-current.component';
 import { ClockCalibrateComponent } from './clock/clock-calibrate/clock-calibrate.component';
 import { ClockAlarmsComponent } from './clock/clock-alarms/clock-alarms.component';
-import {CalSplitFlapComponent} from "./clock/clock-calibrate/cal-split-flap/cal-split-flap.component";
+import {CalSplitFlapComponent} from './clock/clock-calibrate/cal-split-flap/cal-split-flap.component';
+import { RadioCurrentComponent } from './radio/radio-current/radio-current.component';
+import { RadioListComponent } from './radio/radio-list/radio-list.component';
+import {NgxGaugeModule} from 'ngx-gauge';
 
 
 @NgModule({
@@ -64,7 +67,9 @@ import {CalSplitFlapComponent} from "./clock/clock-calibrate/cal-split-flap/cal-
     ClockCurrentComponent,
     ClockCalibrateComponent,
     ClockAlarmsComponent,
-    CalSplitFlapComponent
+    CalSplitFlapComponent,
+    RadioCurrentComponent,
+    RadioListComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +92,8 @@ import {CalSplitFlapComponent} from "./clock/clock-calibrate/cal-split-flap/cal-
     ReactiveFormsModule,
     MomentTimezonePickerModule,
     FormsModule,
-    ChartsModule
+    ChartsModule,
+    NgxGaugeModule
   ],
   providers: [BackendService],
   bootstrap: [AppComponent]

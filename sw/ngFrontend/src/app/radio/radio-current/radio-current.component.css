@@ -1,0 +1,29 @@
+.radio_freq {
+  color: black;
+  font-size: 50px;
+  text-align: center;
+}
+
+.radio_ps {
+  color: darkblue;
+  font-size: 30px;
+  text-align: center;
+}
+
+.radio_ta {
+  color: darkcyan;
+  font-size: 15px;
+  text-align: center;
+}
+
+.mat-button{
+  width: 70px;
+  height: 70px;
+  vertical-align: center;
+}
+
+.mat-icon {
+  font-size: 50px;
+  margin-top: -25px;
+  margin-left: -25px;
+}
