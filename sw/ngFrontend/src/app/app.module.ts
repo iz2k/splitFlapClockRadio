@@ -47,6 +47,7 @@ import { RadioListComponent } from './radio/radio-list/radio-list.component';
 import {NgxGaugeModule} from 'ngx-gauge';
 import { SpotifyCurrentComponent } from './spotify/spotify-current/spotify-current.component';
 import { SpotifyListComponent } from './spotify/spotify-list/spotify-list.component';
+import { AlarmBriefComponent } from './clock/clock-alarms/alarm-brief/alarm-brief.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { SpotifyListComponent } from './spotify/spotify-list/spotify-list.compon
     RadioCurrentComponent,
     RadioListComponent,
     SpotifyCurrentComponent,
-    SpotifyListComponent
+    SpotifyListComponent,
+    AlarmBriefComponent
   ],
   imports: [
     BrowserModule,

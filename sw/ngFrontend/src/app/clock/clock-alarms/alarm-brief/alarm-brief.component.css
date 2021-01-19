@@ -1,0 +1,53 @@
+.alarmBox {
+  width: 200px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+}
+.alarmBoxOn {
+  background: white;
+}
+.alarmBoxOff {
+  background: gainsboro;
+}
+
+.alarmName {
+  font-size: 20px;
+  color: blue;
+}
+.alarmTime {
+  font-size: 36px;
+  color: brown;
+}
+.weekday {
+  font-size: 12px;
+  width: 24px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  margin: 1px;
+}
+.dayOn {
+  background: darkseagreen;
+}
+.dayOff {
+  background: darksalmon;
+}
+
+.mat-icon-OFF {
+  margin-top: 10px;
+  width: 60px;
+  font-size: 40px;
+  vertical-align: center;
+  -webkit-text-fill-color:#cccccc;
+}
+.mat-icon-ON {
+  margin-top: 10px;
+  width: 60px;
+  font-size: 40px;
+  vertical-align: center;
+  -webkit-text-fill-color:darkgreen;
+}

@@ -1,1 +1,3 @@
-<p>clock-alarms works!</p>
+<div class="column" *ngFor="let alarm of alarmList; let i = index">
+  <app-alarm-brief [alarm]="alarm" [idx]="i"></app-alarm-brief>
+</div>

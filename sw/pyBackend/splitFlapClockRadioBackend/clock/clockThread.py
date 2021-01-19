@@ -4,6 +4,7 @@ from threading import Thread
 
 from flask_socketio import SocketIO
 
+from splitFlapClockRadioBackend.clock.alarm import Alarm
 from splitFlapClockRadioBackend.clock.smbusMsp430 import smbusMsp430
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.tools.timeTools import getTimeZoneAwareNow

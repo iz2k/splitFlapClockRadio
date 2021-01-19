@@ -112,4 +112,8 @@ export class BackendService extends Socket {
   getSpotifyStatus(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/get-spotify-status');
   }
+
+  getAlarmList(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-alarm-list');
+  }
 }

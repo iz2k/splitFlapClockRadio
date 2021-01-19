@@ -1,0 +1,70 @@
+<div class="column alarmBox" [class.alarmBoxOn]="alarm.Active===true"
+            [class.alarmBoxOff]="alarm.Active===false">
+
+  <div class="text-right">
+    <mat-slide-toggle (toggleChange)="toggleAlarm(!alarm.Active)"
+              [checked]="alarm.Active">
+    </mat-slide-toggle>
+  </div>
+
+  <div class="alarmName">
+    {{alarm.Name}}
+  </div>
+  <div class="alarmTime">
+    {{alarm.Hour | number : '2.0'}}:{{alarm.Minute | number : '2.0'}}
+  </div>
+  <div class="column w100">
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[0]===true"
+          [class.dayOff]="alarm.WeekDays[0]===false">
+      MO
+    </div>
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[1]===true"
+          [class.dayOff]="alarm.WeekDays[1]===false">
+      TU
+    </div>
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[2]===true"
+          [class.dayOff]="alarm.WeekDays[2]===false">
+      WE
+    </div>
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[3]===true"
+          [class.dayOff]="alarm.WeekDays[3]===false">
+      TH
+    </div>
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[4]===true"
+          [class.dayOff]="alarm.WeekDays[4]===false">
+      FR
+    </div>
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[5]===true"
+          [class.dayOff]="alarm.WeekDays[5]===false">
+      SA
+    </div>
+    <div class="column weekday" [class.dayOn]="alarm.WeekDays[6]===true"
+          [class.dayOff]="alarm.WeekDays[6]===false">
+      SU
+    </div>
+  </div>
+
+  <div class="column w100">
+    <div class="column">
+      <mat-icon [class.mat-icon-ON]="alarm.EnableWeatherForecast===true"
+            [class.mat-icon-OFF]="alarm.EnableWeatherForecast===false">brightness_7</mat-icon>
+    </div>
+
+    <div class="column">
+      <mat-icon [class.mat-icon-ON]="alarm.Message!==''"
+            [class.mat-icon-OFF]="alarm.Message===''">record_voice_over</mat-icon>
+    </div>
+
+    <div class="column" *ngIf="alarm.PlaySource==='Radio'">
+      <mat-icon class="mat-icon-ON">radio</mat-icon>
+    </div>
+    <div class="column" *ngIf="alarm.PlaySource==='Spotify'">
+      <mat-icon class="mat-icon-ON">queue_music</mat-icon>
+    </div>
+    <div class="column" *ngIf="alarm.PlaySource==='Tone'">
+      <mat-icon class="mat-icon-ON">notifications_active</mat-icon>
+    </div>
+  </div>
+
+
+</div>

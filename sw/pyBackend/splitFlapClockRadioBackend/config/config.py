@@ -43,11 +43,12 @@ class Config:
     def createDefaultConfig(self):
         self.params = {
             'api' : {
-                'geocodeApi': '***REMOVED***',
-                'openWeatherApi': '***REMOVED***',
+                'geocodeApi': '',
+                'openWeatherApi': '',
             },
             'clock' : {
-                'timeZone' : ''
+                'timeZone' : '',
+                'alarms' : []
             },
             'location' : {
                 'location' : '',

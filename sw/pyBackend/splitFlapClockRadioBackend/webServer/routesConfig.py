@@ -67,3 +67,7 @@ def defineConfigRoutes(app : Flask, config : Config):
         if (content != None):
             config.updateClockParam('timeZone', content['nameValue'])
         return prettyJson({'status' : 'Timezone modified!'})
+
+    @app.route('/get-alarm-list', methods=['GET'])
+    def getAlarms():
+        return prettyJson(config.params['clock']['alarms'])
