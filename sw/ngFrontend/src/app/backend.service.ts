@@ -104,4 +104,12 @@ export class BackendService extends Socket {
   reloadWeather(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/reload-weather');
   }
+
+  getRadioStatus(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-radio-status');
+  }
+
+  getSpotifyStatus(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-spotify-status');
+  }
 }

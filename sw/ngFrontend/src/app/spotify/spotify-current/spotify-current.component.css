@@ -1,0 +1,23 @@
+.curTrack {
+  color: black;
+  font-size: 50px;
+  text-align: center;
+}
+
+.curArtist {
+  color: darkblue;
+  font-size: 30px;
+  text-align: center;
+}
+
+.mat-button{
+  width: 70px;
+  height: 70px;
+  vertical-align: center;
+}
+
+.mat-icon {
+  font-size: 50px;
+  margin-top: -25px;
+  margin-left: -25px;
+}

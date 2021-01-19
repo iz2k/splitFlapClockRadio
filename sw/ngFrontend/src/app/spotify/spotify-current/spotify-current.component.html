@@ -1,0 +1,38 @@
+<div *ngIf="spotifyReport != undefined">
+
+  <div class="row">
+    <div class="w100 curArtist">
+      {{spotifyReport.currentArtist}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="w100 curTrack">
+      {{spotifyReport.currentTrack}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="w10"></div>
+    <div class="w10">
+      <button mat-button (click)=previous($event)>
+        <mat-icon>skip_previous</mat-icon>
+      </button>
+    </div>
+    <div class="w60 text-center">
+      <button mat-button class="button-class" (click)=turnOn($event) *ngIf="spotifyReport.isOn == false">
+        <mat-icon style="-webkit-text-fill-color:burlywood">play_arrow</mat-icon>
+      </button>
+      <button mat-button class="button-class" (click)=turnOff($event) *ngIf="spotifyReport.isOn == true">
+        <mat-icon style="-webkit-text-fill-color:burlywood">stop</mat-icon>
+      </button>
+    </div>
+    <div class="w10">
+      <button mat-button (click)=next($event)>
+        <mat-icon>skip_next</mat-icon>
+      </button>
+    </div>
+    <div class="w10"></div>
+  </div>
+
+
+</div>

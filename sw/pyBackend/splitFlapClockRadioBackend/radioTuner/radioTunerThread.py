@@ -15,11 +15,13 @@ class RadioTunerThread(Thread):
 
     queue = Queue()
     radioTuner = None
+    lastReport = None
 
     def __init__(self):
         Thread.__init__(self)
         self.radioTuner = Si4731()
         start_service('i2s-pipe')
+        self.lastReport = self.radioTuner.get_info_obj()
 
     def start(self):
         Thread.start(self)
@@ -61,16 +63,16 @@ class RadioTunerThread(Thread):
                     self.radioTuner.turn(True)
                 if (q_msg == 'turn_off'):
                     self.radioTuner.turn(False)
+                    self.emitFmRadioReport()
                 if (q_msg == 'seek_up'):
                     self.radioTuner.fm_seek_up()
                 if (q_msg == 'seek_down'):
                     self.radioTuner.fm_seek_down()
 
-            now = getNow()
-            next_update = last_update + timedelta(seconds=interval_seconds)
-            if now > next_update:
-                last_update = now
-                self.emitFmRadioReport()
+            if self.detectFmRadioReportChange():
+                if self.radioTuner.on:
+                    self.emitFmRadioReport()
+
             time.sleep(0.1)
 
 
@@ -95,6 +97,15 @@ class RadioTunerThread(Thread):
     def previous(self):
         self.queue.put(['seek_down', 0])
         print('[radio] SEEK DOWN')
+
+    def detectFmRadioReportChange(self):
+        newReport = self.radioTuner.get_info_obj()
+        hasChanged = False
+        for key in self.lastReport:
+            if (self.lastReport[key] != newReport[key]):
+                hasChanged = True
+        self.lastReport = newReport
+        return hasChanged
 
     def emitFmRadioReport(self):
         self.sio.emit('fmRadioReport', prettyJson(self.radioTuner.get_info_obj()))

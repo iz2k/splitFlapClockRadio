@@ -10,6 +10,9 @@ from splitFlapClockRadioBackend.tools.timeTools import getDateTime
 
 def defineRadioTunerRoutes(app : Flask, sio : SocketIO, config : Config, radioTunerTh: RadioTunerThread):
 
+    @app.route('/get-radio-status', methods=['GET'])
+    def getRadioStatus():
+        return prettyJson(radioTunerTh.lastReport)
 
     @sio.on('fmRadio')
     def fmRadio_event(data):

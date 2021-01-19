@@ -13,6 +13,9 @@ export class RadioCurrentComponent implements OnInit {
   constructor(private backend: BackendService) { }
 
   ngOnInit(): void {
+    this.backend.getRadioStatus().subscribe(json => {
+      this.parseFmRadioReport(json);
+    });
     this.backend.ioSocket.on('fmRadioReport', json => this.parseFmRadioReport(JSON.parse(json)));
   }
 

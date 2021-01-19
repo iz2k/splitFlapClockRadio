@@ -39,12 +39,13 @@ def main():
 
     webserverTh = webServerThread(log=False)
     webserverTh.define_webroutes(weather = weatherStationTh.weatherStation,
-                                 dbCtl=dbCtl, config=config, clockTh=clockTh, radioTunerTh=radioTunerTh)
+                                 dbCtl=dbCtl, config=config, clockTh=clockTh, radioTunerTh=radioTunerTh, spotifyPl=spotifyPlayer)
 
     # Pass SIO to threads
     osInfoTh.set_sio(webserverTh.sio)
     weatherStationTh.set_sio(webserverTh.sio)
     radioTunerTh.set_sio(webserverTh.sio)
+    spotifyPlayer.set_sio(webserverTh.sio)
     weatherStationTh.set_clockTh(clockTh)
 
     try:

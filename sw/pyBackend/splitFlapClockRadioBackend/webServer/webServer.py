@@ -8,6 +8,7 @@ from splitFlapClockRadioBackend.clock.clockThread import ClockThread
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
+from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 from splitFlapClockRadioBackend.tools.ipTools import getHostname, getIP
 from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
 from splitFlapClockRadioBackend.webServer.routesClock import defineClockRoutes
@@ -15,6 +16,7 @@ from splitFlapClockRadioBackend.webServer.routesConfig import defineConfigRoutes
 from splitFlapClockRadioBackend.webServer.routesDataBase import defineDataBaseRoutes
 from splitFlapClockRadioBackend.webServer.routesInfo import defineInfoRoutes
 from splitFlapClockRadioBackend.webServer.routesRadioTuner import defineRadioTunerRoutes
+from splitFlapClockRadioBackend.webServer.routesSpotify import defineSpotifyRoutes
 from splitFlapClockRadioBackend.webServer.routesWeatherStation import defineWeatherStationRoutes
 
 
@@ -57,10 +59,11 @@ class webServerThread(Thread):
         # When server ends, reset flag
         self.isRunning = False
 
-    def define_webroutes(self, weather : WeatherStation, dbCtl : dbController, config : Config, clockTh : ClockThread, radioTunerTh : RadioTunerThread):
+    def define_webroutes(self, weather : WeatherStation, dbCtl : dbController, config : Config, clockTh : ClockThread, radioTunerTh : RadioTunerThread, spotifyPl : SpotifyPlayer):
         defineInfoRoutes(self.sio)
         defineConfigRoutes(self.flaskApp, config)
         defineWeatherStationRoutes(self.flaskApp, weather)
         defineDataBaseRoutes(self.flaskApp, dbCtl)
         defineClockRoutes(self.flaskApp, config, clockTh)
         defineRadioTunerRoutes(self.flaskApp, self.sio, config, radioTunerTh)
+        defineSpotifyRoutes(self.flaskApp, self.sio, config, spotifyPl)

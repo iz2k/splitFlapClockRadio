@@ -45,6 +45,8 @@ import {CalSplitFlapComponent} from './clock/clock-calibrate/cal-split-flap/cal-
 import { RadioCurrentComponent } from './radio/radio-current/radio-current.component';
 import { RadioListComponent } from './radio/radio-list/radio-list.component';
 import {NgxGaugeModule} from 'ngx-gauge';
+import { SpotifyCurrentComponent } from './spotify/spotify-current/spotify-current.component';
+import { SpotifyListComponent } from './spotify/spotify-list/spotify-list.component';
 
 
 @NgModule({
@@ -69,7 +71,9 @@ import {NgxGaugeModule} from 'ngx-gauge';
     ClockAlarmsComponent,
     CalSplitFlapComponent,
     RadioCurrentComponent,
-    RadioListComponent
+    RadioListComponent,
+    SpotifyCurrentComponent,
+    SpotifyListComponent
   ],
   imports: [
     BrowserModule,

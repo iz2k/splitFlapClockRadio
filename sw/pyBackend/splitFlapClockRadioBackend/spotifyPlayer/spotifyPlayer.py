@@ -1,15 +1,22 @@
-import subprocess
+from flask_socketio import SocketIO
 
+from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.osTools import execute, restart_service
 
 
 class SpotifyPlayer:
 
-	currentTrack = 'None'
+	currentArtist = ''
+	currentTrack = ''
+	isOn = False
+	sio : SocketIO = None
 
 	def __init__(self):
 		self.set_local_device()
 		self.pause()
+
+	def set_sio(self, sio : SocketIO):
+		self.sio = sio
 
 	def check_local_device(self):
 		output=execute('/home/pi/.local/bin/spotify device')
@@ -17,6 +24,7 @@ class SpotifyPlayer:
 			return True
 		else:
 			restart_service('raspotify')
+			self.set_local_device()
 			return False
 
 	def set_local_device(self):
@@ -26,46 +34,55 @@ class SpotifyPlayer:
 		else:
 			print('[spotify] Problem during set local device: ')
 
-
-	def pause(self):
-		if(self.check_local_device() == False):
-			self.set_local_device()
-		output=execute('/home/pi/.local/bin/spotify pause')
-		if len(output.splitlines())>0:
-			self.currentTrack = output.splitlines()[1].lstrip()
-		else:
-			self.currentTrack = 'N/A'
-		print('[spotify] PAUSE: ' + self.currentTrack)
-
 	def play(self, uri=None):
-		if(self.check_local_device() == False):
-			self.set_local_device()
+		self.check_local_device()
 		command = '/home/pi/.local/bin/spotify play'
 		if (uri != None):
 			command = command + ' --uri ' + uri
 		output=execute(command)
-		if len(output.splitlines())>0:
-			self.currentTrack = output.splitlines()[1].lstrip()
-		else:
-			self.currentTrack = 'N/A'
-		print('[spotify] PLAY: ' + self.currentTrack)
+		self.parse_spotify_status(output)
+		print('[spotify] PLAY: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
+
+	def pause(self):
+		output=execute('/home/pi/.local/bin/spotify pause')
+		self.parse_spotify_status(output)
+		print('[spotify] PAUSE: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
 
 	def next(self):
-		if(self.check_local_device() == False):
-			self.set_local_device()
 		output=execute('/home/pi/.local/bin/spotify next')
-		if len(output.splitlines())>0:
-			self.currentTrack = output.splitlines()[1].lstrip()
-		else:
-			self.currentTrack = 'N/A'
-		print('[spotify] NEXT: ' + self.currentTrack)
+		self.parse_spotify_status(output)
+		print('[spotify] NEXT: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
 
 	def previous(self):
-		if(self.check_local_device() == False):
-			self.set_local_device()
 		output=execute('/home/pi/.local/bin/spotify previous')
-		if len(output.splitlines())>0:
-			self.currentTrack = output.splitlines()[1].lstrip()
+		self.parse_spotify_status(output)
+		print('[spotify] PREVIOUS: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
+
+	def parse_spotify_status(self, cmdoutput):
+		if len(cmdoutput.splitlines())>1:
+			line1 = cmdoutput.splitlines()[0].lstrip()
+			if ("Playing: " in line1):
+				self.isOn = True
+			if ("Paused: " in line1):
+				self.isOn = False
+			line2 = cmdoutput.splitlines()[1].lstrip()
+			self.currentArtist = line2.split(' - ')[0]
+			self.currentTrack = line2.split(' - ')[1]
 		else:
-			self.currentTrack = 'N/A'
-		print('[spotify] PREVIOUS: ' + self.currentTrack)
+			self.currentArtist = ''
+			self.currentTrack = ''
+			self.isOn = False
+
+		self.emitStatus()
+
+	def getStatus(self):
+		return {
+			'isOn':self.isOn,
+			'currentArtist':self.currentArtist,
+			'currentTrack':self.currentTrack,
+		}
+
+	def emitStatus(self):
+		if self.sio != None:
+			print('emitting spotifystatus')
+			self.sio.emit('spotifyReport', prettyJson(self.getStatus()))
