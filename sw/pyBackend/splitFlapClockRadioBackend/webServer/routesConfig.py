@@ -92,3 +92,27 @@ def defineConfigRoutes(app : Flask, config : Config):
         except Exception as e:
             print(e)
             return 'Invalid idx to delete alarm'
+
+    @app.route('/get-radio-items', methods=['GET'])
+    def getRadioItems():
+        return prettyJson(config.params['radioItems'])
+
+    @app.route('/add-radio-item', methods=['POST'])
+    def addRadioItem():
+        content = flask_request.get_json(silent=True)
+        if (content != None):
+            if (len(content)==2):
+                config.addRadioItem(content[0], content[1])
+        return prettyJson({'status' : 'Adding Radio Item!'})
+
+    # /url?arg1=xxxx&arg2=yyy
+    @app.route('/delete-radio-item', methods=['GET'])
+    def deleteRadioItem():
+        try:
+            # Get arguments
+            idx = flask_request.args.get('idx')
+            config.deleteRadioItem(int(idx))
+            return prettyJson({'status' : 'RadioItem Deleted!'})
+        except Exception as e:
+            print(e)
+            return 'Invalid idx to delete alarm'

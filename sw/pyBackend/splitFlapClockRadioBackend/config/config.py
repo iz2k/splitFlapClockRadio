@@ -53,6 +53,18 @@ class Config:
         del self.params['clock']['alarms'][idx]
         self.saveConfig()
 
+    def addRadioItem(self, freq, PS):
+        self.params['radioItems'].append(
+            {
+            'Frequency': freq,
+            'Name': PS,
+             })
+        self.saveConfig()
+
+    def deleteRadioItem(self, idx):
+        del self.params['radioItems'][idx]
+        self.saveConfig()
+
     def createDefaultConfig(self):
         self.params = {
             'api' : {

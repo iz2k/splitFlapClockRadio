@@ -129,4 +129,25 @@ export class BackendService extends Socket {
   deleteAlarm(idx): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/delete-alarm?idx=' + idx);
   }
+
+  getRadioItems(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-radio-items');
+  }
+
+  tuneRadio(freq): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/set-radio-tune?freq=' + freq);
+  }
+
+  addRadioStation(freq, name): Observable<any> {
+    return this.http.post<any>(this.urlEndPoint + '/add-radio-item', [freq, name],
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      });
+  }
+
+  deleteRadioStation(idx): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/delete-radio-item?idx=' + idx);
+  }
 }

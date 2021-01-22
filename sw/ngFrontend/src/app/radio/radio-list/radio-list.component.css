@@ -1,0 +1,41 @@
+.stationBox {
+  width: 200px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  margin: 5px;
+  text-align: center;
+}
+
+.stationName {
+  font-size: 24px;
+  color: blue;
+}
+.stationFreq {
+  padding-top: 10px;
+  font-size: 36px;
+  color: brown;
+  text-align: right;
+}
+
+.Freq {
+  padding-top: 22px;
+  padding-left: 5px;
+  font-size: 24px;
+  color: brown;
+  text-align: left;
+}
+
+.mat-icon-PLAY {
+  width: 100px;
+  padding-top: 10px;
+  margin-left: 50px;
+  padding-bottom: 20px;
+}
+.mat-icon-ADD {
+  padding: 10px;
+}
+.mat-icon-DELETE {
+  padding-top: 10px;
+  color: brown;
+}

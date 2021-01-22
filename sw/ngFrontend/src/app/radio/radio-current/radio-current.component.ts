@@ -21,7 +21,7 @@ export class RadioCurrentComponent implements OnInit {
 
   parseFmRadioReport(json): void {
       this.fmRadioReport = json;
-      console.log(json);
+      //console.log(json);
   }
 
   turnOn(event: Event): void {

@@ -1,1 +1,31 @@
-works
+<div class="column" *ngFor="let radioStation of radioItems; let i = index">
+  <div class="column stationBox">
+
+    <div class="column w60 stationFreq">
+      {{radioStation.Frequency | number:'2.1'}}
+    </div>
+    <div class="column w40 Freq">
+      MHz
+    </div>
+    <div class="column w100 text-center stationName">
+      {{radioStation.Name}}
+    </div>
+    <div class="column text-center mat-icon-PLAY">
+      <button mat-mini-fab color="primary" (click)="tune(radioStation.Frequency)">
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    </div>
+    <div class="column mat-icon-DELETE">
+      <button mat-icon-button (click)="deleteRadioStation(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="column mat-icon-ADD">
+  <button mat-mini-fab color="primary" (click)="addRadioStation()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
