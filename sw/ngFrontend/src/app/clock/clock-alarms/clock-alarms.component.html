@@ -1,3 +1,8 @@
 <div class="column" *ngFor="let alarm of alarmList; let i = index">
   <app-alarm-brief [alarm]="alarm" [idx]="i"></app-alarm-brief>
 </div>
+<div class="column mat-icon-ADD">
+  <button mat-mini-fab color="primary" (click)="newAlarm()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

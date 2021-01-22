@@ -116,4 +116,17 @@ export class BackendService extends Socket {
   getAlarmList(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/get-alarm-list');
   }
+
+  setAlarm(alarm): Observable<any> {
+    return this.http.post<any>(this.urlEndPoint + '/set-alarm', alarm,
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      });
+  }
+
+  deleteAlarm(idx): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/delete-alarm?idx=' + idx);
+  }
 }

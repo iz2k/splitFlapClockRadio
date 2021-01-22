@@ -23,4 +23,18 @@ export class ClockAlarmsComponent implements OnInit {
       console.log(json);
   }
 
+  newAlarm(): void {
+      console.log('json');
+      this.alarmList.push({
+        Active: false,
+        EnableWeatherForecast: false,
+        Hour: 0,
+        Message: '',
+        Minute: 0,
+        Name: '',
+        PlayItem: '',
+        PlaySource: '',
+        WeekDays: [false, false, false, false, false, false, false]
+      });
+  }
 }

@@ -1,19 +1,28 @@
-<div class="column alarmBox" [class.alarmBoxOn]="alarm.Active===true"
+<div *ngIf="alarm!=undefined" class="column alarmBox" [class.alarmBoxOn]="alarm.Active===true"
             [class.alarmBoxOff]="alarm.Active===false">
 
-  <div class="text-right">
-    <mat-slide-toggle (toggleChange)="toggleAlarm(!alarm.Active)"
-              [checked]="alarm.Active">
+  <div class="column w50 text-left">
+    <button mat-icon-button class="mat-icon-CONFIG ml-1" (click)="openDialogEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button class="mat-icon-CONFIG ml-1" (click)="delete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+  <div class="column w50 text-right">
+    <mat-slide-toggle class="m-1"
+      (toggleChange)="toggleAlarm(!alarm.Active)"
+      [checked]="alarm.Active">
     </mat-slide-toggle>
   </div>
 
-  <div class="alarmName">
+  <div class="column w100 alarmName pt-2">
     {{alarm.Name}}
   </div>
-  <div class="alarmTime">
+  <div class="column w100 alarmTime">
     {{alarm.Hour | number : '2.0'}}:{{alarm.Minute | number : '2.0'}}
   </div>
-  <div class="column w100">
+  <div class="column w100 p-2">
     <div class="column weekday" [class.dayOn]="alarm.WeekDays[0]===true"
           [class.dayOff]="alarm.WeekDays[0]===false">
       MO
@@ -44,7 +53,7 @@
     </div>
   </div>
 
-  <div class="column w100">
+  <div class="column w100 p-2">
     <div class="column">
       <mat-icon [class.mat-icon-ON]="alarm.EnableWeatherForecast===true"
             [class.mat-icon-OFF]="alarm.EnableWeatherForecast===false">brightness_7</mat-icon>

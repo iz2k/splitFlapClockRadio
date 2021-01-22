@@ -1,9 +1,6 @@
 .alarmBox {
-  width: 200px;
-  border-width: 1px;
-  border-color: black;
-  border-style: solid;
-  margin: 5px;
+  padding: 10px;
+  width: 400px;
   text-align: center;
 }
 .alarmBoxOn {
@@ -21,6 +18,10 @@
   font-size: 36px;
   color: brown;
 }
+.messageText {
+  font-size: 20px;
+  color: darkblue;
+}
 .weekday {
   font-size: 12px;
   width: 24px;
@@ -29,9 +30,11 @@
   border-style: solid;
   margin: 1px;
 }
+
 .dayOn {
   background: darkseagreen;
 }
+
 .dayOff {
   background: darksalmon;
 }
@@ -43,6 +46,7 @@
   vertical-align: center;
   -webkit-text-fill-color:#cccccc;
 }
+
 .mat-icon-ON {
   margin-top: 10px;
   width: 60px;
@@ -50,7 +54,28 @@
   vertical-align: center;
   -webkit-text-fill-color:darkgreen;
 }
+
 .mat-icon-CONFIG {
   width: 30px;
   height: 30px;
+}
+
+.cancel-button {
+  width: 50px;
+  height: 40px;
+}
+.apply-button {
+  width: 50px;
+  height: 40px;
+}
+
+.config-day{
+  float: left;
+  padding-left: 10px;
+  width: 100%;
+}
+
+.timepicker {
+  float: left;
+  padding-left: 100px;
 }

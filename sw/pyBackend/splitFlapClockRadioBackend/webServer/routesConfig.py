@@ -71,3 +71,24 @@ def defineConfigRoutes(app : Flask, config : Config):
     @app.route('/get-alarm-list', methods=['GET'])
     def getAlarms():
         return prettyJson(config.params['clock']['alarms'])
+
+
+    @app.route('/set-alarm', methods=['POST'])
+    def setAlarm():
+        content = flask_request.get_json(silent=True)
+        if (content != None):
+            if (len(content)==2):
+                config.updateClockAlarm(content[0], content[1])
+        return prettyJson({'status' : 'Updating alarm!'})
+
+    # /url?arg1=xxxx&arg2=yyy
+    @app.route('/delete-alarm', methods=['GET'])
+    def deleteAlarm():
+        try:
+            # Get arguments
+            idx = flask_request.args.get('idx')
+            config.deleteClockAlarm(int(idx))
+            return prettyJson({'status' : 'Alarm Deleted!'})
+        except Exception as e:
+            print(e)
+            return 'Invalid idx to delete alarm'

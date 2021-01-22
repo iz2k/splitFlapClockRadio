@@ -54,7 +54,7 @@ class WeatherStationThread(Thread):
 
             self.weatherStation.updateSensorReport()
             self.weatherStation.sgp.adjustRH(self.weatherStation.sensorReport['humidity'])
-            self.emit()
+            #self.emit()
 
             now = getNow()
             next_update = last_update + timedelta(minutes=interval_minutes)

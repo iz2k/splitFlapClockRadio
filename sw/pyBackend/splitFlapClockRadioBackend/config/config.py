@@ -40,6 +40,19 @@ class Config:
         self.params['clock'][param] = value
         self.saveConfig()
 
+    def updateClockAlarm(self, idx, alarm):
+        if (idx < len(self.params['clock']['alarms'])):
+            # Update existing alarm
+            self.params['clock']['alarms'][idx] = alarm
+        else:
+            # Append new alarm
+            self.params['clock']['alarms'].append(alarm)
+        self.saveConfig()
+
+    def deleteClockAlarm(self, idx):
+        del self.params['clock']['alarms'][idx]
+        self.saveConfig()
+
     def createDefaultConfig(self):
         self.params = {
             'api' : {

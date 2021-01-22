@@ -71,7 +71,8 @@ class RadioTunerThread(Thread):
 
             if self.detectFmRadioReportChange():
                 if self.radioTuner.on:
-                    self.emitFmRadioReport()
+                    #self.emitFmRadioReport()
+                    pass
 
             time.sleep(0.1)
 

@@ -48,6 +48,8 @@ import {NgxGaugeModule} from 'ngx-gauge';
 import { SpotifyCurrentComponent } from './spotify/spotify-current/spotify-current.component';
 import { SpotifyListComponent } from './spotify/spotify-list/spotify-list.component';
 import { AlarmBriefComponent } from './clock/clock-alarms/alarm-brief/alarm-brief.component';
+import { AlarmConfigComponent } from './clock/clock-alarms/alarm-config/alarm-config.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -75,32 +77,34 @@ import { AlarmBriefComponent } from './clock/clock-alarms/alarm-brief/alarm-brie
     RadioListComponent,
     SpotifyCurrentComponent,
     SpotifyListComponent,
-    AlarmBriefComponent
+    AlarmBriefComponent,
+    AlarmConfigComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    JSBAngularFlipClockModule,
-    NgbModule,
-    SocketIoModule,
-    HttpClientModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatSlideToggleModule,
-    MatIconModule,
-    MatButtonToggleModule,
-    ReactiveFormsModule,
-    MomentTimezonePickerModule,
-    FormsModule,
-    ChartsModule,
-    NgxGaugeModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        JSBAngularFlipClockModule,
+        NgbModule,
+        SocketIoModule,
+        HttpClientModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatSlideToggleModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        ReactiveFormsModule,
+        MomentTimezonePickerModule,
+        FormsModule,
+        ChartsModule,
+        NgxGaugeModule,
+        MatDialogModule
+    ],
   providers: [BackendService],
   bootstrap: [AppComponent]
 })
