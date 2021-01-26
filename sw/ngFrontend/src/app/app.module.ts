@@ -50,6 +50,7 @@ import { SpotifyListComponent } from './spotify/spotify-list/spotify-list.compon
 import { AlarmBriefComponent } from './clock/clock-alarms/alarm-brief/alarm-brief.component';
 import { AlarmConfigComponent } from './clock/clock-alarms/alarm-config/alarm-config.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { SpotifySearchComponent } from './spotify/spotify-search/spotify-search.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     SpotifyCurrentComponent,
     SpotifyListComponent,
     AlarmBriefComponent,
-    AlarmConfigComponent
+    AlarmConfigComponent,
+    SpotifySearchComponent
   ],
     imports: [
         BrowserModule,

@@ -1,1 +1,23 @@
-<p>spotify-list works!</p>
+<div class="column" *ngFor="let spotifyItem of spotifyItems; let i = index">
+  <div class="column stationBox">
+
+    <div class="column w100 image">
+      <img src="{{spotifyItem.Image}}" width="192">
+    </div>
+    <div class="column name">
+      <div class="container">
+        <div class="scrolling">{{spotifyItem.Name}}</div>
+      </div>
+    </div>
+    <div class="column text-center mat-icon-PLAY">
+      <button mat-mini-fab color="primary" (click)="play(spotifyItem.URI)">
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    </div>
+    <div class="column mat-icon-DELETE">
+      <button mat-icon-button (click)="deleteSpotifyItem(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

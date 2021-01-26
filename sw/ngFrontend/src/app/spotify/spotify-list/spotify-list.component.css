@@ -1,0 +1,60 @@
+.stationBox {
+  width: 212px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  margin: 5px;
+  text-align: center;
+}
+
+.name {
+  width: 100%;
+  font-size: 16px;
+  color: blue;
+  text-align: center;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.image {
+  padding: 10px;
+  text-align: center;
+}
+
+.mat-icon-PLAY {
+  width: 100px;
+  padding-top: 10px;
+  margin-left: 50px;
+  padding-bottom: 20px;
+}
+
+.mat-icon-DELETE {
+  padding-top: 10px;
+  color: brown;
+}
+.container {
+  overflow: hidden;
+  position: relative;
+}
+
+.container::before {
+  content: '\00a0';
+}
+
+.scrolling {
+  animation: marquee 10s linear infinite;
+  display: block;
+  min-width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(212px);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

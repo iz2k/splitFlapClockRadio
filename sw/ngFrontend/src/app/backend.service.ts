@@ -150,4 +150,34 @@ export class BackendService extends Socket {
   deleteRadioStation(idx): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/delete-radio-item?idx=' + idx);
   }
+
+  spotifySearch(type, terms): Observable<any> {
+    return this.http.post<any>(this.urlEndPoint + '/spotify-search', {type, terms},
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      });
+  }
+
+  spotifyPlay(uri): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/spotify-play?uri=' + uri);
+  }
+
+  spotifyAddItem(type, name, uri, img): Observable<any> {
+    return this.http.post<any>(this.urlEndPoint + '/add-spotify-item', {Type: type, Name: name, URI: uri, Image: img},
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      });
+  }
+
+  getSpotifyItems(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-spotify-items');
+  }
+
+  deleteSpotifyItem(idx): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/delete-spotify-item?idx=' + idx);
+  }
 }

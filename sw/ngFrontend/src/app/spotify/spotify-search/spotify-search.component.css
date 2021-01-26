@@ -1,0 +1,20 @@
+.type {
+  width: 150px;
+  padding: 5px;
+}
+.terms {
+  width: calc(100% - 280px);
+  padding: 5px;
+}
+.searchEnabled {
+  -webkit-text-fill-color:darkblue;
+}
+.searchDisabled {
+  -webkit-text-fill-color:gainsboro;
+}
+.searchButton {
+  padding-top: 15px;
+  float: left;
+  width: auto;
+  height: auto;
+}

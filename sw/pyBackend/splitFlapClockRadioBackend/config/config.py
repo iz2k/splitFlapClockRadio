@@ -65,6 +65,20 @@ class Config:
         del self.params['radioItems'][idx]
         self.saveConfig()
 
+    def addSpotifyItem(self, type, name, uri, img):
+        self.params['spotifyItems'].append(
+            {
+            'Type': type,
+            'Name': name,
+            'URI': uri,
+            'Image': img,
+             })
+        self.saveConfig()
+
+    def deletepotifyItem(self, idx):
+        del self.params['spotifyItems'][idx]
+        self.saveConfig()
+
     def createDefaultConfig(self):
         self.params = {
             'api' : {

@@ -1,0 +1,138 @@
+
+<div class="column w100">
+      <mat-form-field  class="column type">
+        <mat-label>Search Type</mat-label>
+        <mat-select [(value)]="searchType" (selectionChange)=search()>
+          <mat-option value="track">Track</mat-option>
+          <mat-option value="artist">Artist</mat-option>
+          <mat-option value="album">Album</mat-option>
+          <mat-option value="playlist">Playlist</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field  class="column terms">
+      <mat-label>Search Terms</mat-label>
+      <input matInput [(ngModel)]="searchTerms" (keydown.enter)=search()>
+      </mat-form-field>
+      <div class="column searchButton">
+          <button mat-button  (click)=search()>
+            <mat-icon [class.searchEnabled]="searchTerms!==''"
+            [class.searchDisabled]="(searchTerms === '') || (searchTerms === undefined)">search</mat-icon>
+          </button>
+          <button mat-button  (click)=clearResults()>
+            <mat-icon>clear</mat-icon>
+          </button>
+      </div>
+</div>
+<div *ngIf="searchResults != undefined">
+  <table class="table w100">
+    <thead>
+      <tr>
+        <ng-container *ngIf="searchType === 'track'">
+          <th scope="col">#</th>
+          <th scope="col">Artist</th>
+          <th scope="col">Album</th>
+          <th scope="col">Track</th>
+        </ng-container>
+        <ng-container *ngIf="searchType === 'album'">
+          <th scope="col">#</th>
+          <th scope="col">Artist</th>
+          <th scope="col">Album</th>
+          <th scope="col">Release date</th>
+          <th scope="col">Cover</th>
+        </ng-container>
+        <ng-container *ngIf="searchType === 'artist'">
+          <th scope="col">#</th>
+          <th scope="col">Artist</th>
+          <th scope="col">Cover</th>
+        </ng-container>
+        <ng-container *ngIf="searchType === 'playlist'">
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Owner</th>
+          <th scope="col">Cover</th>
+        </ng-container>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let result of searchResults.items; let i = index">
+        <td>{{i+1}}</td>
+
+        <ng-container *ngIf="searchType === 'album'">
+            <td>
+              <ng-container *ngIf="result.artists.length < 5">
+                <ng-container *ngFor="let artist of result.artists; let j = index">
+                  {{artist.name}} <ng-container *ngIf="result.artists.length - 1 > j">&</ng-container>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="result.artists.length > 4">
+                Various Artists
+              </ng-container>
+            </td>
+            <td>
+              {{result.name}}
+            </td>
+            <td>
+              {{result.release_date}}
+            </td>
+            <td>
+              <img  *ngIf="result.images.length>0"
+                    src="{{result.images[0].url}}" width="128">
+            </td>
+
+        </ng-container>
+
+        <ng-container *ngIf="searchType === 'track'">
+            <td>
+              <ng-container *ngIf="result.artists.length < 5">
+                <ng-container *ngFor="let artist of result.artists; let j = index">
+                  {{artist.name}} <ng-container *ngIf="result.artists.length - 1 > j">&</ng-container>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="result.artists.length > 4">
+                Various Artists
+              </ng-container>
+            </td>
+            <td>
+              {{result.album.name}}
+            </td>
+            <td>
+              {{result.name}}
+            </td>
+        </ng-container>
+
+        <ng-container *ngIf="searchType === 'artist'">
+            <td>
+              {{result.name}}
+            </td>
+            <td>
+              <img  *ngIf="result.images.length>0"
+                    src="{{result.images[0].url}}" width="128">
+            </td>
+        </ng-container>
+
+        <ng-container *ngIf="searchType === 'playlist'">
+            <td>
+              {{result.name}}
+            </td>
+            <td>
+              {{result.owner.display_name}}
+            </td>
+            <td>
+              <img  *ngIf="result.images.length>0"
+                    src="{{result.images[0].url}}" width="128">
+            </td>
+
+        </ng-container>
+            <td>
+              <button mat-button  (click)=play(result)>
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+              <button mat-button  (click)=addToList(result)>
+                <mat-icon>note_add</mat-icon>
+              </button>
+            </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

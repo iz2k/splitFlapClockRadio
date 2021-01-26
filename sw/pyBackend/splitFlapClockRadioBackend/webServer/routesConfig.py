@@ -1,11 +1,12 @@
 from flask import Flask
 from flask import request as flask_request
+from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 
 
-def defineConfigRoutes(app : Flask, config : Config):
+def defineConfigRoutes(app : Flask, sio : SocketIO, config : Config):
 
     @app.route('/get-location-config', methods=['GET'])
     def getLocationConfig():
@@ -116,3 +117,31 @@ def defineConfigRoutes(app : Flask, config : Config):
         except Exception as e:
             print(e)
             return 'Invalid idx to delete alarm'
+
+    @app.route('/get-spotify-items', methods=['GET'])
+    def getSpotifyItems():
+        return prettyJson(config.params['spotifyItems'])
+
+    @app.route('/add-spotify-item', methods=['POST'])
+    def addSpotifyItem():
+        try:
+            # Get arguments
+            content = flask_request.get_json(silent=True)
+            config.addSpotifyItem(content['Type'], content['Name'], content['URI'], content['Image'])
+            sio.emit('spotifyItems', prettyJson(config.params['spotifyItems']))
+            return prettyJson({'status': 'Adding Spotify Item!'})
+        except Exception as e:
+            print(e)
+            return 'Invalid args to add spotify item'
+
+    # /url?arg1=xxxx&arg2=yyy
+    @app.route('/delete-spotify-item', methods=['GET'])
+    def deleteSpotifyItem():
+        try:
+            # Get arguments
+            idx = flask_request.args.get('idx')
+            config.deletepotifyItem(int(idx))
+            return prettyJson({'status': 'Spotify Item Deleted!'})
+        except Exception as e:
+            print(e)
+            return 'Invalid idx to delete spotify item'

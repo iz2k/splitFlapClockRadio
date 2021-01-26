@@ -61,7 +61,7 @@ class webServerThread(Thread):
 
     def define_webroutes(self, weather : WeatherStation, dbCtl : dbController, config : Config, clockTh : ClockThread, radioTunerTh : RadioTunerThread, spotifyPl : SpotifyPlayer):
         defineInfoRoutes(self.sio)
-        defineConfigRoutes(self.flaskApp, config)
+        defineConfigRoutes(self.flaskApp, self.sio, config)
         defineWeatherStationRoutes(self.flaskApp, weather)
         defineDataBaseRoutes(self.flaskApp, dbCtl)
         defineClockRoutes(self.flaskApp, config, clockTh)

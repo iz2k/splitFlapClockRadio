@@ -42,6 +42,7 @@ class SpotifyPlayer:
 		output=execute(command)
 		self.parse_spotify_status(output)
 		print('[spotify] PLAY: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
+		return self.getStatus()
 
 	def pause(self):
 		output=execute('/home/pi/.local/bin/spotify pause')
@@ -86,3 +87,6 @@ class SpotifyPlayer:
 		if self.sio != None:
 			print('emitting spotifystatus')
 			self.sio.emit('spotifyReport', prettyJson(self.getStatus()))
+
+	def searchSpotify(self, type, terms):
+		return execute('/home/pi/.local/bin/spotify search ' + terms + ' --' + type + ' --raw')

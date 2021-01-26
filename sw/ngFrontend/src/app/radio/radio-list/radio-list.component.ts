@@ -42,7 +42,7 @@ export class RadioListComponent implements OnInit {
   }
 
   deleteRadioStation(idx: number): void {
-    this.radioItems.pop(idx);
+    this.radioItems.splice(idx, 1);
     this.backend.deleteRadioStation(idx).subscribe(ans => {
         console.log(ans);
       });

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request as flask_request
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.config.config import Config
@@ -15,8 +16,20 @@ def defineSpotifyRoutes(app : Flask, sio : SocketIO, config : Config, spotifyPla
     def getSpotifyStatus():
         return prettyJson(spotifyPlayer.getStatus())
 
+    @app.route('/spotify-search', methods=['POST'])
+    def spotifySearch():
+        content = flask_request.get_json(silent=True)
+        ans = spotifyPlayer.searchSpotify(content['type'], content['terms'])
+        return prettyJson(ans)
+
+    @app.route('/spotify-play', methods=['GET'])
+    def spotifyPlay():
+        uri = flask_request.args.get('uri')
+        ans = spotifyPlayer.play(uri)
+        return prettyJson(ans)
+
     @sio.on('spotify')
-    def fmRadio_event(data):
+    def spotify_event(data):
         print('Spotify event!')
         print(data)
         cmd = data[0]
