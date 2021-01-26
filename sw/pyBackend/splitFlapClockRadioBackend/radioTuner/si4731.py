@@ -282,7 +282,7 @@ class Si4731:
             self.on = onoff
             # Volume value goes from 0 to 63
             if onoff == True:
-                self.set_volume(63)
+                self.set_volume(53)
             else:
                 self.set_volume(0)
         except:

@@ -7,7 +7,6 @@ import {SensorsComponent} from './sensors/sensors.component';
 import {ClockComponent} from './clock/clock.component';
 import {RadioComponent} from './radio/radio.component';
 import {SpotifyComponent} from './spotify/spotify.component';
-import {LocationComponent} from './location/location.component';
 
 
 const routes: Routes = [
@@ -15,7 +14,6 @@ const routes: Routes = [
   { path: 'clock', component: ClockComponent },
   { path: 'radio', component: RadioComponent },
   { path: 'spotify', component: SpotifyComponent },
-  { path: 'location', component: LocationComponent },
   { path: 'sensors', component: SensorsComponent },
   { path: 'weather', component: WeatherComponent },
   { path: 'historic', component: HistoricComponent }

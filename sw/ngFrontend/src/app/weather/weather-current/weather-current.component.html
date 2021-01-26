@@ -1,36 +1,48 @@
-<div style="height: 192px" *ngIf="weatherReport != undefined">
+<div *ngIf="weatherReport != undefined" class="row w100" align="center">
 
-  <div class="column w30 align-items-center h-100">
-    <img src="{{weatherIconUrl}}">
+  <div class="column align-items-center h-100 text-center pt-4">
+    <img src="{{weatherIconUrl}}" width="128px">
   </div>
-  <div class="column w70 align-items-center h-100">
-    <div class="column w30 h-100">
-      <div class="h-50">
+  <div class="column align-items-center h-100 wcol">
+    <div class="column w30">
+      <div>
         <img src="assets/img/thermo.png">
+      </div>
+      <div>
         {{weatherReport['current']['temp']}} ºC
       </div>
-      <div class="h-50">
+      <div class="pt-3">
         <img src="assets/img/pressure.png">
+      </div>
+      <div>
       {{weatherReport['current']['pressure']}} mbar
       </div>
     </div>
-    <div class="column w30 h-100">
-      <div class="h-50">
+    <div class="column w30">
+      <div>
         <img src="assets/img/hygro.png">
+      </div>
+      <div>
         {{weatherReport['current']['humidity']}} %
       </div>
-      <div class="h-50">
+      <div class="pt-3">
         <img src="assets/img/sunbath.png">
+      </div>
+      <div>
       {{weatherReport['current']['uvi']}} UV
       </div>
     </div>
-    <div class="column w30 h-100">
-      <div class="h-50">
+    <div class="column w30">
+      <div>
         <img src="assets/img/wind.png">
+      </div>
+      <div>
         {{(weatherReport['current']['wind_speed'] * 3.6).toFixed(2)}} km/h
       </div>
-      <div class="h-50">
+      <div class="pt-3">
         <img src="assets/img/rain.png">
+      </div>
+      <div>
       {{weatherReport['hourly'][0]['pop'] * 100}} %
       </div>
     </div>

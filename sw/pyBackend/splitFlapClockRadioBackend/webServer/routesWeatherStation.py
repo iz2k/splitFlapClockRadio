@@ -1,10 +1,11 @@
 from flask import Flask
+from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
 
 
-def defineWeatherStationRoutes(app : Flask, weather : WeatherStation):
+def defineWeatherStationRoutes(app : Flask, sio :  SocketIO, weather : WeatherStation):
 
     @app.route('/get-weather', methods=['GET'])
     def getWeather():
@@ -26,4 +27,5 @@ def defineWeatherStationRoutes(app : Flask, weather : WeatherStation):
     @app.route('/reload-weather', methods=['GET'])
     def reloadWeather():
         weather.reloadWeather()
+        sio.emit('weatherReport', weather.weatherReport)
         return prettyJson({'status':'Success'})

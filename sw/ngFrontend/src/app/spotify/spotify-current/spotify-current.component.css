@@ -21,3 +21,31 @@
   margin-top: -25px;
   margin-left: -25px;
 }
+
+.containerCurrent {
+  overflow: hidden;
+  position: relative;
+}
+
+.containerCurrent::before {
+  content: '\00a0';
+}
+
+.scrollingCurrent {
+  animation: marqueeCurrent 10s linear alternate infinite;
+  display: block;
+  min-width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+@keyframes marqueeCurrent {
+  from {
+    transform: translateX(calc(100% - 400px));
+  }
+  to {
+    transform: translateX(calc(400px - 100%));
+  }
+}

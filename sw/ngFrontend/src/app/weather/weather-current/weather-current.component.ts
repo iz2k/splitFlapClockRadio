@@ -17,6 +17,7 @@ export class WeatherCurrentComponent implements OnInit {
     this.backend.getWeather().subscribe(json => {
       this.parseWeather(json);
     });
+    this.backend.ioSocket.on('weatherReport', json => this.parseWeather(json));
   }
 
   parseWeather(json): void {

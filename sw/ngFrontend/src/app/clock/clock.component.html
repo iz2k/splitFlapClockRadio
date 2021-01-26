@@ -6,7 +6,7 @@
     </div>
 
     <div class="card-body w100">
-      <app-clock-current  *ngIf="!calibrationMode"></app-clock-current>
+      <app-clock-current  *ngIf="!calibrationMode" [enableTZ]="true"></app-clock-current>
       <div  *ngIf="calibrationMode" class="font-weight-bold text-center text-danger"> CALIBRATION MODE ACTIVE</div>
     </div>
   </div>

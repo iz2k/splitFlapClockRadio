@@ -26,8 +26,6 @@ class MainControlThread(Thread):
     clockTh : ClockThread = None
     config : Config = None
 
-    mediaSource = 'None'
-
     def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, clockTh, config):
         Thread.__init__(self)
         self.dbCtl = dbCtl
@@ -101,31 +99,28 @@ class MainControlThread(Thread):
         self.lightStripTh.vol_toggleMute(self.audio.mute)
 
     def changeMediaSource(self):
-        if self.mediaSource == 'None':
-            self.audio.play('on')
-            self.mediaSource = 'Radio'
-            self.radioTunerTh.tune(97.2)
-            self.radioTunerTh.play()
-        elif self.mediaSource == 'Radio':
+        if self.radioTunerTh.radioTuner.on:
             self.audio.play('on')
             self.radioTunerTh.pause()
-            self.mediaSource = 'Spotify'
             self.spotifyPlayer.play('spotify:playlist:2z7k6r8z0OlXuDsIuy80ZN')
-        elif self.mediaSource == 'Spotify':
+        elif self.spotifyPlayer.isOn:
             self.audio.play('off')
             self.spotifyPlayer.pause()
-            self.mediaSource = 'None'
+        else:
+            self.audio.play('on')
+            self.radioTunerTh.tune(97.2)
+            self.radioTunerTh.play()
+
 
     def changeMediaItem(self, action):
-        if self.mediaSource == 'None':
-            pass
-        elif self.mediaSource == 'Radio':
+
+        if self.radioTunerTh.radioTuner.on:
             self.audio.play('source')
             if action == 1:
                 self.radioTunerTh.next()
             elif action == -1:
                 self.radioTunerTh.previous()
-        elif self.mediaSource == 'Spotify':
+        elif self.spotifyPlayer.isOn:
             self.audio.play('source')
             if action == 1:
                 self.spotifyPlayer.next()

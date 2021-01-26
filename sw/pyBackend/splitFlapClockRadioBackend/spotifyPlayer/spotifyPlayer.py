@@ -1,3 +1,5 @@
+import time
+
 from flask_socketio import SocketIO
 
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
@@ -24,6 +26,7 @@ class SpotifyPlayer:
 			return True
 		else:
 			restart_service('raspotify')
+			time.sleep(3)
 			self.set_local_device()
 			return False
 

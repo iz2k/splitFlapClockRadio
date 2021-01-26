@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {WeatherCurrentComponent} from '../../weather/weather-current/weather-current.component';
+import {WeatherCurrentComponent} from '../weather-current/weather-current.component';
 import {BackendService} from '../../backend.service';
-import {GeocodeService} from '../geocode.service';
 import Map from 'ol/Map';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import View from 'ol/View';
 import * as olProj from 'ol/proj';
+import {GeocodeService} from './geocode.service';
 
 @Component({
   selector: 'app-location-config',

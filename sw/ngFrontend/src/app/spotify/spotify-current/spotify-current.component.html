@@ -1,13 +1,19 @@
 <div *ngIf="spotifyReport != undefined">
 
-  <div class="row">
+  <div class="row" *ngIf="spotifyReport.isOn">
     <div class="w100 curArtist">
-      {{spotifyReport.currentArtist}}
+
+      <div class="containerCurrent">
+        <div class="scrollingCurrent">{{spotifyReport.currentArtist}}</div>
+      </div>
+
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="spotifyReport.isOn">
     <div class="w100 curTrack">
-      {{spotifyReport.currentTrack}}
+      <div class="containerCurrent">
+        <div class="scrollingCurrent">{{spotifyReport.currentTrack}}</div>
+      </div>
     </div>
   </div>
 

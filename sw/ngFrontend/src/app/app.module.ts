@@ -33,11 +33,10 @@ import 'hammerjs';
 import 'chartjs-plugin-zoom';
 import { SensorsComponent } from './sensors/sensors.component';
 import { SensorCalibrationComponent } from './sensors/sensor-calibration/sensor-calibration.component';
-import { LocationComponent } from './location/location.component';
 import { ClockComponent } from './clock/clock.component';
 import { RadioComponent } from './radio/radio.component';
 import { SpotifyComponent } from './spotify/spotify.component';
-import { LocationConfigComponent } from './location/location-config/location-config.component';
+import { LocationConfigComponent } from './weather/location-config/location-config.component';
 import { ClockCurrentComponent } from './clock/clock-current/clock-current.component';
 import { ClockCalibrateComponent } from './clock/clock-calibrate/clock-calibrate.component';
 import { ClockAlarmsComponent } from './clock/clock-alarms/clock-alarms.component';
@@ -65,7 +64,6 @@ import { SpotifySearchComponent } from './spotify/spotify-search/spotify-search.
     HistoricComponent,
     SensorsComponent,
     SensorCalibrationComponent,
-    LocationComponent,
     ClockComponent,
     RadioComponent,
     SpotifyComponent,

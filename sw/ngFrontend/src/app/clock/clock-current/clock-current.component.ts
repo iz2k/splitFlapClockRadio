@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {BackendService} from '../../backend.service';
 
@@ -8,6 +8,9 @@ import {BackendService} from '../../backend.service';
   styleUrls: ['./clock-current.component.css']
 })
 export class ClockCurrentComponent implements OnInit {
+
+  @Input()
+  enableTZ;
 
   constructor(private backend: BackendService) { }
 
@@ -68,15 +71,17 @@ export class ClockCurrentComponent implements OnInit {
   }
 
   incrementClockTime(): void {
-    this.clockTime.second++;
-    if (this.clockTime.second > 59) {
-      this.clockTime.second = 0;
-      this.clockTime.minute++;
-      if (this.clockTime.minute > 59){
-        this.clockTime.minute = 0;
-        this.clockTime.hour++;
-        if (this.clockTime.hour > 23){
-          this.clockTime.hour = 0;
+    if (this.clockTime !== undefined){
+      this.clockTime.second++;
+      if (this.clockTime.second > 59) {
+        this.clockTime.second = 0;
+        this.clockTime.minute++;
+        if (this.clockTime.minute > 59){
+          this.clockTime.minute = 0;
+          this.clockTime.hour++;
+          if (this.clockTime.hour > 23){
+            this.clockTime.hour = 0;
+          }
         }
       }
     }

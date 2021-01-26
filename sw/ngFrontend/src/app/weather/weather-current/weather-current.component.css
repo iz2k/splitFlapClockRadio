@@ -1,0 +1,7 @@
+.wimg {
+  width: 128px;
+}
+
+.wcol {
+  width: calc((100% - 128px));
+}

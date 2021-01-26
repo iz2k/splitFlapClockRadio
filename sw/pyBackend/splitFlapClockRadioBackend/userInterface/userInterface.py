@@ -1,4 +1,3 @@
-import time
 from queue import Queue
 
 from flask_socketio import SocketIO
