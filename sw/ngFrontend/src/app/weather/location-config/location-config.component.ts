@@ -6,7 +6,7 @@ import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import View from 'ol/View';
 import * as olProj from 'ol/proj';
-import {GeocodeService} from './geocode.service';
+import {GeocodeService} from '../weather-apis/geocode.service';
 
 @Component({
   selector: 'app-location-config',
@@ -19,14 +19,13 @@ export class LocationConfigComponent implements OnInit {
   geocodeAPI: any;
   geocodeResult: any;
   volatileCityName: any;
-  volatileGeocodeAPI: any;
   location: any;
   map: any;
 
   @ViewChild(WeatherCurrentComponent)
   private weatherCurrent: WeatherCurrentComponent;
 
-  constructor(private backend: BackendService, private geocode: GeocodeService) { }
+  constructor(private backend: BackendService, public geocode: GeocodeService) { }
 
   ngOnInit(): void {
     this.backend.getLocationConfig().subscribe(jsLocation => {
@@ -61,7 +60,6 @@ export class LocationConfigComponent implements OnInit {
 
   parseApis(json): void {
     this.geocodeAPI = json.geocodeApi;
-    this.volatileGeocodeAPI = this.geocodeAPI;
     this.geocode.setApi(this.geocodeAPI);
   }
 
@@ -102,14 +100,5 @@ export class LocationConfigComponent implements OnInit {
     });
   }
 
-  saveGeocodeApi(): void {
-    this.backend.setApiParameters(
-      [
-        {parameter: 'geocodeApi', value: this.geocodeAPI}
-      ]).subscribe(json =>
-    {
-      this.parseLocationConfig(json);
-    });
-  }
 
 }

@@ -39,7 +39,7 @@ class WeatherStationThread(Thread):
 
     def run(self):
 
-        interval_minutes = 5
+        interval_minutes = 10
 
         last_update = getNow() - timedelta(minutes=interval_minutes)
 
@@ -61,6 +61,7 @@ class WeatherStationThread(Thread):
             if now > next_update:
                 last_update = now
                 self.weatherStation.updateWeatherReport()
+                self.sio.emit('weatherReport', self.weatherStation.weatherReport)
                 self.weatherStation.insertToDb()
                 self.clockTh.update_weather(self.weatherStation.get_ww_idx())
 

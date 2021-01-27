@@ -1,0 +1,28 @@
+<div class="column w100 pl-3">
+  <mat-form-field style="width: 300px" class="column">
+      <mat-label>GeocodeAPI</mat-label>
+      <input matInput placeholder="geocodeapi.io" [(ngModel)]="geocodeAPI" >
+  </mat-form-field>
+  <button mat-mini-fab class="column" color="primary" (click)="saveGeocodeApi()" *ngIf="geocodeAPI != storedGeocodeAPI">
+      <mat-icon>publish</mat-icon>
+  </button>
+  <div class="column icon-container">
+    <mat-icon *ngIf="(!geocode.checkInCurse) && (geocode.isOk) && (geocodeAPI == storedGeocodeAPI)" class="green-icon">check_circle</mat-icon>
+    <mat-icon *ngIf="(!geocode.checkInCurse) && (!geocode.isOk) && (geocodeAPI == storedGeocodeAPI)" class="red-icon">error</mat-icon>
+    <mat-spinner *ngIf="(geocode.checkInCurse)" [diameter]="32"></mat-spinner>
+  </div>
+</div>
+<div class="column w100 pl-3">
+  <mat-form-field style="width: 300px" class="column">
+      <mat-label>OpenWeatherAPI</mat-label>
+      <input matInput placeholder="geocodeapi.io" [(ngModel)]="openWeatherAPI" >
+  </mat-form-field>
+  <button mat-mini-fab class="column" color="primary" (click)="saveOpenWeatherApi()" *ngIf="openWeatherAPI != storedOpenWeatherAPI">
+      <mat-icon>publish</mat-icon>
+  </button>
+  <div class="column icon-container">
+    <mat-icon *ngIf="(!openWeather.checkInCurse) && (openWeather.isOk) && (openWeatherAPI == storedOpenWeatherAPI)" class="green-icon">check_circle</mat-icon>
+    <mat-icon *ngIf="(!openWeather.checkInCurse) && (!openWeather.isOk) && (openWeatherAPI == storedOpenWeatherAPI)" class="red-icon">error</mat-icon>
+    <mat-spinner *ngIf="(openWeather.checkInCurse)" [diameter]="32"></mat-spinner>
+  </div>
+</div>

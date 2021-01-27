@@ -48,8 +48,10 @@ import { SpotifyCurrentComponent } from './spotify/spotify-current/spotify-curre
 import { SpotifyListComponent } from './spotify/spotify-list/spotify-list.component';
 import { AlarmBriefComponent } from './clock/clock-alarms/alarm-brief/alarm-brief.component';
 import { AlarmConfigComponent } from './clock/clock-alarms/alarm-config/alarm-config.component';
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatDialogModule} from '@angular/material/dialog';
 import { SpotifySearchComponent } from './spotify/spotify-search/spotify-search.component';
+import { WeatherApisComponent } from './weather/weather-apis/weather-apis.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -78,7 +80,8 @@ import { SpotifySearchComponent } from './spotify/spotify-search/spotify-search.
     SpotifyListComponent,
     AlarmBriefComponent,
     AlarmConfigComponent,
-    SpotifySearchComponent
+    SpotifySearchComponent,
+    WeatherApisComponent
   ],
     imports: [
         BrowserModule,
@@ -98,6 +101,7 @@ import { SpotifySearchComponent } from './spotify/spotify-search/spotify-search.
         MatSlideToggleModule,
         MatIconModule,
         MatButtonToggleModule,
+        MatProgressSpinnerModule,
         ReactiveFormsModule,
         MomentTimezonePickerModule,
         FormsModule,

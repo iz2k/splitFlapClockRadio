@@ -1,4 +1,4 @@
-<div class="column w40">
+<div class="column w40" *ngIf="geocode.isOk && !geocode.checkInCurse">
   <div  align="center">
     <mat-form-field>
         <mat-label>City</mat-label>
@@ -23,15 +23,16 @@
     </div>
   </div>
 </div>
-<div class="column w60">
-  <div class="row">
-    <mat-form-field style="width: 300px">
-        <mat-label>GeocodeAPI</mat-label>
-        <input matInput placeholder="geocodeapi.io" [(ngModel)]="geocodeAPI" >
-    </mat-form-field>
-    <button mat-mini-fab color="primary" (click)="saveGeocodeApi()" *ngIf="geocodeAPI != volatileGeocodeAPI">
-        <mat-icon>publish</mat-icon>
-    </button>
-  </div>
+
+<div class="column w100 justify-content-center" *ngIf="geocode.checkInCurse" align="center">
+  <mat-spinner [diameter]="32"></mat-spinner>
+</div>
+
+<div  class="column w100 text-center" *ngIf="!geocode.isOk && !geocode.checkInCurse">
+  You need a valid GeocodeAPI for geolocalization.
+</div>
+
+
+<div class="column w60" [class.noMap]="!geocode.isOk">
   <div id="cityMap" class="row"></div>
 </div>

@@ -5,3 +5,8 @@
 .mainContainer {
   min-width: 800px;
 }
+
+.noMap {
+  height: 0px;
+  visibility: hidden;
+}

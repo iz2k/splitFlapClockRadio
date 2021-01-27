@@ -1,5 +1,4 @@
-<div *ngIf="weatherReport != undefined" class="row w100" align="center">
-
+<div *ngIf="(weatherReport != undefined) && (openWeather.isOk)  && !openWeather.checkInCurse" class="row w100" align="center">
   <div class="column align-items-center h-100 text-center pt-4">
     <img src="{{weatherIconUrl}}" width="128px">
   </div>
@@ -48,4 +47,12 @@
     </div>
   </div>
 
+</div>
+
+<div class="column w100 justify-content-center" *ngIf="openWeather.checkInCurse" align="center">
+  <mat-spinner [diameter]="32"></mat-spinner>
+</div>
+
+<div  class="column w100 text-center" *ngIf="!openWeather.isOk && !openWeather.checkInCurse">
+  You need a valid OpenWeatherMap API for weather forecasts.
 </div>

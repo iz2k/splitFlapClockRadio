@@ -1,0 +1,12 @@
+.green-icon {
+  color: green;
+  font-size: 32px;
+}
+.red-icon {
+  color: red;
+  font-size: 32px;
+}
+.icon-container {
+  padding: 10px;
+  height: 32px;
+}
