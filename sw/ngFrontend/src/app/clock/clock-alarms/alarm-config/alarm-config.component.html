@@ -1,57 +1,72 @@
+<div class="row alarmBox">
 
-<div class="column w100 alarmBox">
-  <div mat-dialog-content>
-    <mat-form-field class="column w100 alarmName">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="alarm.Name">
-    </mat-form-field>
-    <ngb-timepicker class="timepicker" [(ngModel)]="time"></ngb-timepicker>
-    <div class="column w100 text-left pt-2">
-      Week Days:<br>
-      <div class="column w50 text-left">
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[0]">Monday</mat-checkbox>
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[1]">Tuesday</mat-checkbox>
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[2]">Wednesday</mat-checkbox>
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[3]">Thursday</mat-checkbox>
+  <div class="column" style="width: calc(100% - 30px)">
+    <div mat-dialog-content>
+      <mat-form-field class="column w100 alarmName">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="alarm.Name">
+      </mat-form-field>
+      <ngb-timepicker class="timepicker" [(ngModel)]="time"></ngb-timepicker>
+      <div class="column w100 text-left pt-2">
+        Week Days:<br>
+        <div class="column w50 text-left">
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[0]">Monday</mat-checkbox>
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[1]">Tuesday</mat-checkbox>
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[2]">Wednesday</mat-checkbox>
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[3]">Thursday</mat-checkbox>
+        </div>
+        <div class="column w50 text-left">
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[4]">Friday</mat-checkbox>
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[5]">Saturday</mat-checkbox>
+          <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[6]">Sunday</mat-checkbox>
+        </div>
       </div>
-      <div class="column w50 text-left">
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[4]">Friday</mat-checkbox>
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[5]">Saturday</mat-checkbox>
-        <mat-checkbox class="config-day" [(ngModel)]="alarm.WeekDays[6]">Sunday</mat-checkbox>
+      <div class="column w100 text-left pt-2">
+        Settings:<br>
+        <mat-checkbox [(ngModel)]="alarm.EnableWeatherForecast">Weather Forecast</mat-checkbox>
+        <mat-form-field class="column w100 messageText">
+          <mat-label>Message</mat-label>
+          <input matInput [(ngModel)]="alarm.Message">
+        </mat-form-field>
+        <mat-form-field  class="column w30">
+          <mat-label>Media Source</mat-label>
+          <mat-select [(value)]="alarm.PlaySource">
+            <mat-option value="Spotify">Spotify</mat-option>
+            <mat-option value="Radio">Radio</mat-option>
+            <mat-option value="Tone">Tone</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="column w70">
+          <mat-label>Media Item</mat-label>
+
+          <mat-select [(value)]="alarm.PlayItem.URI" *ngIf="alarm.PlaySource == 'Spotify'">
+            <ng-container *ngFor="let spotItem of spotifyList; let i = index">
+              <mat-option value="{{spotItem.URI}}">
+                <img src="{{spotItem.Image}}" height="32px"> [{{spotItem.Type}}] {{spotItem.Name}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+
+          <mat-select [(value)]="alarm.PlayItem.Frequency" *ngIf="alarm.PlaySource == 'Radio'">
+            <ng-container *ngFor="let radioItem of radioList; let i = index">
+              <mat-option [value]="radioItem.Frequency">[{{radioItem.Frequency}} MHz] {{radioItem.Name}}</mat-option>
+            </ng-container>
+          </mat-select>
+
+          <mat-select [(value)]="alarm.PlayItem" *ngIf="alarm.PlaySource == 'Tone'">
+            <mat-option value="Beep">Beep</mat-option>
+            <mat-option value="Ring">Ring</mat-option>
+          </mat-select>
+
+        </mat-form-field>
       </div>
+
     </div>
-    <div class="column w100 text-left pt-2">
-      Settings:<br>
-      <mat-checkbox [(ngModel)]="alarm.EnableWeatherForecast">Weather Forecast</mat-checkbox>
-      <mat-form-field class="column w100 messageText">
-        <mat-label>Message</mat-label>
-        <input matInput [(ngModel)]="alarm.Message">
-      </mat-form-field>
-      <mat-form-field  class="column w30">
-        <mat-label>Media Source</mat-label>
-        <mat-select [(value)]="alarm.PlaySource">
-          <mat-option value="Spotify">Spotify</mat-option>
-          <mat-option value="Radio">Radio</mat-option>
-          <mat-option value="Tone">Tone</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="column w70">
-        <mat-label>Media Item</mat-label>
-        <mat-select [(value)]="alarm.PlayItem">
-          <mat-option value="Spotify">Spotify</mat-option>
-          <mat-option value="Radio">Radio</mat-option>
-          <mat-option value="Tone">Tone</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div mat-dialog-actions class="w100" align="center">
+      <button mat-button class="cancel-button" (click)="onCancel()">Cancel</button>
+      <button mat-button class="apply-button" (click)="onApply()">Apply</button>
     </div>
-
   </div>
-</div>
-<div class="row">
-  <div mat-dialog-actions class="w100" align="center">
-    <button mat-button class="cancel-button" (click)="onCancel()">Cancel</button>
-    <button mat-button class="apply-button" (click)="onApply()">Apply</button>
-  </div>
-</div>
 
+</div>

@@ -32,7 +32,7 @@ export class ClockAlarmsComponent implements OnInit {
         Message: '',
         Minute: 0,
         Name: '',
-        PlayItem: '',
+        PlayItem: {},
         PlaySource: '',
         WeekDays: [false, false, false, false, false, false, false]
       });

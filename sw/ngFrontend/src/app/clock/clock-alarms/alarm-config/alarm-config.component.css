@@ -1,6 +1,7 @@
 .alarmBox {
   padding: 10px;
-  width: 400px;
+  min-width: 350px;
+  max-width: 600px;
   text-align: center;
 }
 .alarmBoxOn {
@@ -77,5 +78,5 @@
 
 .timepicker {
   float: left;
-  padding-left: 100px;
+  padding-left: calc(50% - 70px);
 }
