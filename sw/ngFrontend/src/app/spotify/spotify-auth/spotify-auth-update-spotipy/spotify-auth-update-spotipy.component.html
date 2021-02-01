@@ -1,0 +1,25 @@
+<div class="row p-3">
+  <div class="column w100">
+    Follow this link to enable spotyfi-cli in your Spotify account:
+  </div>
+  <div class="column m-auto pt-2 pb-2">
+    <a *ngIf="authURL" href="{{authURL}}" target="_blank">enable spotify-cli</a>
+    <mat-spinner *ngIf="!authURL" [diameter]="32"></mat-spinner>
+  </div>
+</div>
+<div *ngIf="authURL" class="row p-3">
+  <div class="column w100">
+    Copy the provided verification code and paste it here:
+  </div>
+  <div class="column m-auto w80 pt-2">
+    <mat-form-field class="w100">
+      <mat-label>Verification Code</mat-label>
+      <textarea matInput [(ngModel)]="verificationCode"></textarea>
+    </mat-form-field>
+  </div>
+  <div class="column m-auto">
+    <button mat-button  (click)=endAuth()>
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</div>

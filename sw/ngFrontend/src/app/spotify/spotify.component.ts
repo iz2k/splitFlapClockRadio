@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./spotify.component.css']
 })
 export class SpotifyComponent implements OnInit {
+  showAuth = false;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  applyAuthMode(b: boolean): void {
+    this.showAuth = b;
+  }
 }

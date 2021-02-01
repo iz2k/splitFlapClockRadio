@@ -52,6 +52,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { SpotifySearchComponent } from './spotify/spotify-search/spotify-search.component';
 import { WeatherApisComponent } from './weather/weather-apis/weather-apis.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { SpotifyAuthComponent } from './spotify/spotify-auth/spotify-auth.component';
+import { SpotifyAuthUpdateSpotipyComponent } from './spotify/spotify-auth/spotify-auth-update-spotipy/spotify-auth-update-spotipy.component';
+import { SpotifyAuthUpdateRaspotifyComponent } from './spotify/spotify-auth/spotify-auth-update-raspotify/spotify-auth-update-raspotify.component';
 
 
 @NgModule({
@@ -81,7 +84,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     AlarmBriefComponent,
     AlarmConfigComponent,
     SpotifySearchComponent,
-    WeatherApisComponent
+    WeatherApisComponent,
+    SpotifyAuthComponent,
+    SpotifyAuthUpdateSpotipyComponent,
+    SpotifyAuthUpdateRaspotifyComponent
   ],
     imports: [
         BrowserModule,

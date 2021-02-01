@@ -2,6 +2,11 @@ import os
 import shutil
 import subprocess
 
+import ctypes
+
+import pty
+
+
 def getDiskUsage():
     stat = shutil.disk_usage(os.getcwd())
     total_GB = "%.2f" % (stat.total / 1024 / 1024 / 1024)
@@ -45,3 +50,10 @@ def execute(cmd):
     p = subprocess.Popen(cmd.split(), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     output, error = p.communicate()
     return output.decode("utf-8")
+
+def executeOnPTY(cmd):
+    libc = ctypes.CDLL('libc.so.6')
+    master, slave = pty.openpty()
+    p = subprocess.Popen(cmd.split(), preexec_fn=libc.setsid, stdin=slave, stdout=slave, stderr=slave)
+    os.close(slave)
+    return [p, master]

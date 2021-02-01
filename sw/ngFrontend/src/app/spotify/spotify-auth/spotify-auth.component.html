@@ -1,0 +1,22 @@
+<div class="row m-auto">
+  <div class="column w50 m-auto">
+    <ng-container *ngIf="authStatus !== undefined">Spotify-cli status: {{authStatus}}</ng-container>
+    <mat-spinner *ngIf="authStatus == undefined" [diameter]="32"></mat-spinner>
+  </div>
+  <div class="column w50 m-auto">
+    <button mat-button  (click)=openDialogUpdateSpotifyCli()>
+      <mat-icon>settings</mat-icon> Change Spotify-cli credentials
+    </button>
+  </div>
+</div>
+<div class="row m-auto">
+  <div class="column w50 m-auto">
+    <ng-container *ngIf="deviceVisible !== undefined">Raspotify visibility: {{deviceVisible}}</ng-container>
+    <mat-spinner *ngIf="deviceVisible == undefined" [diameter]="32"></mat-spinner>
+  </div>
+  <div class="column w50 m-auto">
+    <button mat-button  (click)=openDialogUpdateRaspotify()>
+      <mat-icon>settings</mat-icon> Change Raspotify credentials
+    </button>
+  </div>
+</div>

@@ -109,10 +109,6 @@ export class BackendService extends Socket {
     return this.http.get<any>(this.urlEndPoint + '/get-radio-status');
   }
 
-  getSpotifyStatus(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-spotify-status');
-  }
-
   getAlarmList(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/get-alarm-list');
   }
@@ -151,6 +147,10 @@ export class BackendService extends Socket {
     return this.http.get<any>(this.urlEndPoint + '/delete-radio-item?idx=' + idx);
   }
 
+  getSpotifyStatus(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-spotify-status');
+  }
+
   spotifySearch(type, terms): Observable<any> {
     return this.http.post<any>(this.urlEndPoint + '/spotify-search', {type, terms},
       {
@@ -180,4 +180,30 @@ export class BackendService extends Socket {
   deleteSpotifyItem(idx): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/delete-spotify-item?idx=' + idx);
   }
+
+  getSpotifyAuth(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-spotify-auth');
+  }
+
+  checkSpotifyDevice(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/spotify-check-device');
+  }
+
+  startSpotifyAuth(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/spotify-auth-start');
+  }
+
+  endSpotifyAuth(code): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/spotify-auth-end?code=' + code);
+  }
+
+  spotifyUpdateRaspotifyCredentials(username, password): Observable<any> {
+    return this.http.post<any>(this.urlEndPoint + '/spotify-update-raspotify', {username, password},
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      });
+  }
+
 }

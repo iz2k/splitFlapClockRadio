@@ -1,0 +1,15 @@
+
+<mat-form-field class="column w100">
+  <mat-label>Username</mat-label>
+  <input matInput [(ngModel)]="username">
+</mat-form-field>
+
+<mat-form-field class="column w100">
+  <mat-label>Password</mat-label>
+  <input matInput type="password" [(ngModel)]="password">
+</mat-form-field>
+
+<button mat-button  (click)=updateRaspotify()>
+  <mat-icon>check_circle</mat-icon> Change Raspotify credentials
+</button>
+<mat-spinner *ngIf="updateInCurse" [diameter]="32"></mat-spinner>

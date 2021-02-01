@@ -30,6 +30,30 @@ def defineSpotifyRoutes(app : Flask, sio : SocketIO, config : Config, spotifyPla
         ans = spotifyPlayer.play(uri)
         return prettyJson(ans)
 
+    @app.route('/get-spotify-auth', methods=['GET'])
+    def getSpotifyAuth():
+        return prettyJson(spotifyPlayer.getAuth())
+
+    @app.route('/spotify-check-device', methods=['GET'])
+    def spotifyCheckDevice():
+        return prettyJson({'Visible': spotifyPlayer.check_local_device()})
+
+    @app.route('/spotify-auth-start', methods=['GET'])
+    def spotifyAuthStart():
+        return prettyJson({'url': spotifyPlayer.startAuthProcess()})
+
+    @app.route('/spotify-auth-end', methods=['GET'])
+    def spotifyAuthEnd():
+        code = flask_request.args.get('code')
+        return prettyJson({'status': spotifyPlayer.endAuthProcess(code)})
+
+    @app.route('/spotify-update-raspotify', methods=['POST'])
+    def spotifyUpdateRaspotify():
+        content = flask_request.get_json(silent=True)
+        username = content['username']
+        password = content['password']
+        return prettyJson({'status': spotifyPlayer.updateRaspotifyCredentials(username, password)})
+
     @sio.on('spotify')
     def spotify_event(data):
         print('Spotify event!')

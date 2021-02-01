@@ -17,6 +17,7 @@ export class AlarmConfigComponent implements OnInit {
     public dialogRef: MatDialogRef<AlarmConfigComponent>,
     private backend: BackendService,
     @Inject(MAT_DIALOG_DATA) public alarm: any) {}
+
   onCancel(): void {
     this.dialogRef.close();
   }
