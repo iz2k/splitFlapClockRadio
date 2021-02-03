@@ -1,26 +1,24 @@
 import os
 import wave
-import alsaaudio
-import subprocess
 import shlex
 
-from flask_socketio import SocketIO
+import alsaaudio
+import subprocess
+
 
 
 class Audio:
     mute = False
     volume_step = 2
     say = None
-    sio: SocketIO = None
 
-    def __init__(self):
+    def __init__(self, app):
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
         self.device = alsaaudio.PCM(device='default')
         self.mixer = alsaaudio.Mixer('Master')
         self.volume = self.mixer.getvolume()[0]
         self.bindir = os.path.dirname(os.path.realpath(__file__))
-
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
 
     def play(self, wavfile):
         # Open PCM file
@@ -56,8 +54,8 @@ class Audio:
         f.close()
 
     def update_volume(self):
-        if self.sio != None:
-            self.sio.emit('volume', {'mute': self.mute, 'volume': self.volume})
+        if self.app.webserverTh.sio != None:
+            self.app.webserverTh.sio.emit('volume', {'mute': self.mute, 'volume': self.volume})
         if self.mute is False:
             self.mixer.setvolume(self.volume)
             print('[sound] Volume:', self.volume)
@@ -103,6 +101,24 @@ class Audio:
         raw_cmd += text
         raw_cmd += '"'
 
+        cmd = shlex.split(raw_cmd)
+        if wait:
+            subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        else:
+            if (self.say is not None):
+                self.say.terminate()
+                self.say.wait()
+            self.say = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+    def say_text_offline(self, text, lang='es-ES', wait=False):
+        raw_cmd = 'pico2wave -w text.wav'
+        raw_cmd += ' -l ' + lang
+        raw_cmd += ' "' + text + '"'
+
+        cmd = shlex.split(raw_cmd)
+        subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+        raw_cmd = 'aplay text.wav'
         cmd = shlex.split(raw_cmd)
         if wait:
             subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)

@@ -3,10 +3,6 @@ from datetime import timedelta
 from queue import Queue
 from threading import Thread
 
-from flask_socketio import SocketIO
-
-from splitFlapClockRadioBackend.clock.clockThread import ClockThread
-from splitFlapClockRadioBackend.dbManager.dbController import dbController
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.timeTools import getNow
 from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
@@ -16,11 +12,12 @@ class WeatherStationThread(Thread):
 
     queue = Queue()
     weatherStation = None
-    clockTh = None
 
-    def __init__(self, dbCtl : dbController, config):
+    def __init__(self, app ):
         Thread.__init__(self)
-        self.weatherStation = WeatherStation(dbCtl, config)
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
+        self.weatherStation = WeatherStation(self.app)
 
     def start(self):
         Thread.start(self)
@@ -30,12 +27,6 @@ class WeatherStationThread(Thread):
             self.queue.put(['quit', 0])
             self.join()
             print('thread exit cleanly')
-
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
-
-    def set_clockTh(self, clockTh: ClockThread):
-        self.clockTh = clockTh
 
     def run(self):
 
@@ -61,11 +52,11 @@ class WeatherStationThread(Thread):
             if now > next_update:
                 last_update = now
                 self.weatherStation.updateWeatherReport()
-                self.sio.emit('weatherReport', self.weatherStation.weatherReport)
+                self.app.webserverTh.sio.emit('weatherReport', self.weatherStation.weatherReport)
                 self.weatherStation.insertToDb()
-                self.clockTh.update_weather(self.weatherStation.get_ww_idx())
+                self.app.clockTh.update_weather(self.weatherStation.get_ww_idx())
 
             time.sleep(1)
 
     def emit(self):
-        self.sio.emit('sensorData', prettyJson(self.weatherStation.sensorReport))
+        self.app.webserverTh.sio.emit('sensorData', prettyJson(self.weatherStation.sensorReport))

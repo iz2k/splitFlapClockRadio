@@ -1,9 +1,6 @@
 import os
 import time
 
-import subprocess
-from flask_socketio import SocketIO
-
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.osTools import execute, restart_service, executeOnPTY
 
@@ -13,16 +10,14 @@ class SpotifyPlayer:
 	currentArtist = ''
 	currentTrack = ''
 	isOn = False
-	sio : SocketIO = None
 	authProcess = None
 	authProcessMaster = None
 
-	def __init__(self):
+	def __init__(self, app):
+		from splitFlapClockRadioBackend.appInterface import App
+		self.app: App = app
 		self.set_local_device()
 		self.pause()
-
-	def set_sio(self, sio : SocketIO):
-		self.sio = sio
 
 	def check_local_device(self):
 		output=execute('/home/pi/.local/bin/spotify device')
@@ -54,7 +49,7 @@ class SpotifyPlayer:
 	def pause(self):
 		output=execute('/home/pi/.local/bin/spotify pause')
 		self.parse_spotify_status(output)
-		print('[spotify] PAUSE: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
+		print('[spotify] STOP')
 
 	def next(self):
 		output=execute('/home/pi/.local/bin/spotify next')
@@ -91,9 +86,10 @@ class SpotifyPlayer:
 		}
 
 	def emitStatus(self):
-		if self.sio != None:
-			print('emitting spotifystatus')
-			self.sio.emit('spotifyReport', prettyJson(self.getStatus()))
+		try:
+			self.app.webserverTh.sio.emit('spotifyReport', prettyJson(self.getStatus()))
+		except:
+			pass
 
 	def searchSpotify(self, type, terms):
 		return execute('/home/pi/.local/bin/spotify search ' + terms + ' --' + type + ' --raw')

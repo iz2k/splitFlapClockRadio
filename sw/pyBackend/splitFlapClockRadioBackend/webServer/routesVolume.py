@@ -1,25 +1,23 @@
-from flask import Flask
 from flask import request as flask_request
 
-from splitFlapClockRadioBackend.audio.audio import Audio
+from splitFlapClockRadioBackend.appInterface import App
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
-from splitFlapClockRadioBackend.tools.timeTools import getDateTime
 
 
 
-def defineVolumeRoutes(app : Flask, audio : Audio):
+def defineVolumeRoutes(app: App):
 
-    @app.route('/get-volume', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/get-volume', methods=['GET'])
     def getVolume():
-        return prettyJson({'mute': audio.mute, 'volume': audio.volume})
+        return prettyJson({'mute': app.audio.mute, 'volume': app.audio.volume})
 
-    @app.route('/set-volume', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/set-volume', methods=['GET'])
     def setVolume():
         value = flask_request.args.get('vol')
-        audio.set_volume(int(value))
-        return prettyJson({'mute': audio.mute, 'volume': audio.volume})
+        app.audio.set_volume(int(value))
+        return prettyJson({'mute': app.audio.mute, 'volume': app.audio.volume})
 
-    @app.route('/toggle-mute', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/toggle-mute', methods=['GET'])
     def toggleMute():
-        audio.toggle_mute()
-        return prettyJson({'mute': audio.mute, 'volume': audio.volume})
+        app.audio.toggle_mute()
+        return prettyJson({'mute': app.audio.mute, 'volume': app.audio.volume})

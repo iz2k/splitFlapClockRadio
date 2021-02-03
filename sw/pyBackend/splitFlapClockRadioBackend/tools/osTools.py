@@ -22,27 +22,27 @@ def check_service_running(service):
         return False
 
 def start_service(service):
-    print('Starting ' + service + ' service')
+    print('[system] Starting ' + service + ' service')
     cmd = 'sudo service ' + service + ' start'
     subprocess.run(cmd.split(), capture_output=True)
 
 def restart_service(service):
-    print('Restarting ' + service + ' service')
+    print('[system] Restarting ' + service + ' service')
     cmd = 'sudo service ' + service + ' restart'
     subprocess.run(cmd.split(), capture_output=True)
 
 def stop_service(service):
-    print('Stopping ' + service + ' service')
+    print('[system] Stopping ' + service + ' service')
     cmd = 'sudo service ' + service + ' stop'
     subprocess.run(cmd.split(), capture_output=True)
 
 def start_service_async(service):
-    print('Starting ' + service + ' service')
+    print('[system] Starting ' + service + ' service')
     cmd = 'sudo service ' + service + ' start'
     subprocess.Popen(cmd.split())
 
 def stop_service_async(service):
-    print('Stopping ' + service + ' service')
+    print('[system] Stopping ' + service + ' service')
     cmd = 'sudo service ' + service + ' stop'
     subprocess.Popen(cmd.split())
 

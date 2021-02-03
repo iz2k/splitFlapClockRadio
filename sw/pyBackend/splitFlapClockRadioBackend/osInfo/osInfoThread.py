@@ -3,8 +3,6 @@ import time
 from queue import Queue
 from threading import Thread
 
-from flask_socketio import SocketIO
-
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.osTools import getDiskUsage
 from splitFlapClockRadioBackend.tools.ipTools import getHostname, getIP, getInternetCommandLine
@@ -14,10 +12,11 @@ from splitFlapClockRadioBackend.tools.timeTools import getDateTime
 class osInfoThread(Thread):
 
     queue = Queue()
-    sio : SocketIO = None
 
-    def __init__(self):
+    def __init__(self, app):
         Thread.__init__(self)
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
 
     def start(self):
         self.emit()
@@ -28,9 +27,6 @@ class osInfoThread(Thread):
             self.queue.put(['quit', 0])
             self.join()
             print('thread exit cleanly')
-
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
 
     def run(self):
 
@@ -56,7 +52,7 @@ class osInfoThread(Thread):
     def emit(self):
         newReport = getReport()
         #print(newReport)
-        self.sio.emit('osInfo', prettyJson(newReport))
+        self.app.webserverTh.sio.emit('osInfo', prettyJson(newReport))
 
 def getReport():
     # Get hostname and IP

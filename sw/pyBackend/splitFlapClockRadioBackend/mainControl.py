@@ -2,39 +2,15 @@ import time
 from queue import Queue
 from threading import Thread
 
-from flask_socketio import SocketIO
-
-from splitFlapClockRadioBackend.audio.audio import Audio
-from splitFlapClockRadioBackend.clock.clockThread import ClockThread
-from splitFlapClockRadioBackend.config.config import Config
-from splitFlapClockRadioBackend.dbManager.dbController import dbController
-from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
-from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
-from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
-
 
 class MainControlThread(Thread):
 
     queue = Queue()
 
-    dbCtl : dbController = None
-    audio : Audio = None
-    lightStripTh : RgbStripThread= None
-    sio : SocketIO = None
-    spotifyPlayer : SpotifyPlayer = None
-    radioTunerTh : RadioTunerThread = None
-    clockTh : ClockThread = None
-    config : Config = None
-
-    def __init__(self, dbCtl, audio, lightStripTh, spotifyPlayer, radioTunerTh, clockTh, config):
+    def __init__(self, app):
         Thread.__init__(self)
-        self.dbCtl = dbCtl
-        self.audio = audio
-        self.lightStripTh = lightStripTh
-        self.spotifyPlayer = spotifyPlayer
-        self.radioTunerTh = radioTunerTh
-        self.clockTh = clockTh
-        self.config = config
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
 
     def start(self):
         Thread.start(self)
@@ -46,13 +22,10 @@ class MainControlThread(Thread):
             self.join()
             print('thread exit cleanly')
 
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
-
     def run(self):
 
         # TODO: REMOVE. Just to autostart radio during development.
-        self.changeMediaSource()
+        #self.changeMediaSource()
         # Main loop
         run_app=True
         while(run_app):
@@ -82,47 +55,47 @@ class MainControlThread(Thread):
             time.sleep(0.1)
 
     def systemStartup(self):
-        self.audio.say_text('Iniciando reloj.', lang='es')
-        self.lightStripTh.test()
+        self.app.audio.say_text_offline('Iniciando reloj.', lang='es-ES')
+        self.app.lightStripTh.test()
 
     def changeVolume(self, action):
-        if (self.audio.mute == True):
+        if (self.app.audio.mute == True):
             self.toggleMute()
         if action == 1:
-            self.audio.volume_up()
+            self.app.audio.volume_up()
         if action == -1:
-            self.audio.volume_down()
-        self.lightStripTh.vol_update(self.audio.volume)
+            self.app.audio.volume_down()
+        self.app.lightStripTh.vol_update(self.app.audio.volume)
 
     def toggleMute(self):
-        self.audio.toggle_mute()
-        self.lightStripTh.vol_toggleMute(self.audio.mute)
+        self.app.audio.toggle_mute()
+        self.app.lightStripTh.vol_toggleMute(self.app.audio.mute)
 
     def changeMediaSource(self):
-        if self.radioTunerTh.radioTuner.on:
-            self.audio.play('on')
-            self.radioTunerTh.pause()
-            self.spotifyPlayer.play('spotify:playlist:2z7k6r8z0OlXuDsIuy80ZN')
-        elif self.spotifyPlayer.isOn:
-            self.audio.play('off')
-            self.spotifyPlayer.pause()
+        if self.app.radioTunerTh.radioTuner.on:
+            self.app.audio.play('on')
+            self.app.radioTunerTh.pause()
+            self.app.spotifyPlayer.play('spotify:playlist:2z7k6r8z0OlXuDsIuy80ZN')
+        elif self.app.spotifyPlayer.isOn:
+            self.app.audio.play('off')
+            self.app.spotifyPlayer.pause()
         else:
-            self.audio.play('on')
-            self.radioTunerTh.tune(97.2)
-            self.radioTunerTh.play()
+            self.app.audio.play('on')
+            self.app.radioTunerTh.tune(97.2)
+            self.app.radioTunerTh.play()
 
 
     def changeMediaItem(self, action):
 
-        if self.radioTunerTh.radioTuner.on:
-            self.audio.play('source')
+        if self.app.radioTunerTh.radioTuner.on:
+            self.app.audio.play('source')
             if action == 1:
-                self.radioTunerTh.next()
+                self.app.radioTunerTh.next()
             elif action == -1:
-                self.radioTunerTh.previous()
-        elif self.spotifyPlayer.isOn:
-            self.audio.play('source')
+                self.app.radioTunerTh.previous()
+        elif self.app.spotifyPlayer.isOn:
+            self.app.audio.play('source')
             if action == 1:
-                self.spotifyPlayer.next()
+                self.app.spotifyPlayer.next()
             elif action == -1:
-                self.spotifyPlayer.previous()
+                self.app.spotifyPlayer.previous()

@@ -3,11 +3,6 @@ from datetime import timedelta, datetime
 from queue import Queue
 from threading import Thread
 
-from flask_socketio import SocketIO
-
-from splitFlapClockRadioBackend.dbManager.dbController import dbController
-from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
-from splitFlapClockRadioBackend.tools.timeTools import getNow
 from splitFlapClockRadioBackend.rgbStrip.neoStrip import NeoStrip
 
 
@@ -18,9 +13,11 @@ class RgbStripThread(Thread):
     signalingFlag : bool = False
     signalingExpire : time = None
 
-    def __init__(self):
-        Thread.__init__(self)
+    def __init__(self, app):
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
         self.rgbStrip = NeoStrip()
+        Thread.__init__(self)
 
     def start(self):
         Thread.start(self)
@@ -30,9 +27,6 @@ class RgbStripThread(Thread):
             self.queue.put(['quit', 0])
             self.join()
             print('thread exit cleanly')
-
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
 
     def run(self):
 

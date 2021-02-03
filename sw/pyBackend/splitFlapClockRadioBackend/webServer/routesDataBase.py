@@ -1,15 +1,14 @@
-from flask import Flask
 from flask import request as flask_request
 
-from splitFlapClockRadioBackend.dbManager.dbController import dbController
+from splitFlapClockRadioBackend.appInterface import App
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 
 
-def defineDataBaseRoutes(app : Flask, dbCtl : dbController):
+def defineDataBaseRoutes(app: App):
 
-    @app.route('/get-measurements', methods=['POST'])
+    @app.webserverTh.flaskApp.route('/get-measurements', methods=['POST'])
     def getMeasurements():
         content = flask_request.get_json(silent=True)
         print(content)
-        measurements = dbCtl.loadMeasurements(content['startDate'], content['stopDate']).all()
+        measurements = app.dbCtl.loadMeasurements(content['startDate'], content['stopDate']).all()
         return prettyJson(measurements)

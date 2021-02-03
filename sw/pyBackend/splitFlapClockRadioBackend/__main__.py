@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 
+from splitFlapClockRadioBackend.appInterface import App
 from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.clock.clockThread import ClockThread
 from splitFlapClockRadioBackend.config.config import Config
@@ -14,6 +15,7 @@ from splitFlapClockRadioBackend.weatherStation.weatherStationThread import Weath
 from splitFlapClockRadioBackend.webServer.webServer import webServerThread
 from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
 
+
 def main():
 
     # Parse arguments
@@ -21,60 +23,48 @@ def main():
     parser.add_argument("-port", default='8081', help=" port used for web server")
     args = parser.parse_args()
 
-    config = Config()
-    dbCtl = dbController()
-    userInterface = UserInterface()
-    audio = Audio()
-    spotifyPlayer = SpotifyPlayer()
+    app = App()
+    app.config = Config(app=app)
+    app.dbCtl = dbController(app=app)
+    app.userInterface = UserInterface(app=app)
+    app.audio = Audio(app=app)
+    app.spotifyPlayer = SpotifyPlayer(app=app)
 
     # Define threads
-    osInfoTh = osInfoThread()
-    weatherStationTh = WeatherStationThread(dbCtl=dbCtl, config=config)
-    lightStripTh = RgbStripThread()
-    radioTunerTh = RadioTunerThread()
-    clockTh = ClockThread(config=config)
-    mainControlTh = MainControlThread(dbCtl=dbCtl, audio=audio, lightStripTh=lightStripTh, spotifyPlayer=spotifyPlayer, radioTunerTh=radioTunerTh, clockTh=clockTh, config=config)
+    app.osInfoTh = osInfoThread(app=app)
+    app.weatherStationTh = WeatherStationThread(app=app)
+    app.lightStripTh = RgbStripThread(app=app)
+    app.radioTunerTh = RadioTunerThread(app=app)
+    app.clockTh = ClockThread(app=app)
+    app.mainControlTh = MainControlThread(app=app)
 
-    userInterface.set_mainControlQueue(mainControlTh.queue)
-
-    webserverTh = webServerThread(log=False)
-    webserverTh.define_webroutes(weather = weatherStationTh.weatherStation,
-                                 dbCtl=dbCtl, config=config, clockTh=clockTh,
-                                 radioTunerTh=radioTunerTh, spotifyPl=spotifyPlayer,
-                                 audio=audio)
-
-    # Pass SIO to threads
-    osInfoTh.set_sio(webserverTh.sio)
-    weatherStationTh.set_sio(webserverTh.sio)
-    radioTunerTh.set_sio(webserverTh.sio)
-    spotifyPlayer.set_sio(webserverTh.sio)
-    audio.set_sio(webserverTh.sio)
-    weatherStationTh.set_clockTh(clockTh)
+    app.webserverTh = webServerThread(app=app)
+    app.webserverTh.define_webroutes()
 
     try:
         # Start threads
-        osInfoTh.start()
-        weatherStationTh.start()
-        lightStripTh.start()
-        radioTunerTh.start()
-        clockTh.start()
-        mainControlTh.start()
-        webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
+        app.osInfoTh.start()
+        app.weatherStationTh.start()
+        app.lightStripTh.start()
+        app.radioTunerTh.start()
+        app.clockTh.start()
+        app.mainControlTh.start()
+        app.webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 
         # Wait while server running
-        webserverTh.join()
+        app.webserverTh.join()
 
         # When server ends, stop threads
-        osInfoTh.stop()
-        weatherStationTh.stop()
+        app.osInfoTh.stop()
+        app.weatherStationTh.stop()
 
         # Print Goodby msg
         print('Exiting...')
 
     except KeyboardInterrupt:
         # Stop threads
-        osInfoTh.stop()
-        weatherStationTh.stop()
+        app.osInfoTh.stop()
+        app.weatherStationTh.stop()
 
 
 # If executed as main, call main

@@ -9,18 +9,20 @@ from splitFlapClockRadioBackend.dbManager import dbCredentials, myBase, Measurem
 
 class dbController:
 
-    def __init__(self):
+    def __init__(self, app):
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
         SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://' + dbCredentials['user'] + ':' + dbCredentials['pass'] + '@' + \
                                   dbCredentials['host'] + '/' + dbCredentials['db']
 
         # Initialize DB handler
         if not database_exists(SQLALCHEMY_DATABASE_URI):
-            print('DB missing. Creating new DB.')
+            print('[db] DB missing. Creating new DB.')
             create_database(SQLALCHEMY_DATABASE_URI)
 
         self.engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_size=100)
         self.sessionmaker = sessionmaker(bind=self.engine)
-        print('DB engine ready.')
+        print('[db] DB engine ready.')
 
         # Generate database schema with imported elements
         myBase.metadata.create_all(self.engine)
@@ -43,7 +45,7 @@ class dbController:
 
         session.close()
         tStop = datetime.now()
-        print('\t> Load time: ' + str(tStop - tStart))
+        print('[db] \t> Load time: ' + str(tStop - tStart))
         return result
 
     def loadMeasurements(self, dStart, dStop):
@@ -55,11 +57,11 @@ class dbController:
 
         session.close()
         tStop = datetime.now()
-        print('\t> Load time: ' + str(tStop - tStart))
+        print('[db] \t> Load time: ' + str(tStop - tStart))
         return result
 
     def testRelationship(self):
-        print('Test Realtionship within DB:')
+        print('[db] Test Realtionship within DB:')
         # INSERT DATA
         myMeas = Measurement(
                     datetime=datetime.now(),

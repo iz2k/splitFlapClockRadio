@@ -5,7 +5,9 @@ class Config:
     _FILENAME='cfgSplitFlapClockRadio.json'
     params = {}
 
-    def __init__(self):
+    def __init__(self, app):
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
         self.loadConfig()
 
     def saveConfig(self):

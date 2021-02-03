@@ -1,73 +1,66 @@
-from flask import Flask
 from flask import request as flask_request
-from flask_socketio import SocketIO
 
-from splitFlapClockRadioBackend.config.config import Config
-from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
-from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
+from splitFlapClockRadioBackend.appInterface import App
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
-from splitFlapClockRadioBackend.tools.timeTools import getDateTime
+
+def defineSpotifyRoutes(app: App):
 
 
-
-def defineSpotifyRoutes(app : Flask, sio : SocketIO, config : Config, spotifyPlayer: SpotifyPlayer, radioTunerTh: RadioTunerThread):
-
-
-    @app.route('/get-spotify-status', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/get-spotify-status', methods=['GET'])
     def getSpotifyStatus():
-        return prettyJson(spotifyPlayer.getStatus())
+        return prettyJson(app.spotifyPlayer.getStatus())
 
-    @app.route('/spotify-search', methods=['POST'])
+    @app.webserverTh.flaskApp.route('/spotify-search', methods=['POST'])
     def spotifySearch():
         content = flask_request.get_json(silent=True)
-        ans = spotifyPlayer.searchSpotify(content['type'], content['terms'])
+        ans = app.spotifyPlayer.searchSpotify(content['type'], content['terms'])
         return prettyJson(ans)
 
-    @app.route('/spotify-play', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/spotify-play', methods=['GET'])
     def spotifyPlay():
         uri = flask_request.args.get('uri')
-        radioTunerTh.pause()
-        ans = spotifyPlayer.play(uri)
+        app.radioTunerTh.pause()
+        ans = app.spotifyPlayer.play(uri)
         return prettyJson(ans)
 
-    @app.route('/get-spotify-auth', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/get-spotify-auth', methods=['GET'])
     def getSpotifyAuth():
-        return prettyJson(spotifyPlayer.getAuth())
+        return prettyJson(app.spotifyPlayer.getAuth())
 
-    @app.route('/spotify-check-device', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/spotify-check-device', methods=['GET'])
     def spotifyCheckDevice():
-        return prettyJson({'Visible': spotifyPlayer.check_local_device()})
+        return prettyJson({'Visible': app.spotifyPlayer.check_local_device()})
 
-    @app.route('/spotify-auth-start', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/spotify-auth-start', methods=['GET'])
     def spotifyAuthStart():
-        return prettyJson({'url': spotifyPlayer.startAuthProcess()})
+        return prettyJson({'url': app.spotifyPlayer.startAuthProcess()})
 
-    @app.route('/spotify-auth-end', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/spotify-auth-end', methods=['GET'])
     def spotifyAuthEnd():
         code = flask_request.args.get('code')
-        return prettyJson({'status': spotifyPlayer.endAuthProcess(code)})
+        return prettyJson({'status': app.spotifyPlayer.endAuthProcess(code)})
 
-    @app.route('/spotify-update-raspotify', methods=['POST'])
+    @app.webserverTh.flaskApp.route('/spotify-update-raspotify', methods=['POST'])
     def spotifyUpdateRaspotify():
         content = flask_request.get_json(silent=True)
         username = content['username']
         password = content['password']
-        return prettyJson({'status': spotifyPlayer.updateRaspotifyCredentials(username, password)})
+        return prettyJson({'status': app.spotifyPlayer.updateRaspotifyCredentials(username, password)})
 
-    @sio.on('spotify')
+    @app.webserverTh.sio.on('spotify')
     def spotify_event(data):
         print('Spotify event!')
         print(data)
         cmd = data[0]
         arg = data[1]
-        radioTunerTh.pause()
+        app.radioTunerTh.pause()
         if (cmd == 'next'):
-            spotifyPlayer.next()
+            app.spotifyPlayer.next()
         if (cmd == 'previous'):
-            spotifyPlayer.previous()
+            app.spotifyPlayer.previous()
         if (cmd == 'play'):
-            spotifyPlayer.play()
+            app.spotifyPlayer.play()
         if (cmd == 'pause'):
-            spotifyPlayer.pause()
+            app.spotifyPlayer.pause()
 
 

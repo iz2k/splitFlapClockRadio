@@ -1,31 +1,28 @@
-from flask import Flask
-from flask_socketio import SocketIO
-
+from splitFlapClockRadioBackend.appInterface import App
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
-from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
 
 
-def defineWeatherStationRoutes(app : Flask, sio :  SocketIO, weather : WeatherStation):
+def defineWeatherStationRoutes(app: App):
 
-    @app.route('/get-weather', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/get-weather', methods=['GET'])
     def getWeather():
-        return prettyJson(weather.weatherReport)
+        return prettyJson(app.weatherStationTh.weatherStation.weatherReport)
 
-    @app.route('/get-sensors', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/get-sensors', methods=['GET'])
     def getHome():
-        return prettyJson(weather.sensorReport)
+        return prettyJson(app.weatherStationTh.weatherStation.sensorReport)
 
-    @app.route('/reset-sensors-baseline', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/reset-sensors-baseline', methods=['GET'])
     def resetBaseline():
-        return prettyJson(weather.sgp.resetBaseline())
+        return prettyJson(app.weatherStationTh.weatherStation.sgp.resetBaseline())
 
-    @app.route('/reload-sensors', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/reload-sensors', methods=['GET'])
     def reloadSensors():
-        weather.reloadSensors()
+        app.weatherStationTh.weatherStation.reloadSensors()
         return prettyJson({'status':'Success'})
 
-    @app.route('/reload-weather', methods=['GET'])
+    @app.webserverTh.flaskApp.route('/reload-weather', methods=['GET'])
     def reloadWeather():
-        weather.reloadWeather()
-        sio.emit('weatherReport', weather.weatherReport)
+        app.weatherStationTh.weatherStation.reloadWeather()
+        app.webserverTh.sio.emit('weatherReport', app.weatherStationTh.weatherStation.weatherReport)
         return prettyJson({'status':'Success'})

@@ -3,8 +3,6 @@ from datetime import timedelta
 from queue import Queue
 from threading import Thread
 
-from flask_socketio import SocketIO
-
 from splitFlapClockRadioBackend.radioTuner.si4731 import Si4731
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.osTools import start_service
@@ -17,8 +15,10 @@ class RadioTunerThread(Thread):
     radioTuner = None
     lastReport = None
 
-    def __init__(self):
+    def __init__(self, app):
         Thread.__init__(self)
+        from splitFlapClockRadioBackend.appInterface import App
+        self.app: App = app
         self.radioTuner = Si4731()
         start_service('i2s-pipe')
         self.lastReport = self.radioTuner.get_info_obj()
@@ -31,9 +31,6 @@ class RadioTunerThread(Thread):
             self.queue.put(['quit', 0])
             self.join()
             print('thread exit cleanly')
-
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
 
     def run(self):
 
@@ -108,4 +105,4 @@ class RadioTunerThread(Thread):
         return hasChanged
 
     def emitFmRadioReport(self):
-        self.sio.emit('fmRadioReport', prettyJson(self.radioTuner.get_info_obj()))
+        self.app.webserverTh.sio.emit('fmRadioReport', prettyJson(self.radioTuner.get_info_obj()))
