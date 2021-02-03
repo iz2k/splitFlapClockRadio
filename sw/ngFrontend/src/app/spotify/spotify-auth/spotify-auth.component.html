@@ -1,6 +1,13 @@
 <div class="row m-auto">
   <div class="column w50 m-auto">
-    <ng-container *ngIf="authStatus !== undefined">Spotify-cli status: {{authStatus}}</ng-container>
+    <ng-container *ngIf="authStatus !== undefined">
+      <ng-container *ngIf="authStatus.includes('Logged in') == true">
+        Spotify-cli status: <b class="text-success">{{authStatus}}</b>
+      </ng-container>
+      <ng-container *ngIf="authStatus.includes('Logged in') == false">
+        Spotify-cli status: <b class="text-danger">{{authStatus}}</b>
+      </ng-container>
+    </ng-container>
     <mat-spinner *ngIf="authStatus == undefined" [diameter]="32"></mat-spinner>
   </div>
   <div class="column w50 m-auto">
@@ -11,7 +18,14 @@
 </div>
 <div class="row m-auto">
   <div class="column w50 m-auto">
-    <ng-container *ngIf="deviceVisible !== undefined">Raspotify visibility: {{deviceVisible}}</ng-container>
+    <ng-container *ngIf="deviceVisible !== undefined">
+      <ng-container *ngIf="deviceVisible == true">
+        Raspotify status: <b class="text-success">Device found.</b>
+      </ng-container>
+      <ng-container *ngIf="deviceVisible == false">
+        Raspotify status: <b class="text-danger">Device not found.</b>
+      </ng-container>
+    </ng-container>
     <mat-spinner *ngIf="deviceVisible == undefined" [diameter]="32"></mat-spinner>
   </div>
   <div class="column w50 m-auto">
