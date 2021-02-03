@@ -1,0 +1,10 @@
+.iconOn {
+  -webkit-text-fill-color:green;
+}
+
+.iconOff {
+  -webkit-text-fill-color:red;
+}
+.iconNormal {
+  -webkit-text-fill-color:burlywood;
+}

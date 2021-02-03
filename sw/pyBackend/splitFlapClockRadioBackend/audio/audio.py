@@ -4,16 +4,23 @@ import alsaaudio
 import subprocess
 import shlex
 
+from flask_socketio import SocketIO
+
+
 class Audio:
     mute = False
     volume_step = 2
     say = None
+    sio: SocketIO = None
 
     def __init__(self):
         self.device = alsaaudio.PCM(device='default')
         self.mixer = alsaaudio.Mixer('Master')
         self.volume = self.mixer.getvolume()[0]
         self.bindir = os.path.dirname(os.path.realpath(__file__))
+
+    def set_sio(self, sio : SocketIO):
+        self.sio = sio
 
     def play(self, wavfile):
         # Open PCM file
@@ -49,6 +56,8 @@ class Audio:
         f.close()
 
     def update_volume(self):
+        if self.sio != None:
+            self.sio.emit('volume', {'mute': self.mute, 'volume': self.volume})
         if self.mute is False:
             self.mixer.setvolume(self.volume)
             print('[sound] Volume:', self.volume)
@@ -77,7 +86,8 @@ class Audio:
         return retval
 
     def set_volume(self, vol):
-        self.volume = vol
+        if vol >=0 and vol <=100:
+            self.volume = vol
         self.update_volume()
 
     def toggle_mute(self):

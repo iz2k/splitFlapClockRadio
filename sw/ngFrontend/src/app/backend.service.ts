@@ -206,4 +206,16 @@ export class BackendService extends Socket {
       });
   }
 
+  getVolume(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-volume');
+  }
+
+  setVolume(vol): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/set-volume?vol=' + vol);
+  }
+
+  toggleMute(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/toggle-mute');
+  }
+
 }

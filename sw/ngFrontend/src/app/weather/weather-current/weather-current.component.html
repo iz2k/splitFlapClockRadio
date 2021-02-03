@@ -42,7 +42,7 @@
         <img src="assets/img/rain.png">
       </div>
       <div>
-      {{weatherReport['hourly'][0]['pop'] * 100}} %
+      {{(weatherReport['hourly'][0]['pop'] * 100).toFixed(2)}} %
       </div>
     </div>
   </div>

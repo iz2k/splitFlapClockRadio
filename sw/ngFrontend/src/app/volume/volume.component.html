@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="column w20 m-auto" align="right">
+    <button mat-button class="button-class" (click)=toggleMute()>
+      <mat-icon [class.iconOff]="mute==true">volume_off</mat-icon>
+    </button>
+  </div>
+  <div class="column w60">
+      <button mat-button class="button-class" (click)=volDown()>
+        <mat-icon class="iconNormal">volume_down</mat-icon>
+      </button>
+      <mat-slider min="0" max="100" step="2" value="{{volume}}" style="width: calc(100% - 128px)" (valueChange)="setVol($event)"></mat-slider>
+      <button mat-button class="button-class" (click)=volUp()>
+        <mat-icon class="iconNormal">volume_up</mat-icon>
+      </button>
+  </div>
+  <div class="column w20 m-auto">
+  </div>
+</div>

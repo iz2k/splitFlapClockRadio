@@ -55,6 +55,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { SpotifyAuthComponent } from './spotify/spotify-auth/spotify-auth.component';
 import { SpotifyAuthUpdateSpotipyComponent } from './spotify/spotify-auth/spotify-auth-update-spotipy/spotify-auth-update-spotipy.component';
 import { SpotifyAuthUpdateRaspotifyComponent } from './spotify/spotify-auth/spotify-auth-update-raspotify/spotify-auth-update-raspotify.component';
+import { VolumeComponent } from './volume/volume.component';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 @NgModule({
@@ -87,7 +89,8 @@ import { SpotifyAuthUpdateRaspotifyComponent } from './spotify/spotify-auth/spot
     WeatherApisComponent,
     SpotifyAuthComponent,
     SpotifyAuthUpdateSpotipyComponent,
-    SpotifyAuthUpdateRaspotifyComponent
+    SpotifyAuthUpdateRaspotifyComponent,
+    VolumeComponent
   ],
     imports: [
         BrowserModule,
@@ -113,7 +116,8 @@ import { SpotifyAuthUpdateRaspotifyComponent } from './spotify/spotify-auth/spot
         FormsModule,
         ChartsModule,
         NgxGaugeModule,
-        MatDialogModule
+        MatDialogModule,
+        MatSliderModule
     ],
   providers: [BackendService],
   bootstrap: [AppComponent]

@@ -4,6 +4,7 @@ from flask_cors import CORS
 from queue import Queue
 from threading import Thread
 
+from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.clock.clockThread import ClockThread
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
@@ -17,6 +18,7 @@ from splitFlapClockRadioBackend.webServer.routesDataBase import defineDataBaseRo
 from splitFlapClockRadioBackend.webServer.routesInfo import defineInfoRoutes
 from splitFlapClockRadioBackend.webServer.routesRadioTuner import defineRadioTunerRoutes
 from splitFlapClockRadioBackend.webServer.routesSpotify import defineSpotifyRoutes
+from splitFlapClockRadioBackend.webServer.routesVolume import defineVolumeRoutes
 from splitFlapClockRadioBackend.webServer.routesWeatherStation import defineWeatherStationRoutes
 
 
@@ -59,7 +61,7 @@ class webServerThread(Thread):
         # When server ends, reset flag
         self.isRunning = False
 
-    def define_webroutes(self, weather : WeatherStation, dbCtl : dbController, config : Config, clockTh : ClockThread, radioTunerTh : RadioTunerThread, spotifyPl : SpotifyPlayer):
+    def define_webroutes(self, weather : WeatherStation, dbCtl : dbController, config : Config, clockTh : ClockThread, radioTunerTh : RadioTunerThread, spotifyPl : SpotifyPlayer, audio : Audio):
         defineInfoRoutes(self.sio)
         defineConfigRoutes(self.flaskApp, self.sio, config)
         defineWeatherStationRoutes(self.flaskApp, self.sio, weather)
@@ -67,3 +69,4 @@ class webServerThread(Thread):
         defineClockRoutes(self.flaskApp, config, clockTh)
         defineRadioTunerRoutes(self.flaskApp, self.sio, config, radioTunerTh, spotifyPl)
         defineSpotifyRoutes(self.flaskApp, self.sio, config, spotifyPl, radioTunerTh)
+        defineVolumeRoutes(self.flaskApp, audio)
