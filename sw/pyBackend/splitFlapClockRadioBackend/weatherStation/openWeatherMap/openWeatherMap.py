@@ -1,9 +1,6 @@
 import json
 from urllib import request
 
-from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
-
-
 class OpenWeatherMap:
 
     _apiKey = None

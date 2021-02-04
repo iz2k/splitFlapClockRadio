@@ -89,7 +89,7 @@ class Config:
                 'openWeatherApi': '',
             },
             'clock' : {
-                'timeZone' : '',
+                'timeZone' : 'Europe/Madrid',
                 'alarms' : []
             },
             'location' : {
@@ -98,8 +98,8 @@ class Config:
                 'longitude' : ''
             },
             'sensors' : {
-                'baselineEco2': 34274,
-                'baselineTvoc': 34723
+                'baselineEco2': 30000,
+                'baselineTvoc': 30000
             },
             'spotifyItems' : [],
             'radioItems' : []

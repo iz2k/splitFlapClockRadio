@@ -33,8 +33,9 @@ export class WeatherCurrentComponent implements OnInit {
   }
 
   parseWeather(json): void {
+    if (json !== null && json !== undefined && json !== {}) {
       this.weatherReport = json;
       this.weatherIconUrl = 'http://openweathermap.org/img/wn/' + this.weatherReport.current.weather[0].icon + '@4x.png';
-      console.log(json);
+    }
   }
 }

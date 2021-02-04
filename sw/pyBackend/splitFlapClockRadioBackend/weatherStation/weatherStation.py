@@ -91,6 +91,8 @@ class WeatherStation(Thread):
         self.sgp.initConfig([int(self.app.config.params['sensors']['baselineEco2']), int(self.app.config.params['sensors']['baselineTvoc'])])
 
     def reloadWeather(self):
+        print('reloadWeather')
+        self.openWeather.setApiKey(apiKey=self.app.config.params['api']['openWeatherApi'])
         self.openWeather.setLocation(latitude=self.app.config.params['location']['latitude'],
                                      longitude=self.app.config.params['location']['longitude'])
         self.updateWeatherReport()
