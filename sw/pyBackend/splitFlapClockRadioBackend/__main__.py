@@ -28,10 +28,9 @@ def main():
     app.dbCtl = dbController(app=app)
     app.userInterface = UserInterface(app=app)
     app.audio = Audio(app=app)
+    app.osInfoTh = osInfoThread(app=app)
     app.spotifyPlayer = SpotifyPlayer(app=app)
 
-    # Define threads
-    app.osInfoTh = osInfoThread(app=app)
     app.weatherStationTh = WeatherStationThread(app=app)
     app.lightStripTh = RgbStripThread(app=app)
     app.radioTunerTh = RadioTunerThread(app=app)

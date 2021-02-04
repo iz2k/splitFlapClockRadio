@@ -10,7 +10,6 @@ def defineClockRoutes(app: App):
 
     @app.webserverTh.flaskApp.route('/get-time', methods=['GET'])
     def getTime():
-        print(app.config.params['clock']['timeZone'])
         return prettyJson(getDateTime(app.config.params['clock']['timeZone']))
 
     @app.webserverTh.flaskApp.route('/get-clock-mode', methods=['GET'])

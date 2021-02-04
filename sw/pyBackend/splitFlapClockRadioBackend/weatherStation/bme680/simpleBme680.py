@@ -12,6 +12,8 @@ class SimpleBME680:
             self.sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
 
         self.initConfig()
+        while self.getSensorData() == {}:
+            pass
 
     def printCalibrationData(self):
         for name in dir(self.sensor.calibration_data):

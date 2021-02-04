@@ -36,7 +36,8 @@ class dbController:
         session.commit()
         session.close()
         tStop = datetime.now()
-        #print('\t> Insert time: ' + str(tStop-tStart))
+        print('[db] Writing data.')
+        print('[db] \t> Write time: ' + str(tStop-tStart))
 
     def load(self, table):
         tStart = datetime.now()
@@ -45,7 +46,8 @@ class dbController:
 
         session.close()
         tStop = datetime.now()
-        print('[db] \t> Load time: ' + str(tStop - tStart))
+        print('[db] Reading data.')
+        print('[db] \t> Read time: ' + str(tStop-tStart))
         return result
 
     def loadMeasurements(self, dStart, dStop):
@@ -57,7 +59,8 @@ class dbController:
 
         session.close()
         tStop = datetime.now()
-        print('[db] \t> Load time: ' + str(tStop - tStart))
+        print('[db] Reading data.')
+        print('[db] \t> Read time: ' + str(tStop-tStart))
         return result
 
     def testRelationship(self):

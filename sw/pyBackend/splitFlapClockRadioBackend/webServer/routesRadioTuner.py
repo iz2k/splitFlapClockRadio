@@ -19,6 +19,8 @@ def defineRadioTunerRoutes(app: App):
         if (cmd == 'seek_down'):
             app.radioTunerTh.previous()
         if (cmd == 'turn_on'):
+            if app.radioTunerTh.radioTuner.on == False:
+                app.radioTunerTh.tune(97.2)
             app.radioTunerTh.play()
         if (cmd == 'turn_off'):
             app.radioTunerTh.pause()

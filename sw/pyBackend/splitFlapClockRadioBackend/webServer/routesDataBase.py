@@ -9,6 +9,5 @@ def defineDataBaseRoutes(app: App):
     @app.webserverTh.flaskApp.route('/get-measurements', methods=['POST'])
     def getMeasurements():
         content = flask_request.get_json(silent=True)
-        print(content)
         measurements = app.dbCtl.loadMeasurements(content['startDate'], content['stopDate']).all()
         return prettyJson(measurements)

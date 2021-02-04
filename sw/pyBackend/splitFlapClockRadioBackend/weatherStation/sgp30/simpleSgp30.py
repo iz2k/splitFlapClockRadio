@@ -16,11 +16,14 @@ class SimpleSGP30():
         self.sgp30.set_iaq_baseline(baseline[0], baseline[1])
 
     def getSensorData(self):
-        return {
-            'eCO2' : self.sgp30.eCO2,
-            'TVOC' : self.sgp30.TVOC,
-            'baseline': self.sgp30.get_iaq_baseline()
-        }
+        try:
+            return {
+                'eCO2' : self.sgp30.eCO2,
+                'TVOC' : self.sgp30.TVOC,
+                'baseline': self.sgp30.get_iaq_baseline()
+            }
+        except:
+            return {}
 
     def getBaseline(self):
         return {

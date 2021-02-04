@@ -49,8 +49,6 @@ def defineSpotifyRoutes(app: App):
 
     @app.webserverTh.sio.on('spotify')
     def spotify_event(data):
-        print('Spotify event!')
-        print(data)
         cmd = data[0]
         arg = data[1]
         app.radioTunerTh.pause()

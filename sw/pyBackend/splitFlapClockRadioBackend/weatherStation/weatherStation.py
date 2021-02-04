@@ -39,19 +39,10 @@ class WeatherStation:
     def updateWeatherReport(self):
         self.weatherReport = self.openWeather.getReport()
         if (self.weatherReport != None):
-            print('[weather] Report Update:')
-            print(prettyJson(
-                {
-                    'location' : self.app.config.params['location']['city'],
-                    'temperature' : str(self.weatherReport['current']['temp']) + 'C',
-                    'pressure' : str(self.weatherReport['current']['pressure']) + 'mbar',
-                    'humidity' : str(self.weatherReport['current']['humidity']) + '%',
-                    'weather' : self.weatherReport['current']['weather'][0]['description']
-                }
-            ))
+            print('[weather] Updating Weather Report')
             self.updateTodayForecast()
         else:
-            print('[weather] Error updating report.')
+            print('[weather] Error updating Weather Report.')
 
     def updateTodayForecast(self):
         fc = 'Actualmente, hace una temperatura de ' + str(round(self.weatherReport['current']['temp'])) + ' grados'
@@ -64,17 +55,12 @@ class WeatherStation:
         self.todayForecast = fc
 
     def updateSensorReport(self):
-        self.sensorReport = {}
-        bmedata = {}
-        while bmedata == {}:
-            bmedata = self.bme.getSensorData()
-
+        bmedata = self.bme.getSensorData()
         for parameter in bmedata:
             self.sensorReport[parameter] = bmedata[parameter]
         sgpdata = self.sgp.getSensorData()
         for parameter in sgpdata:
             self.sensorReport[parameter] = sgpdata[parameter]
-        #print(self.sensorReport)
 
     def insertToDb(self):
         if(self.weatherReport != None):
@@ -102,7 +88,7 @@ class WeatherStation:
 
             self.app.dbCtl.insert(myMeas)
         else:
-            print('[WeatherStation] Error inserting data to DB.')
+            print('[weather] Error inserting data to DB.')
 
     def get_ww_idx(self):
         dictionary = {
