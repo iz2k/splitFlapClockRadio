@@ -38,7 +38,7 @@ class UserInterface(Thread):
         if self.is_alive():
             self.queue.put(['quit', 0])
             self.join()
-            print('thread exit cleanly')
+            print('UI thread exit.')
 
     def vol_rotary_callback(self, direction):
         print("[ui] VOL_ROTARY:", direction)
@@ -86,9 +86,12 @@ class UserInterface(Thread):
                     self.changeMediaItem(q_data)
                 if q_msg == 'control_switch':
                     if q_data == 'short':
-                        pass
+                        if (self.app.alarm.stopActiveAlarms()):
+                            self.app.radioTuner.pause()
+                            self.app.spotifyPlayer.pause()
                     if q_data == 'long':
                         self.changeMediaSource()
+                        self.app.alarm.stopActiveAlarms()
 
             time.sleep(0.1)
 

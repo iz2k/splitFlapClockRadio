@@ -27,9 +27,6 @@ class dbController:
         # Generate database schema with imported elements
         myBase.metadata.create_all(self.engine)
 
-        from splitFlapClockRadioBackend.dbManager.dbWebRoutes import defineDbWebRoutes
-        defineDbWebRoutes(self.app)
-
         #self.testRelationship()
 
     def insert(self, object):

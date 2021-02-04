@@ -49,8 +49,10 @@ def defineClockWebRoutes(app: App):
             print(e)
             return 'Invalid parameters. Please specify type=hh, mm or ww'
 
-
-
-
-
+    @app.webserver.flaskApp.route('/set-timezone', methods=['POST'])
+    def setTimezone():
+        content = flask_request.get_json(silent=True)
+        if (content != None):
+            app.config.updateClockParam('timeZone', content['nameValue'])
+        return prettyJson({'status' : 'Timezone modified!'})
 

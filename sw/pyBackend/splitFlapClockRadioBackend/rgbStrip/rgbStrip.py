@@ -28,7 +28,7 @@ class RgbStrip(Thread):
         if self.is_alive():
             self.queue.put(['quit', 0])
             self.join()
-            print('thread exit cleanly')
+            print('RgbStrip thread exit.')
 
     def run(self):
 

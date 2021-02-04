@@ -35,7 +35,7 @@ class RadioTuner(Thread):
         if self.is_alive():
             self.queue.put(['quit', 0])
             self.join()
-            print('thread exit cleanly')
+            print('RadioTuner thread exit.')
 
     def run(self):
 

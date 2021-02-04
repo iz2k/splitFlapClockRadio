@@ -24,7 +24,6 @@ class Clock(Thread):
         self.desired_hh = self.smbus430.read_registerName('hh_desired_digit')
         self.desired_mm = self.smbus430.read_registerName('mm_desired_digit')
         self.desired_ww = self.smbus430.read_registerName('ww_desired_digit')
-        self.app = app
 
         from splitFlapClockRadioBackend.clock.clockWebRoutes import defineClockWebRoutes
         defineClockWebRoutes(self.app)
@@ -38,7 +37,7 @@ class Clock(Thread):
         if self.is_alive():
             self.queue.put(['quit', 0])
             self.join()
-            print('thread exit cleanly')
+            print('Clock thread exit.')
 
     def run(self):
 
@@ -65,21 +64,7 @@ class Clock(Thread):
             # Keep track of time
             if self.mode == 'clock':
                 curTime = getTimeZoneAwareNow(self.app.config.params['clock']['timeZone'])
-                if self.update_time(curTime.hour, curTime.minute):
-                    for alarm in self.app.config.params['clock']['alarms']:
-                        if (alarm['Active'] == True):
-                            if (alarm['WeekDays'][curTime.weekday()] == True):
-                                if (alarm['Hour'] == curTime.hour and alarm['Minute'] == curTime.minute):
-                                    self.app.lightStrip.test()
-                                    if (alarm['Message'] != ''):
-                                        self.app.audio.say_text_offline(alarm['Message'], lang='es-ES', wait=True)
-                                    if (alarm['EnableWeatherForecast'] == True):
-                                        self.app.audio.say_text_offline(self.app.weatherStation.weatherStation.todayForecast, lang='es-ES', wait=True)
-                                    if (alarm['PlaySource'] == 'Spotify'):
-                                        self.app.spotifyPlayer.play(alarm['PlayItem']['URI'])
-                                    if (alarm['PlaySource'] == 'Radio'):
-                                        self.app.radioTuner.tune(alarm['PlayItem']['Frequency'])
-                                        self.app.radioTuner.play()
+                self.update_time(curTime.hour, curTime.minute)
 
             time.sleep(0.1)
 

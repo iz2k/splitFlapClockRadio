@@ -11,9 +11,6 @@ class Config:
         self.app: App = app
         self.loadConfig()
 
-        from splitFlapClockRadioBackend.config.configWebRoutes import defineConfigWebRoutes
-        defineConfigWebRoutes(self.app)
-
     def saveConfig(self):
         writeJsonFile(self._FILENAME, self.params)
 

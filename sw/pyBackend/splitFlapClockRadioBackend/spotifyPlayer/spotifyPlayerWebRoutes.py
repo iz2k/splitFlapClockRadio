@@ -61,4 +61,30 @@ def defineSpotifyPlayerWebRoutes(app: App):
         if (cmd == 'pause'):
             app.spotifyPlayer.pause()
 
+    @app.webserver.flaskApp.route('/get-spotify-items', methods=['GET'])
+    def getSpotifyItems():
+        return prettyJson(app.config.params['spotifyItems'])
 
+    @app.webserver.flaskApp.route('/add-spotify-item', methods=['POST'])
+    def addSpotifyItem():
+        try:
+            # Get arguments
+            content = flask_request.get_json(silent=True)
+            app.config.addSpotifyItem(content['Type'], content['Name'], content['URI'], content['Image'])
+            app.webserver.sio.emit('spotifyItems', prettyJson(app.config.params['spotifyItems']))
+            return prettyJson({'status': 'Adding Spotify Item!'})
+        except Exception as e:
+            print(e)
+            return 'Invalid args to add spotify item'
+
+    # /url?arg1=xxxx&arg2=yyy
+    @app.webserver.flaskApp.route('/delete-spotify-item', methods=['GET'])
+    def deleteSpotifyItem():
+        try:
+            # Get arguments
+            idx = flask_request.args.get('idx')
+            app.config.deletepotifyItem(int(idx))
+            return prettyJson({'status': 'Spotify Item Deleted!'})
+        except Exception as e:
+            print(e)
+            return 'Invalid idx to delete spotify item'

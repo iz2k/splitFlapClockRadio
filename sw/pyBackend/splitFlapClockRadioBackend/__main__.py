@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 
+from splitFlapClockRadioBackend.alarm.alarm import Alarm
 from splitFlapClockRadioBackend.audio.audio import Audio
 from splitFlapClockRadioBackend.clock.clock import Clock
 from splitFlapClockRadioBackend.config.config import Config
@@ -14,17 +15,18 @@ from splitFlapClockRadioBackend.webServer.WebServer import WebServer
 from splitFlapClockRadioBackend.rgbStrip.rgbStrip import RgbStrip
 
 class App:
-    config: Config = None
-    clock: Clock = None
-    dbCtl: dbController = None
-    userInterface: UserInterface = None
-    audio: Audio = None
-    spotifyPlayer: SpotifyPlayer = None
-    osInfo: osInfo = None
-    weatherStation: WeatherStation = None
-    lightStrip: RgbStrip = None
-    radioTuner: RadioTuner = None
     webserver: WebServer = None
+    config: Config = None
+    audio: Audio = None
+    lightStrip: RgbStrip = None
+    dbCtl: dbController = None
+    osInfo: osInfo = None
+    clock: Clock = None
+    alarm: Alarm = None
+    radioTuner: RadioTuner = None
+    spotifyPlayer: SpotifyPlayer = None
+    weatherStation: WeatherStation = None
+    userInterface: UserInterface = None
 
 def main():
 
@@ -41,6 +43,7 @@ def main():
     app.dbCtl = dbController(app=app)
     app.osInfo = osInfo(app=app)
     app.clock = Clock(app=app)
+    app.alarm = Alarm(app=app)
     app.radioTuner = RadioTuner(app=app)
     app.spotifyPlayer = SpotifyPlayer(app=app)
     app.weatherStation = WeatherStation(app=app)
@@ -53,23 +56,24 @@ def main():
 
         # Wait while server running
         app.webserver.join()
+        print('WebServer thread exit.')
 
         # When server ends, stop threads
         stopThreads(app)
-
-        # Print Goodby msg
-        print('Exiting...')
 
     except KeyboardInterrupt:
         stopThreads(app)
 
 def stopThreads(app: App):
+    print('Ending application by user request.')
     app.clock.stop()
+    app.alarm.stop()
     app.osInfo.stop()
     app.weatherStation.stop()
     app.lightStrip.stop()
     app.radioTuner.stop()
     app.userInterface.stop()
+    print('Application ended.')
 
 
 # If executed as main, call main

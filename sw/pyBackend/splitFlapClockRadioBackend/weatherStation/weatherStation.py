@@ -48,7 +48,7 @@ class WeatherStation(Thread):
         if self.is_alive():
             self.queue.put(['quit', 0])
             self.join()
-            print('thread exit cleanly')
+            print('WeatherStation thread exit.')
 
 
     def run(self):
