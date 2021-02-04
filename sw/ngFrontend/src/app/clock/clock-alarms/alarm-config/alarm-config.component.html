@@ -37,7 +37,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="column w70">
+        <mat-form-field class="column w70" *ngIf="alarm.PlaySource == 'Spotify' || alarm.PlaySource == 'Radio' || alarm.PlaySource == 'Tone'">
           <mat-label>Media Item</mat-label>
 
           <mat-select [(value)]="alarm.PlayItem.URI" *ngIf="alarm.PlaySource == 'Spotify'">

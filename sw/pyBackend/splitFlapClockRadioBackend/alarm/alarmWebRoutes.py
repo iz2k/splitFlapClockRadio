@@ -8,12 +8,12 @@ from splitFlapClockRadioBackend.tools.timeTools import getDateTime
 
 def defineAlarmWebRoutes(app: App):
 
-    @app.webserver.flaskApp.route('/get-alarm-list', methods=['GET'])
+    @app.webserver.flaskApp.route('/rest/alarm/get-list', methods=['GET'])
     def getAlarms():
         return prettyJson(app.config.params['clock']['alarms'])
 
 
-    @app.webserver.flaskApp.route('/set-alarm', methods=['POST'])
+    @app.webserver.flaskApp.route('/rest/alarm/set-alarm', methods=['POST'])
     def setAlarm():
         content = flask_request.get_json(silent=True)
         if (content != None):
@@ -24,7 +24,7 @@ def defineAlarmWebRoutes(app: App):
         return prettyJson({'status' : 'Updating alarm!'})
 
     # /url?arg1=xxxx&arg2=yyy
-    @app.webserver.flaskApp.route('/delete-alarm', methods=['GET'])
+    @app.webserver.flaskApp.route('/rest/alarm/delete-alarm', methods=['GET'])
     def deleteAlarm():
         try:
             # Get arguments

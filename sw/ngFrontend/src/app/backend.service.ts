@@ -110,11 +110,11 @@ export class BackendService extends Socket {
   }
 
   getAlarmList(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-alarm-list');
+    return this.http.get<any>(this.urlEndPoint + '/rest/alarm/get-list');
   }
 
   setAlarm(alarm): Observable<any> {
-    return this.http.post<any>(this.urlEndPoint + '/set-alarm', alarm,
+    return this.http.post<any>(this.urlEndPoint + '/rest/alarm/set-alarm', alarm,
       {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
@@ -123,7 +123,7 @@ export class BackendService extends Socket {
   }
 
   deleteAlarm(idx): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/delete-alarm?idx=' + idx);
+    return this.http.get<any>(this.urlEndPoint + '/rest/alarm/delete-alarm?idx=' + idx);
   }
 
   getRadioItems(): Observable<any> {
