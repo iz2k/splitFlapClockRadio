@@ -9,7 +9,7 @@ from splitFlapClockRadioBackend.tools.osTools import start_service
 from splitFlapClockRadioBackend.tools.timeTools import getNow
 
 
-class RadioTunerThread(Thread):
+class RadioTuner(Thread):
 
     queue = Queue()
     radioTuner = None
@@ -17,11 +17,16 @@ class RadioTunerThread(Thread):
 
     def __init__(self, app):
         Thread.__init__(self)
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.radioTuner = Si4731()
         start_service('i2s-pipe')
         self.lastReport = self.radioTuner.get_info_obj()
+
+        from splitFlapClockRadioBackend.radioTuner.radioTunerWebRoutes import defineRadioTunerWebRoutes
+        defineRadioTunerWebRoutes(self.app)
+
+        self.start()
 
     def start(self):
         Thread.start(self)
@@ -105,4 +110,4 @@ class RadioTunerThread(Thread):
         return hasChanged
 
     def emitFmRadioReport(self):
-        self.app.webserverTh.sio.emit('fmRadioReport', prettyJson(self.radioTuner.get_info_obj()))
+        self.app.webserver.sio.emit('fmRadioReport', prettyJson(self.radioTuner.get_info_obj()))

@@ -1,20 +1,30 @@
 #!/usr/bin/env python3
 import argparse
 
-from splitFlapClockRadioBackend.appInterface import App
 from splitFlapClockRadioBackend.audio.audio import Audio
-from splitFlapClockRadioBackend.clock.clockThread import ClockThread
+from splitFlapClockRadioBackend.clock.clock import Clock
 from splitFlapClockRadioBackend.config.config import Config
 from splitFlapClockRadioBackend.dbManager.dbController import dbController
-from splitFlapClockRadioBackend.mainControl import MainControlThread
-from splitFlapClockRadioBackend.osInfo.osInfoThread import osInfoThread
-from splitFlapClockRadioBackend.radioTuner.radioTunerThread import RadioTunerThread
+from splitFlapClockRadioBackend.osInfo.osInfo import osInfo
+from splitFlapClockRadioBackend.radioTuner.radioTuner import RadioTuner
 from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayer import SpotifyPlayer
 from splitFlapClockRadioBackend.userInterface.userInterface import UserInterface
-from splitFlapClockRadioBackend.weatherStation.weatherStationThread import WeatherStationThread
-from splitFlapClockRadioBackend.webServer.webServer import webServerThread
-from splitFlapClockRadioBackend.rgbStrip.rgbStripThread import RgbStripThread
+from splitFlapClockRadioBackend.weatherStation.weatherStation import WeatherStation
+from splitFlapClockRadioBackend.webServer.WebServer import WebServer
+from splitFlapClockRadioBackend.rgbStrip.rgbStrip import RgbStrip
 
+class App:
+    config: Config = None
+    clock: Clock = None
+    dbCtl: dbController = None
+    userInterface: UserInterface = None
+    audio: Audio = None
+    spotifyPlayer: SpotifyPlayer = None
+    osInfo: osInfo = None
+    weatherStation: WeatherStation = None
+    lightStrip: RgbStrip = None
+    radioTuner: RadioTuner = None
+    webserver: WebServer = None
 
 def main():
 
@@ -24,46 +34,42 @@ def main():
     args = parser.parse_args()
 
     app = App()
+    app.webserver = WebServer(app=app)
     app.config = Config(app=app)
-    app.dbCtl = dbController(app=app)
-    app.userInterface = UserInterface(app=app)
     app.audio = Audio(app=app)
-    app.osInfoTh = osInfoThread(app=app)
+    app.lightStrip = RgbStrip(app=app)
+    app.dbCtl = dbController(app=app)
+    app.osInfo = osInfo(app=app)
+    app.clock = Clock(app=app)
+    app.radioTuner = RadioTuner(app=app)
     app.spotifyPlayer = SpotifyPlayer(app=app)
+    app.weatherStation = WeatherStation(app=app)
+    app.userInterface = UserInterface(app=app)
 
-    app.weatherStationTh = WeatherStationThread(app=app)
-    app.lightStripTh = RgbStripThread(app=app)
-    app.radioTunerTh = RadioTunerThread(app=app)
-    app.clockTh = ClockThread(app=app)
-    app.mainControlTh = MainControlThread(app=app)
-
-    app.webserverTh = webServerThread(app=app)
-    app.webserverTh.define_webroutes()
 
     try:
-        # Start threads
-        app.osInfoTh.start()
-        app.weatherStationTh.start()
-        app.lightStripTh.start()
-        app.radioTunerTh.start()
-        app.clockTh.start()
-        app.mainControlTh.start()
-        app.webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
+        # Start Web Server
+        app.webserver.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 
         # Wait while server running
-        app.webserverTh.join()
+        app.webserver.join()
 
         # When server ends, stop threads
-        app.osInfoTh.stop()
-        app.weatherStationTh.stop()
+        stopThreads(app)
 
         # Print Goodby msg
         print('Exiting...')
 
     except KeyboardInterrupt:
-        # Stop threads
-        app.osInfoTh.stop()
-        app.weatherStationTh.stop()
+        stopThreads(app)
+
+def stopThreads(app: App):
+    app.clock.stop()
+    app.osInfo.stop()
+    app.weatherStation.stop()
+    app.lightStrip.stop()
+    app.radioTuner.stop()
+    app.userInterface.stop()
 
 
 # If executed as main, call main

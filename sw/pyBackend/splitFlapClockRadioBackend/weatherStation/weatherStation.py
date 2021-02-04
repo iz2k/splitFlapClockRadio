@@ -1,13 +1,21 @@
-from datetime import datetime
+import time
+from datetime import timedelta, datetime
+from queue import Queue
+from threading import Thread
+
+from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
+from splitFlapClockRadioBackend.tools.timeTools import getNow
+
 
 from splitFlapClockRadioBackend.weatherStation.bme680.simpleBme680 import SimpleBME680
 from splitFlapClockRadioBackend.weatherStation.sgp30.simpleSgp30 import SimpleSGP30
 from splitFlapClockRadioBackend.weatherStation.openWeatherMap.openWeatherMap import OpenWeatherMap
 from splitFlapClockRadioBackend.dbManager import Measurement, CityMeas, HomeMeas
-from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 
 
-class WeatherStation:
+class WeatherStation(Thread):
+
+    queue = Queue()
 
     weatherReport = {}
     sensorReport = {}
@@ -19,13 +27,64 @@ class WeatherStation:
 
 
     def __init__(self, app):
-        from splitFlapClockRadioBackend.appInterface import App
+        Thread.__init__(self)
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.bme = SimpleBME680()
         self.sgp = SimpleSGP30([int(self.app.config.params['sensors']['baselineEco2']), int(self.app.config.params['sensors']['baselineTvoc'])])
         self.openWeather = OpenWeatherMap(apiKey=self.app.config.params['api']['openWeatherApi'],
                                           latitude=self.app.config.params['location']['latitude'],
                                           longitude=self.app.config.params['location']['longitude'])
+
+        from splitFlapClockRadioBackend.weatherStation.weatherStationWebRoutes import defineWeatherStationWebRoutes
+        defineWeatherStationWebRoutes(self.app)
+
+        self.start()
+
+    def start(self):
+        Thread.start(self)
+
+    def stop(self):
+        if self.is_alive():
+            self.queue.put(['quit', 0])
+            self.join()
+            print('thread exit cleanly')
+
+
+    def run(self):
+
+        interval_minutes = 10
+
+        last_update = getNow() - timedelta(minutes=interval_minutes)
+
+        # Main loop
+        run_app=True
+        while(run_app):
+            # Check if msg in queue
+            while not self.queue.empty():
+                [q_msg, q_data] = self.queue.get()
+                if q_msg == 'quit':
+                    run_app=False
+
+            self.updateSensorReport()
+            if ('humidity' in self.sensorReport):
+                self.sgp.adjustRH(self.sensorReport['humidity'])
+            self.emit()
+
+            now = getNow()
+            next_update = last_update + timedelta(minutes=interval_minutes)
+            if now > next_update:
+                last_update = now
+                self.updateWeatherReport()
+                self.app.webserver.sio.emit('weatherReport', self.weatherReport)
+                self.insertToDb()
+                self.app.clock.update_weather(self.get_ww_idx())
+
+            time.sleep(1)
+
+    def emit(self):
+        self.app.webserver.sio.emit('sensorData', prettyJson(self.sensorReport))
+
 
     def reloadSensors(self):
         self.sgp.resetDevice()

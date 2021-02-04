@@ -13,12 +13,15 @@ class Audio:
     say = None
 
     def __init__(self, app):
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.device = alsaaudio.PCM(device='default')
         self.mixer = alsaaudio.Mixer('Master')
         self.volume = self.mixer.getvolume()[0]
         self.bindir = os.path.dirname(os.path.realpath(__file__))
+
+        from splitFlapClockRadioBackend.audio.audioWebRoutes import defineAudioWebRoutes
+        defineAudioWebRoutes(self.app)
 
     def play(self, wavfile):
         # Open PCM file
@@ -54,8 +57,8 @@ class Audio:
         f.close()
 
     def update_volume(self):
-        if self.app.webserverTh.sio != None:
-            self.app.webserverTh.sio.emit('volume', {'mute': self.mute, 'volume': self.volume})
+        if self.app.webserver.sio != None:
+            self.app.webserver.sio.emit('volume', {'mute': self.mute, 'volume': self.volume})
         if self.mute is False:
             self.mixer.setvolume(self.volume)
             print('[sound] Volume:', self.volume)

@@ -2,11 +2,11 @@ import time
 from queue import Queue
 from threading import Thread
 
-from splitFlapClockRadioBackend.clock.smbusMsp430 import smbusMsp430
+from splitFlapClockRadioBackend.clock.smbus430.smbusMsp430 import smbusMsp430
 from splitFlapClockRadioBackend.tools.timeTools import getTimeZoneAwareNow
 
 
-class ClockThread(Thread):
+class Clock(Thread):
 
     queue = Queue()
     smbusMsp430 = None
@@ -17,7 +17,7 @@ class ClockThread(Thread):
 
     def __init__(self, app):
         Thread.__init__(self)
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.smbus430 = smbusMsp430()
         time.sleep(1)
@@ -25,6 +25,11 @@ class ClockThread(Thread):
         self.desired_mm = self.smbus430.read_registerName('mm_desired_digit')
         self.desired_ww = self.smbus430.read_registerName('ww_desired_digit')
         self.app = app
+
+        from splitFlapClockRadioBackend.clock.clockWebRoutes import defineClockWebRoutes
+        defineClockWebRoutes(self.app)
+
+        self.start()
 
     def start(self):
         Thread.start(self)
@@ -65,16 +70,16 @@ class ClockThread(Thread):
                         if (alarm['Active'] == True):
                             if (alarm['WeekDays'][curTime.weekday()] == True):
                                 if (alarm['Hour'] == curTime.hour and alarm['Minute'] == curTime.minute):
-                                    self.app.lightStripTh.test()
+                                    self.app.lightStrip.test()
                                     if (alarm['Message'] != ''):
                                         self.app.audio.say_text_offline(alarm['Message'], lang='es-ES', wait=True)
                                     if (alarm['EnableWeatherForecast'] == True):
-                                        self.app.audio.say_text_offline(self.app.weatherStationTh.weatherStation.todayForecast, lang='es-ES', wait=True)
+                                        self.app.audio.say_text_offline(self.app.weatherStation.weatherStation.todayForecast, lang='es-ES', wait=True)
                                     if (alarm['PlaySource'] == 'Spotify'):
                                         self.app.spotifyPlayer.play(alarm['PlayItem']['URI'])
                                     if (alarm['PlaySource'] == 'Radio'):
-                                        self.app.radioTunerTh.tune(alarm['PlayItem']['Frequency'])
-                                        self.app.radioTunerTh.play()
+                                        self.app.radioTuner.tune(alarm['PlayItem']['Frequency'])
+                                        self.app.radioTuner.play()
 
             time.sleep(0.1)
 

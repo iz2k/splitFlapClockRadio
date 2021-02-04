@@ -1,3 +1,4 @@
+
 from splitFlapClockRadioBackend.tools.jsonTools import writeJsonFile, readJsonFile, prettyJson
 
 class Config:
@@ -6,9 +7,12 @@ class Config:
     params = {}
 
     def __init__(self, app):
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.loadConfig()
+
+        from splitFlapClockRadioBackend.config.configWebRoutes import defineConfigWebRoutes
+        defineConfigWebRoutes(self.app)
 
     def saveConfig(self):
         writeJsonFile(self._FILENAME, self.params)

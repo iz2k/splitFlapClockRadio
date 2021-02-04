@@ -6,7 +6,7 @@ import pigpio
 import smbus
 from termcolor import colored
 
-from splitFlapClockRadioBackend.clock.typedef import SMBUS_OPS, MSP430_REGS, FLAP_REGS, FLAP_IDX
+from splitFlapClockRadioBackend.clock.smbus430.typedef import SMBUS_OPS, MSP430_REGS, FLAP_REGS, FLAP_IDX
 from splitFlapClockRadioBackend.tools.menuTools import getKeyFromDictionarySubitemName, select_value, doReturn, doMenu
 
 
@@ -16,7 +16,7 @@ class smbusMsp430:
         I2C_ADDRESS=0x16
         RST_GPIO = 12
 
-    def __init__(self, SMBusChannel=1, i2cAddress=0x16, skipReset=True):
+    def __init__(self, SMBusChannel=1, i2cAddress=0x16, skipReset=False):
         self.bus = smbus.SMBus(SMBusChannel)
         self.i2c_address = i2cAddress
 
@@ -28,7 +28,6 @@ class smbusMsp430:
             self.pi.write(self.HW.RST_GPIO.value, 0)
             time.sleep(0.1)
             self.pi.write(self.HW.RST_GPIO.value, 1)
-            #time.sleep(0.1)
             #self.pi.set_mode(self.HW.RST_GPIO.value, pigpio.INPUT)
 
     def read_registerKey(self, key):

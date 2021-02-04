@@ -8,15 +8,15 @@ from threading import Thread
 from splitFlapClockRadioBackend.tools.ipTools import getHostname, getIP
 
 
-class webServerThread(Thread):
+class WebServer(Thread):
 
     queue = Queue()
-    sio : SocketIO = None
-    flaskApp : Flask = None
+    sio: SocketIO = None
+    flaskApp: Flask = None
 
     def __init__(self, app):
         Thread.__init__(self)
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         eventlet.monkey_patch()
 
@@ -50,20 +50,3 @@ class webServerThread(Thread):
         # When server ends, reset flag
         self.isRunning = False
 
-    def define_webroutes(self):
-        from splitFlapClockRadioBackend.webServer.routesClock import defineClockRoutes
-        from splitFlapClockRadioBackend.webServer.routesConfig import defineConfigRoutes
-        from splitFlapClockRadioBackend.webServer.routesDataBase import defineDataBaseRoutes
-        from splitFlapClockRadioBackend.webServer.routesInfo import defineInfoRoutes
-        from splitFlapClockRadioBackend.webServer.routesRadioTuner import defineRadioTunerRoutes
-        from splitFlapClockRadioBackend.webServer.routesSpotify import defineSpotifyRoutes
-        from splitFlapClockRadioBackend.webServer.routesVolume import defineVolumeRoutes
-        from splitFlapClockRadioBackend.webServer.routesWeatherStation import defineWeatherStationRoutes
-        defineInfoRoutes(self.app)
-        defineConfigRoutes(self.app)
-        defineWeatherStationRoutes(self.app)
-        defineDataBaseRoutes(self.app)
-        defineClockRoutes(self.app)
-        defineRadioTunerRoutes(self.app)
-        defineSpotifyRoutes(self.app)
-        defineVolumeRoutes(self.app)

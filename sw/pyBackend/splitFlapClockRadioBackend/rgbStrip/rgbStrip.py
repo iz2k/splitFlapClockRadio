@@ -6,7 +6,7 @@ from threading import Thread
 from splitFlapClockRadioBackend.rgbStrip.neoStrip import NeoStrip
 
 
-class RgbStripThread(Thread):
+class RgbStrip(Thread):
 
     queue = Queue()
     rgbStrip = None
@@ -14,10 +14,12 @@ class RgbStripThread(Thread):
     signalingExpire : time = None
 
     def __init__(self, app):
-        from splitFlapClockRadioBackend.appInterface import App
+        Thread.__init__(self)
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.rgbStrip = NeoStrip()
-        Thread.__init__(self)
+
+        self.start()
 
     def start(self):
         Thread.start(self)

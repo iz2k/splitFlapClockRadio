@@ -10,7 +10,7 @@ from splitFlapClockRadioBackend.dbManager import dbCredentials, myBase, Measurem
 class dbController:
 
     def __init__(self, app):
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://' + dbCredentials['user'] + ':' + dbCredentials['pass'] + '@' + \
                                   dbCredentials['host'] + '/' + dbCredentials['db']
@@ -26,6 +26,9 @@ class dbController:
 
         # Generate database schema with imported elements
         myBase.metadata.create_all(self.engine)
+
+        from splitFlapClockRadioBackend.dbManager.dbWebRoutes import defineDbWebRoutes
+        defineDbWebRoutes(self.app)
 
         #self.testRelationship()
 

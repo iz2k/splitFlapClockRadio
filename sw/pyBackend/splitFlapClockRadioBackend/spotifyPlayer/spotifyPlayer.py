@@ -14,13 +14,16 @@ class SpotifyPlayer:
 	authProcessMaster = None
 
 	def __init__(self, app):
-		from splitFlapClockRadioBackend.appInterface import App
+		from splitFlapClockRadioBackend.__main__ import App
 		self.app: App = app
 		self.set_local_device()
 		self.pause()
 
+		from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayerWebRoutes import defineSpotifyPlayerWebRoutes
+		defineSpotifyPlayerWebRoutes(self.app)
+
 	def check_local_device(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			output=execute('/home/pi/.local/bin/spotify device')
 			if '* Split-Flap-Clock-Radio' in output:
 				return True
@@ -33,7 +36,7 @@ class SpotifyPlayer:
 			print('[spotify] No internet connection')
 
 	def set_local_device(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			output=execute('/home/pi/.local/bin/spotify device -s Split-Flap-Clock-Radio')
 			if len(output.splitlines())>0:
 				print('[spotify] Setting Spotify device to Raspotify: ' + output.splitlines()[0])
@@ -43,7 +46,7 @@ class SpotifyPlayer:
 			print('[spotify] No internet connection')
 
 	def play(self, uri=None):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			self.check_local_device()
 			command = '/home/pi/.local/bin/spotify play'
 			if (uri != None):
@@ -56,7 +59,7 @@ class SpotifyPlayer:
 			print('[spotify] No internet connection')
 
 	def pause(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			output=execute('/home/pi/.local/bin/spotify pause')
 			self.parse_spotify_status(output)
 			print('[spotify] STOP')
@@ -64,7 +67,7 @@ class SpotifyPlayer:
 			print('[spotify] No internet connection')
 
 	def next(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			output=execute('/home/pi/.local/bin/spotify next')
 			self.parse_spotify_status(output)
 			print('[spotify] NEXT: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
@@ -72,7 +75,7 @@ class SpotifyPlayer:
 			print('[spotify] No internet connection')
 
 	def previous(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			output=execute('/home/pi/.local/bin/spotify previous')
 			self.parse_spotify_status(output)
 			print('[spotify] PREVIOUS: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
@@ -105,19 +108,19 @@ class SpotifyPlayer:
 
 	def emitStatus(self):
 		try:
-			self.app.webserverTh.sio.emit('spotifyReport', prettyJson(self.getStatus()))
+			self.app.webserver.sio.emit('spotifyReport', prettyJson(self.getStatus()))
 		except:
 			pass
 
 	def searchSpotify(self, type, terms):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			return execute('/home/pi/.local/bin/spotify search ' + terms + ' --' + type + ' --raw')
 		else:
 			print('[spotify] No internet connection')
 			return {}
 
 	def getAuth(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			output=execute('/home/pi/.local/bin/spotify auth status')
 			if (output == ''):
 				output = 'Not logged in.'
@@ -131,7 +134,7 @@ class SpotifyPlayer:
 			}
 
 	def startAuthProcess(self):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			if self.authProcess is not None:
 				print("[spotify] Killing Previous Auth Process")
 				self.authProcess.terminate()
@@ -181,7 +184,7 @@ class SpotifyPlayer:
 
 
 	def endAuthProcess(self, verificationCode):
-		if self.app.osInfoTh.report['internet'] == True:
+		if self.app.osInfo.report['internet'] == True:
 			if self.authProcess is None:
 				return 'No Auth Process in curse'
 

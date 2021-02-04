@@ -1,7 +1,7 @@
 
 from termcolor import colored
 
-from splitFlapClockRadioBackend.clock.smbusMsp430 import smbusMsp430
+from splitFlapClockRadioBackend.clock.smbus430.smbusMsp430 import smbusMsp430
 from splitFlapClockRadioBackend.tools.menuTools import doMenu
 
 

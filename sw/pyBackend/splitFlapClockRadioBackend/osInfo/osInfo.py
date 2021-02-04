@@ -9,16 +9,21 @@ from splitFlapClockRadioBackend.tools.ipTools import getHostname, getIP, getInte
 from splitFlapClockRadioBackend.tools.timeTools import getDateTime
 
 
-class osInfoThread(Thread):
+class osInfo(Thread):
 
     queue = Queue()
     report = {}
 
     def __init__(self, app):
         Thread.__init__(self)
-        from splitFlapClockRadioBackend.appInterface import App
+        from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         self.report = getReport()
+
+        from splitFlapClockRadioBackend.osInfo.osInfoWebRoutes import defineOsInfoWebRoutes
+        defineOsInfoWebRoutes(self.app)
+
+        self.start()
 
     def start(self):
         self.emit()
@@ -54,7 +59,7 @@ class osInfoThread(Thread):
     def emit(self):
         self.report = getReport()
         #print(newReport)
-        self.app.webserverTh.sio.emit('osInfo', prettyJson(self.report))
+        self.app.webserver.sio.emit('osInfo', prettyJson(self.report))
 
 def getReport():
     # Get hostname and IP

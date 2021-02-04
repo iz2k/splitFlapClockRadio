@@ -1,3 +1,5 @@
+import time
+
 from splitFlapClockRadioBackend.weatherStation.bme680 import bme680
 
 
@@ -12,8 +14,6 @@ class SimpleBME680:
             self.sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
 
         self.initConfig()
-        while self.getSensorData() == {}:
-            pass
 
     def printCalibrationData(self):
         for name in dir(self.sensor.calibration_data):
@@ -37,14 +37,17 @@ class SimpleBME680:
 
     def getSensorData(self):
         data={}
-        if self.sensor.get_sensor_data():
-            data['temperature'] = self.sensor.data.temperature
-            data['pressure'] = self.sensor.data.pressure
-            data['humidity'] = self.sensor.data.humidity
 
-            if self.sensor.data.heat_stable:
-                data['gas_resistance'] = self.sensor.data.gas_resistance
-            else:
-                data['gas_resistance'] = 0
+        while not self.sensor.get_sensor_data():
+            time.sleep(0.1)
+
+        data['temperature'] = self.sensor.data.temperature
+        data['pressure'] = self.sensor.data.pressure
+        data['humidity'] = self.sensor.data.humidity
+
+        if self.sensor.data.heat_stable:
+            data['gas_resistance'] = self.sensor.data.gas_resistance
+        else:
+            data['gas_resistance'] = 0
 
         return data
