@@ -101,10 +101,6 @@ class Config:
                 'baselineEco2': 34274,
                 'baselineTvoc': 34723
             },
-            'raspotify' : {
-                'user' : '',
-                'password' : ''
-            },
             'spotifyItems' : [],
             'radioItems' : []
         }

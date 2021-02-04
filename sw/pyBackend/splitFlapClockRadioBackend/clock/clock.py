@@ -74,7 +74,7 @@ class Clock(Thread):
             self.queue.put(['update_time', [hh, mm]])
             self.desired_hh = hh
             self.desired_mm = mm
-            print('[splitFlap] Update Time: ' + str(hh).zfill(2) + ':' + str(mm).zfill(2))
+            print('[clock] Update Time: ' + str(hh).zfill(2) + ':' + str(mm).zfill(2))
             return True
         else:
             return False
@@ -83,5 +83,5 @@ class Clock(Thread):
         if (ww != self.desired_ww):
             self.queue.put(['update_weather', ww])
             self.desired_ww = ww
-            print('[splitFlap] Update Weather: ' + str(ww).zfill(2))
+            print('[clock] Update Weather: ' + str(ww).zfill(2))
 
