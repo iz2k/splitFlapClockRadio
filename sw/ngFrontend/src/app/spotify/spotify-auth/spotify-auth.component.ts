@@ -44,6 +44,7 @@ export class SpotifyAuthComponent implements OnInit {
         console.log(result);
         this.authStatus = undefined;
         this.checkAuthStatus();
+        this.checkDevice();
       }
     });
   }

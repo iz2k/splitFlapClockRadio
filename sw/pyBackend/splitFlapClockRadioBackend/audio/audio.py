@@ -25,7 +25,7 @@ class Audio:
 
     def play(self, wavfile):
         # Open PCM file
-        f = wave.open(self.bindir + '/../sounds/' + wavfile + '.wav', 'rb')
+        f = wave.open(self.bindir + '/sounds/' + wavfile + '.wav', 'rb')
 
         # Set attributes
         self.device.setchannels(f.getnchannels())

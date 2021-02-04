@@ -1,8 +1,11 @@
 import os
 import time
 
+from splitFlapClockRadioBackend.spotifyPlayer.spotipyAuth import SpotipyAuth
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
-from splitFlapClockRadioBackend.tools.osTools import execute, restart_service, executeOnPTY
+from splitFlapClockRadioBackend.tools.osTools import execute, restart_service
+
+
 
 
 class SpotifyPlayer:
@@ -10,14 +13,15 @@ class SpotifyPlayer:
 	currentArtist = ''
 	currentTrack = ''
 	isOn = False
-	authProcess = None
-	authProcessMaster = None
+	spotipyAuth: SpotipyAuth = None
 
 	def __init__(self, app):
 		from splitFlapClockRadioBackend.__main__ import App
 		self.app: App = app
 		self.set_local_device()
 		self.pause()
+
+		self.spotipyAuth = SpotipyAuth(self.app)
 
 		from splitFlapClockRadioBackend.spotifyPlayer.spotifyPlayerWebRoutes import defineSpotifyPlayerWebRoutes
 		defineSpotifyPlayerWebRoutes(self.app)
@@ -132,81 +136,6 @@ class SpotifyPlayer:
 			return {
 				'status': 'No internet connection',
 			}
-
-	def startAuthProcess(self):
-		if self.app.osInfo.report['internet'] == True:
-			if self.authProcess is not None:
-				print("[spotify] Killing Previous Auth Process")
-				self.authProcess.terminate()
-				self.authProcess.wait()
-
-			cmd = '/home/pi/.local/bin/spotify auth login'
-
-			print('[spotify] Start Auth Process')
-			[self.authProcess, self.authProcessMaster] = executeOnPTY(cmd)
-
-			time.sleep(0.1)
-			x = os.read(self.authProcessMaster, 1026).decode('utf-8')
-			if (x.find('\r\n\r\n') > 0):
-				print('[Spotify] Auth: Get authorization URL')
-
-				# Proceed
-				os.write(self.authProcessMaster, '\n'.encode('utf-8'))
-
-				# Wait and read response
-				time.sleep(0.1)
-				x = os.read(self.authProcessMaster, 1026).decode('utf-8')
-				if (x.find('Please select which additional features you want to authorize') > 0):
-					# Proceed with defaults
-					os.write(self.authProcessMaster, 'Y\n'.encode('utf-8'))
-
-					# Wait and read response
-					time.sleep(0.1)
-					x = os.read(self.authProcessMaster, 1026)
-					ans = x.decode('utf-8')
-					# Search URL
-					idx_start = ans.find('\r\n\r\n\thttps://')
-					idx_end = ans.find('\r\n\r\nEnter verification code')
-					if idx_start > 0 and idx_end > 0:
-						url = ans[idx_start + 5:idx_end]
-						print('[Spotify] Auth URL: ' + url)
-						return url
-					else:
-						print('[Spotify] Auth: Error parsing URL')
-				else:
-					print('[Spotify] Auth Process Error')
-			else:
-				print('[Spotify] Auth Process Error')
-		else:
-			print('[spotify] No internet connection')
-			return 'no-internet-connection'
-
-
-
-	def endAuthProcess(self, verificationCode):
-		if self.app.osInfo.report['internet'] == True:
-			if self.authProcess is None:
-				return 'No Auth Process in curse'
-
-			# Delete old configuration
-			execute('rm /home/pi/.config/spotify-cli/credentials.json')
-
-			# Enter Verification Code
-			os.write(self.authProcessMaster, verificationCode.encode('utf-8'))
-			# Proceed
-			os.write(self.authProcessMaster, '\n'.encode('utf-8'))
-
-			time.sleep(1)
-			x = os.read(self.authProcessMaster, 1026)
-
-			print("[spotify] Killing Auth Process")
-			os.close(self.authProcessMaster)
-			self.authProcess.terminate()
-			self.authProcess.wait()
-			return 'Auth Process done!'
-		else:
-			print('[spotify] No internet connection')
-			return 'no-internet-connection'
 
 	def updateRaspotifyCredentials(self, username, password):
 		print('[spotify] Updating Raspotify Credentials')

@@ -29,16 +29,23 @@ def defineSpotifyPlayerWebRoutes(app: App):
 
     @app.webserver.flaskApp.route('/spotify-check-device', methods=['GET'])
     def spotifyCheckDevice():
+        app.spotifyPlayer.check_local_device()
         return prettyJson({'Visible': app.spotifyPlayer.check_local_device()})
 
     @app.webserver.flaskApp.route('/spotify-auth-start', methods=['GET'])
     def spotifyAuthStart():
-        return prettyJson({'url': app.spotifyPlayer.startAuthProcess()})
+        app.spotifyPlayer.spotipyAuth.startAuthProcess()
+        return prettyJson({'status': 'Spotipy authentication process started'})
+
+    @app.webserver.flaskApp.route('/spotify-auth-url', methods=['GET'])
+    def spotifyAuthUrl():
+        return prettyJson({'url': app.spotifyPlayer.spotipyAuth.url})
 
     @app.webserver.flaskApp.route('/spotify-auth-end', methods=['GET'])
     def spotifyAuthEnd():
         code = flask_request.args.get('code')
-        return prettyJson({'status': app.spotifyPlayer.endAuthProcess(code)})
+        app.spotifyPlayer.spotipyAuth.endAuthProcess(code)
+        return prettyJson({'status': 'Spotipy authentication process ended'})
 
     @app.webserver.flaskApp.route('/spotify-update-raspotify', methods=['POST'])
     def spotifyUpdateRaspotify():

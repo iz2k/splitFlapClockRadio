@@ -8,8 +8,8 @@ from makeInstallScript import create_install_script
 
 
 ########## PACKAGE INFO ##########
-name = 'spltFlapClockRadioBackend'
-description='spltFlapClockRadio BackEnd SW'
+name = 'splitFlapClockRadioBackend'
+description='splitFlapClockRadio BackEnd SW'
 version ='1.0'
 author='iz2k'
 author_email='ibon@zalbide.com'
@@ -45,7 +45,7 @@ setup(
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=requirements,
-    package_data={'spltFlapClockRadio': ['sounds/*']}
+    package_data={'splitFlapClockRadioBackend': ['audio/sounds/*']}
 )
 
 wheel_name = name + '-' + version + '-py3-none-any.whl'

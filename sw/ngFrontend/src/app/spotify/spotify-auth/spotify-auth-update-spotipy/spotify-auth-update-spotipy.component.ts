@@ -18,23 +18,27 @@ export class SpotifyAuthUpdateSpotipyComponent implements OnInit {
 
   ngOnInit(): void {
     this.startAuth();
+    this.backend.ioSocket.on('spotipy-auth', json => this.parseSpotipyAuth(json));
+  }
+
+  private parseSpotipyAuth(json): void {
+    console.log(json);
+    if (json[0] === 'reqUrl')
+    {
+      this.authURL = json[1];
+    }
+    if (json[0] === 'setCode')
+    {
+      this.dialogRef.close('New credentials set');
+    }
   }
 
   startAuth(): void {
-    this.backend.startSpotifyAuth().subscribe(json => {
-      console.log(json);
-      if (json.url !== null){
-        this.authURL = json.url;
-      }else{
-        this.startAuth();
-      }
-    });
+    this.backend.ioSocket.emit('spotipy-auth', ['reqUrl', '']);
   }
 
   endAuth(): void {
-    this.backend.endSpotifyAuth(this.verificationCode).subscribe(json => {
-      console.log(json);
-      this.dialogRef.close('json');
-    });
+    this.backend.ioSocket.emit('spotipy-auth', ['setCode', this.verificationCode]);
   }
+
 }

@@ -193,6 +193,10 @@ export class BackendService extends Socket {
     return this.http.get<any>(this.urlEndPoint + '/spotify-auth-start');
   }
 
+  getSpotifyAuthUrl(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/spotify-auth-url');
+  }
+
   endSpotifyAuth(code): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/spotify-auth-end?code=' + code);
   }
