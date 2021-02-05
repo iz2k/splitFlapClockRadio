@@ -1,5 +1,7 @@
+import os
+
 import eventlet
-from flask import Flask
+from flask import Flask, send_file
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from queue import Queue
@@ -14,18 +16,22 @@ class WebServer(Thread):
     sio: SocketIO = None
     flaskApp: Flask = None
 
-    def __init__(self, app):
+    def __init__(self, app, staticPath):
         Thread.__init__(self)
         from splitFlapClockRadioBackend.__main__ import App
         self.app: App = app
         eventlet.monkey_patch()
 
         # Create Flask App
-        self.flaskApp = Flask(__name__, static_folder='web', static_url_path='')
+        self.flaskApp = Flask(__name__, static_folder=staticPath, static_url_path='')
         # Enable CORS to Flask
         CORS(self.flaskApp)
         # Add SocketIO to app
         self.sio = SocketIO(self.flaskApp, cors_allowed_origins="*", logger=False, engineio_logger=False, async_mode='eventlet')
+
+        @self.flaskApp.route("/")
+        def index():
+            return self.flaskApp.send_static_file("index.html")
 
     def start(self, port, host, debug, use_reloader):
         self.port = port

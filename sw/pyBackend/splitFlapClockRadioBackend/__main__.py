@@ -32,11 +32,12 @@ def main():
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="iz2k's split-flap-clock controller.")
-    parser.add_argument("-port", default='8081', help=" port used for web server")
+    parser.add_argument("-port", default='80', help=" port used for web server")
+    parser.add_argument("-frontend", default='/usr/share/iz2k/splitFlapClockRadioFrontend/public', help=" path to FrontEnd")
     args = parser.parse_args()
 
     app = App()
-    app.webserver = WebServer(app=app)
+    app.webserver = WebServer(app=app, staticPath=args.frontend)
     app.config = Config(app=app)
     app.audio = Audio(app=app)
     app.lightStrip = RgbStrip(app=app)

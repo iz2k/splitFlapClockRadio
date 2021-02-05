@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "eNotifierFrontend": {
+    "splitFlapClockRadioFrontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "eNotifierFrontend:build"
+            "browserTarget": "splitFlapClockRadioFrontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "eNotifierFrontend:build:production"
+              "browserTarget": "splitFlapClockRadioFrontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "eNotifierFrontend:build"
+            "browserTarget": "splitFlapClockRadioFrontend:build"
           }
         },
         "test": {
@@ -116,16 +116,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "eNotifierFrontend:serve"
+            "devServerTarget": "splitFlapClockRadioFrontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "eNotifierFrontend:serve:production"
+              "devServerTarget": "splitFlapClockRadioFrontend:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "eNotifierFrontend"
+  "defaultProject": "splitFlapClockRadioFrontend"
 }

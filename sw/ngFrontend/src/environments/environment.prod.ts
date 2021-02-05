@@ -3,4 +3,4 @@ export const environment = {
 };
 
 export const backendHost = window.location.hostname;
-export const backendPort = '8081';
+export const backendPort = window.location.port;
