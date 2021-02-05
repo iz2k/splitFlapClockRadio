@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../../backend.service';
+import {RestRadioService} from '../rest-radio.service';
 
 @Component({
   selector: 'app-radio-current',
@@ -10,10 +11,11 @@ export class RadioCurrentComponent implements OnInit {
 
   fmRadioReport: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService,
+              private restRadio: RestRadioService) { }
 
   ngOnInit(): void {
-    this.backend.getRadioStatus().subscribe(json => {
+    this.restRadio.getRadioStatus().subscribe(json => {
       this.parseFmRadioReport(json);
     });
     this.backend.ioSocket.on('fmRadioReport', json => this.parseFmRadioReport(JSON.parse(json)));
@@ -21,7 +23,6 @@ export class RadioCurrentComponent implements OnInit {
 
   parseFmRadioReport(json): void {
       this.fmRadioReport = json;
-      //console.log(json);
   }
 
   turnOn(event: Event): void {

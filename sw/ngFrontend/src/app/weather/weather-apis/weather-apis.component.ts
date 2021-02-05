@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../../backend.service';
 import {GeocodeService} from './geocode.service';
 import {OpenWeatherService} from './open-weather-map.service';
+import {RestWeatherService} from '../rest-weather.service';
 
 @Component({
   selector: 'app-weather-apis',
@@ -15,12 +15,12 @@ export class WeatherApisComponent implements OnInit {
   openWeatherAPI: any;
   storedOpenWeatherAPI: any;
 
-  constructor(private backend: BackendService,
+  constructor(private restWeather: RestWeatherService,
               public geocode: GeocodeService,
               public openWeather: OpenWeatherService) { }
 
   ngOnInit(): void {
-      this.backend.getApiConfig().subscribe(jsApis => {
+      this.restWeather.getApis().subscribe(jsApis => {
         console.log(jsApis);
         this.parseApis(jsApis);
         this.geocode.setApi(this.geocodeAPI);
@@ -37,27 +37,27 @@ export class WeatherApisComponent implements OnInit {
 
   saveGeocodeApi(): void {
     this.geocode.setApi(this.geocodeAPI);
-    this.backend.setApiParameters(
+    this.restWeather.setApis(
       [
         {parameter: 'geocodeApi', value: this.geocodeAPI}
       ]).subscribe(json =>
     {
         console.log(json);
         this.parseApis(json);
-        this.backend.reloadWeather().subscribe();
+        this.restWeather.reloadWeather().subscribe();
     });
   }
 
   saveOpenWeatherApi(): void {
     this.openWeather.setApi(this.openWeatherAPI);
-    this.backend.setApiParameters(
+    this.restWeather.setApis(
       [
         {parameter: 'openWeatherApi', value: this.openWeatherAPI}
       ]).subscribe(json =>
     {
         console.log(json);
         this.parseApis(json);
-        this.backend.reloadWeather().subscribe();
+        this.restWeather.reloadWeather().subscribe();
     });
   }
 }

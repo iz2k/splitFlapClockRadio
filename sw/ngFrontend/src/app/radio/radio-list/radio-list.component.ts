@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../../backend.service';
+import {RestRadioService} from '../rest-radio.service';
 
 @Component({
   selector: 'app-radio-list',
@@ -10,10 +10,10 @@ export class RadioListComponent implements OnInit {
 
   radioItems: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private restRadio: RestRadioService) { }
 
   ngOnInit(): void {
-    this.backend.getRadioItems().subscribe(json => {
+    this.restRadio.getRadioItems().subscribe(json => {
       this.parseRadioItems(json);
     });
   }
@@ -24,18 +24,18 @@ export class RadioListComponent implements OnInit {
   }
 
   tune(freq: any): void {
-    this.backend.tuneRadio(freq).subscribe(json => {
+    this.restRadio.tuneRadio(freq).subscribe(json => {
       console.log(json);
     });
 
   }
 
   addRadioStation(): void {
-    this.backend.getRadioStatus().subscribe(json => {
+    this.restRadio.getRadioStatus().subscribe(json => {
       console.log(json);
       const radioItem = {Name: json.PS, Frequency: json.freq};
       this.radioItems.push(radioItem);
-      this.backend.addRadioStation(json.freq, json.PS).subscribe(ans => {
+      this.restRadio.addRadioItem(json.freq, json.PS).subscribe(ans => {
         console.log(ans);
       });
     });
@@ -43,7 +43,7 @@ export class RadioListComponent implements OnInit {
 
   deleteRadioStation(idx: number): void {
     this.radioItems.splice(idx, 1);
-    this.backend.deleteRadioStation(idx).subscribe(ans => {
+    this.restRadio.deleteRadioItem(idx).subscribe(ans => {
         console.log(ans);
       });
   }

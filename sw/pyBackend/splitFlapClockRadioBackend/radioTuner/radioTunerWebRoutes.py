@@ -5,7 +5,7 @@ from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 
 def defineRadioTunerWebRoutes(app: App):
 
-    @app.webserver.flaskApp.route('/get-radio-status', methods=['GET'])
+    @app.webserver.flaskApp.route('/rest/radio/get-status', methods=['GET'])
     def getRadioStatus():
         return prettyJson(app.radioTuner.lastReport)
 
@@ -26,7 +26,7 @@ def defineRadioTunerWebRoutes(app: App):
             app.radioTuner.pause()
 
 
-    @app.webserver.flaskApp.route('/set-radio-tune', methods=['GET'])
+    @app.webserver.flaskApp.route('/rest/radio/tune', methods=['GET'])
     def setRadioTune():
         try:
             # Get arguments
@@ -40,11 +40,11 @@ def defineRadioTunerWebRoutes(app: App):
             return 'Invalid freq to tune'
 
 
-    @app.webserver.flaskApp.route('/get-radio-items', methods=['GET'])
+    @app.webserver.flaskApp.route('/rest/radio/get-items', methods=['GET'])
     def getRadioItems():
         return prettyJson(app.config.params['radioItems'])
 
-    @app.webserver.flaskApp.route('/add-radio-item', methods=['POST'])
+    @app.webserver.flaskApp.route('/rest/radio/add-item', methods=['POST'])
     def addRadioItem():
         content = flask_request.get_json(silent=True)
         if (content != None):
@@ -53,7 +53,7 @@ def defineRadioTunerWebRoutes(app: App):
         return prettyJson({'status' : 'Adding Radio Item!'})
 
     # /url?arg1=xxxx&arg2=yyy
-    @app.webserver.flaskApp.route('/delete-radio-item', methods=['GET'])
+    @app.webserver.flaskApp.route('/rest/radio/delete-item', methods=['GET'])
     def deleteRadioItem():
         try:
             # Get arguments

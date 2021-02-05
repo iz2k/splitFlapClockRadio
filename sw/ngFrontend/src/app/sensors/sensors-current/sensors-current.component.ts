@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {RestSensorsService} from '../rest-sensors.service';
 import {BackendService} from '../../backend.service';
 
 @Component({
@@ -10,10 +11,11 @@ export class SensorsCurrentComponent implements OnInit {
 
   homeReport: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService,
+              private restSensors: RestSensorsService) { }
 
   ngOnInit(): void {
-    this.backend.getHome().subscribe(json => {
+    this.restSensors.getSensors().subscribe(json => {
       this.parseHome(json);
     });
     this.backend.ioSocket.on('sensorData', json => this.parseHome(JSON.parse(json)));

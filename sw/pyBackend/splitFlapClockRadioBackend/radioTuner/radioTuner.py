@@ -14,6 +14,7 @@ class RadioTuner(Thread):
     queue = Queue()
     radioTuner = None
     lastReport = None
+    freq = None
 
     def __init__(self, app):
         Thread.__init__(self)
@@ -59,6 +60,10 @@ class RadioTuner(Thread):
                 [q_msg, q_data] = self.queue.get()
                 if q_msg == 'quit':
                     run_app=False
+                if (q_msg == 'reset'):
+                    self.radioTuner.__init__()
+                    if self.freq != None:
+                        self.radioTuner.fm_tune(self.freq)
                 if (q_msg == 'tune'):
                     self.radioTuner.fm_tune(q_data)
                 if (q_msg == 'turn_on'):
@@ -79,10 +84,12 @@ class RadioTuner(Thread):
 
 
     def tune(self, freq):
-        self.queue.put(['tune', freq])
-        print('[radio] TUNE ' + str(freq) + 'MHz')
+        self.freq = freq
+        self.queue.put(['tune', self.freq])
+        print('[radio] TUNE ' + str(self.freq) + 'MHz')
 
     def play(self):
+        self.queue.put(['reset', 0])
         self.queue.put(['turn_on', 0])
         print('[radio] PLAY')
 

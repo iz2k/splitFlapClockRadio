@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../backend.service';
+import {RestClockService} from './rest-clock.service';
 
 @Component({
   selector: 'app-clock',
@@ -10,17 +10,17 @@ export class ClockComponent implements OnInit {
 
   calibrationMode = false;
 
-  constructor(private backend: BackendService) { }
+  constructor(private restClock: RestClockService) { }
 
   ngOnInit(): void {
-      this.backend.getClockMode().subscribe(json => {this.updateMode(json); });
+      this.restClock.getClockMode().subscribe(json => {this.updateMode(json); });
   }
 
   applyCalibrationMode(calibrationMode): void {
     if (calibrationMode) {
-      this.backend.setClockMode('calibration').subscribe(json => {this.updateMode(json); });
+      this.restClock.setClockMode('calibration').subscribe(json => {this.updateMode(json); });
     }else {
-      this.backend.setClockMode('clock').subscribe(json => {this.updateMode(json); });
+      this.restClock.setClockMode('clock').subscribe(json => {this.updateMode(json); });
     }
   }
 

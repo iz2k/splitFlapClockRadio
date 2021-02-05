@@ -36,8 +36,12 @@ class WeatherStation(Thread):
                                           latitude=self.app.config.params['location']['latitude'],
                                           longitude=self.app.config.params['location']['longitude'])
 
-        from splitFlapClockRadioBackend.weatherStation.weatherStationWebRoutes import defineWeatherStationWebRoutes
-        defineWeatherStationWebRoutes(self.app)
+        from splitFlapClockRadioBackend.weatherStation.weatherWebRoutes import defineWeatherWebRoutes
+        defineWeatherWebRoutes(self.app)
+        from splitFlapClockRadioBackend.weatherStation.sensorsWebRoutes import defineSensorsWebRoutes
+        defineSensorsWebRoutes(self.app)
+        from splitFlapClockRadioBackend.weatherStation.historicWebRoutes import defineHistoricWebRoutes
+        defineHistoricWebRoutes(self.app)
 
         self.start()
 
@@ -91,7 +95,6 @@ class WeatherStation(Thread):
         self.sgp.initConfig([int(self.app.config.params['sensors']['baselineEco2']), int(self.app.config.params['sensors']['baselineTvoc'])])
 
     def reloadWeather(self):
-        print('reloadWeather')
         self.openWeather.setApiKey(apiKey=self.app.config.params['api']['openWeatherApi'])
         self.openWeather.setLocation(latitude=self.app.config.params['location']['latitude'],
                                      longitude=self.app.config.params['location']['longitude'])

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../../backend.service';
+import {RestSpotifyService} from '../rest-spotify.service';
 
 @Component({
   selector: 'app-spotify-current',
@@ -10,10 +11,11 @@ export class SpotifyCurrentComponent implements OnInit {
 
   spotifyReport: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService,
+              private restSpotify: RestSpotifyService) { }
 
   ngOnInit(): void {
-    this.backend.getSpotifyStatus().subscribe(json => {
+    this.restSpotify.getSpotifyStatus().subscribe(json => {
       this.parseSpotifyStatus(json);
     });
     this.backend.ioSocket.on('spotifyReport', json => this.parseSpotifyStatus(JSON.parse(json)));

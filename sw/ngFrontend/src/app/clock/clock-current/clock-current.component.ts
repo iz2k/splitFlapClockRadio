@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {BackendService} from '../../backend.service';
+import {RestClockService} from '../rest-clock.service';
 
 @Component({
   selector: 'app-clock-current',
@@ -12,7 +12,7 @@ export class ClockCurrentComponent implements OnInit {
   @Input()
   enableTZ;
 
-  constructor(private backend: BackendService) { }
+  constructor(private restClock: RestClockService) { }
 
   HoursTensPlace = 0;
   HoursOnesPlace = 0;
@@ -32,7 +32,7 @@ export class ClockCurrentComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.backend.getTime().subscribe(json => {
+    this.restClock.getTime().subscribe(json => {
       this.updateClockTime(json);
       this.timezone.valueChanges.subscribe(tz => this.timezoneChange(tz));
     });
@@ -90,8 +90,8 @@ export class ClockCurrentComponent implements OnInit {
   timezoneChange(tz): void {
     console.log('timezone changed');
     console.log(tz);
-    this.backend.setTimeZone(tz).subscribe(ans => {
-      this.backend.getTime().subscribe(json => this.updateClockTime(json));
+    this.restClock.setTimeZone(tz).subscribe(ans => {
+      this.restClock.getTime().subscribe(json => this.updateClockTime(json));
       console.log(ans);
     });
   }

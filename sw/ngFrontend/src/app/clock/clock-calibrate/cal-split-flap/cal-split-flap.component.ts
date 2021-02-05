@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {BackendService} from '../../../backend.service';
+import {RestClockService} from '../../rest-clock.service';
 
 @Component({
   selector: 'app-cal-split-flap',
@@ -13,14 +13,14 @@ export class CalSplitFlapComponent implements OnInit {
   status;
   statusArray;
 
-  constructor(private backend: BackendService) { }
+  constructor(private restClock: RestClockService) { }
 
   ngOnInit(): void {
     this.updateStatus();
   }
 
   updateStatus(): void {
-    this.backend.getClockStatus(this.type).subscribe(json =>
+    this.restClock.getFlapStatus(this.type).subscribe(json =>
     {
       this.status = json;
       console.log(this.status);
@@ -36,7 +36,7 @@ export class CalSplitFlapComponent implements OnInit {
   }
 
   setParameter(parameter, value): void {
-    this.backend.setClockParameter(this.type, parameter, value).subscribe(json =>
+    this.restClock.setFlapParameter(this.type, parameter, value).subscribe(json =>
     {
       this.status = json;
       console.log(json);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../../backend.service';
+import {RestSpotifyService} from '../rest-spotify.service';
 
 @Component({
   selector: 'app-spotify-search',
@@ -11,7 +11,7 @@ export class SpotifySearchComponent implements OnInit {
   searchTerms: any;
   searchResults: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private restSpotify: RestSpotifyService) { }
 
   ngOnInit(): void {
   }
@@ -20,7 +20,7 @@ export class SpotifySearchComponent implements OnInit {
     this.clearResults();
     if (this.searchTerms !== undefined && this.searchTerms !== '')
     {
-      this.backend.spotifySearch(this.searchType, this.searchTerms).subscribe(ans => {
+      this.restSpotify.spotifySearch(this.searchType, this.searchTerms).subscribe(ans => {
         console.log(ans);
         this.searchResults = JSON.parse(ans);
       });
@@ -33,7 +33,7 @@ export class SpotifySearchComponent implements OnInit {
 
   play(result: any): void {
     console.log('play ' + result.uri);
-    this.backend.spotifyPlay(result.uri).subscribe(ans => {
+    this.restSpotify.spotifyPlay(result.uri).subscribe(ans => {
       console.log(ans);
     });
   }
@@ -52,7 +52,7 @@ export class SpotifySearchComponent implements OnInit {
         }
       }
     }
-    this.backend.spotifyAddItem(result.type, result.name, result.uri, image).subscribe(ans => {
+    this.restSpotify.spotifyAddItem(result.type, result.name, result.uri, image).subscribe(ans => {
       console.log(ans);
     });
 

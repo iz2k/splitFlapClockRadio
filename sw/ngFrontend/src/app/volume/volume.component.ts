@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../backend.service';
+import {RestAudioService} from './rest-audio.service';
 
 @Component({
   selector: 'app-volume',
@@ -10,10 +11,11 @@ export class VolumeComponent implements OnInit {
 
   mute: any;
   volume: number;
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService,
+              private restAudio: RestAudioService) { }
 
   ngOnInit(): void {
-    this.backend.getVolume().subscribe(json => {
+    this.restAudio.getVolume().subscribe(json => {
       this.parseVolume(json);
     });
     this.backend.ioSocket.on('volume', json => this.parseVolume(json));
@@ -25,25 +27,25 @@ export class VolumeComponent implements OnInit {
   }
 
   volDown(): void {
-    this.backend.setVolume(this.volume - 2).subscribe(json => {
+    this.restAudio.setVolume(this.volume - 2).subscribe(json => {
       this.parseVolume(json);
     });
   }
 
   volUp(): void {
-    this.backend.setVolume(this.volume + 2).subscribe(json => {
+    this.restAudio.setVolume(this.volume + 2).subscribe(json => {
       this.parseVolume(json);
     });
   }
 
   toggleMute(): void {
-    this.backend.toggleMute().subscribe(json => {
+    this.restAudio.toggleMute().subscribe(json => {
       this.parseVolume(json);
     });
   }
 
   setVol(event): void {
-    this.backend.setVolume(event).subscribe(json => {
+    this.restAudio.setVolume(event).subscribe(json => {
       this.parseVolume(json);
     });
   }

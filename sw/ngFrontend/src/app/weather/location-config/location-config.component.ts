@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {WeatherCurrentComponent} from '../weather-current/weather-current.component';
-import {BackendService} from '../../backend.service';
 import Map from 'ol/Map';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import View from 'ol/View';
 import * as olProj from 'ol/proj';
 import {GeocodeService} from '../weather-apis/geocode.service';
+import {RestWeatherService} from '../rest-weather.service';
 
 @Component({
   selector: 'app-location-config',
@@ -25,13 +25,13 @@ export class LocationConfigComponent implements OnInit {
   @ViewChild(WeatherCurrentComponent)
   private weatherCurrent: WeatherCurrentComponent;
 
-  constructor(private backend: BackendService, public geocode: GeocodeService) { }
+  constructor(private restWeather: RestWeatherService, public geocode: GeocodeService) { }
 
   ngOnInit(): void {
-    this.backend.getLocationConfig().subscribe(jsLocation => {
+    this.restWeather.getLocation().subscribe(jsLocation => {
       console.log(jsLocation);
       this.parseLocationConfig(jsLocation);
-      this.backend.getApiConfig().subscribe(jsApis => {
+      this.restWeather.getApis().subscribe(jsApis => {
         console.log(jsApis);
         this.parseApis(jsApis);
         this.searchCity();
@@ -88,7 +88,7 @@ export class LocationConfigComponent implements OnInit {
   }
 
   saveLocation(): void {
-    this.backend.setLocationParameters(
+    this.restWeather.setLocation(
       [
         {parameter: 'city', value: this.location.properties.name},
         {parameter: 'longitude', value: this.location.geometry.coordinates[0]},
@@ -96,7 +96,7 @@ export class LocationConfigComponent implements OnInit {
       ]).subscribe(json =>
     {
       this.parseLocationConfig(json);
-      this.backend.reloadWeather().subscribe();
+      this.restWeather.reloadWeather().subscribe();
     });
   }
 

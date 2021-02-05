@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../../backend.service';
+import {RestSensorsService} from '../rest-sensors.service';
 
 @Component({
   selector: 'app-sensor-calibration',
@@ -13,10 +14,11 @@ export class SensorCalibrationComponent implements OnInit {
   currentBaselineEco2: any;
   currentBaselineTvoc: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService,
+              private restSensors: RestSensorsService) { }
 
   ngOnInit(): void {
-    this.backend.getSensorsConfig().subscribe(json => {
+    this.restSensors.getSensorsConfig().subscribe(json => {
       console.log(json);
       this.parseSensorsConfig(json);
     });
@@ -35,18 +37,18 @@ export class SensorCalibrationComponent implements OnInit {
   }
 
   triggerCalibration(): void {
-    this.backend.resetBaseline().subscribe();
+    this.restSensors.resetBaseline().subscribe();
   }
 
   saveBaselines(): void {
-    this.backend.setSensorsParameters(
+    this.restSensors.setSensorsParameters(
       [
         {parameter: 'baselineEco2', value: this.currentBaselineEco2},
         {parameter: 'baselineTvoc', value: this.currentBaselineTvoc},
       ]).subscribe(json =>
     {
       this.parseSensorsConfig(json);
-      this.backend.reloadSensors().subscribe();
+      this.restSensors.reloadSensors().subscribe();
     });
   }
 

@@ -1,8 +1,8 @@
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {BackendService} from '../backend.service';
 import {FormControl} from '@angular/forms';
 import {ChartDataSets} from 'chart.js';
 import {BaseChartDirective, Color} from 'ng2-charts';
+import {RestHistoricService} from './rest-historic.service';
 
 @Component({
   selector: 'app-historic',
@@ -11,7 +11,7 @@ import {BaseChartDirective, Color} from 'ng2-charts';
 })
 export class HistoricComponent implements OnInit {
 
-  constructor(private backend: BackendService) { }
+  constructor(private restHistoric: RestHistoricService) { }
 
   date: FormControl;
   dateStart = new Date();
@@ -96,7 +96,7 @@ export class HistoricComponent implements OnInit {
       startDate: this.dateStart,
       stopDate: this.dateStop
     };
-    this.backend.getMeasurements(filter).subscribe(json => {
+    this.restHistoric.getMeasurements(filter).subscribe(json => {
       this.historicData = json;
       console.log(json);
       this.updateChartDataHome();

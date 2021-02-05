@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {BackendService} from '../../../backend.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {RestSpotifyService} from '../../rest-spotify.service';
 
 @Component({
   selector: 'app-spotify-auth-update-raspotify',
@@ -14,7 +14,7 @@ export class SpotifyAuthUpdateRaspotifyComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<SpotifyAuthUpdateRaspotifyComponent>,
-    private backend: BackendService,
+    private restSpotify: RestSpotifyService,
     @Inject(MAT_DIALOG_DATA) public alarm: any) { }
 
   ngOnInit(): void {
@@ -24,7 +24,7 @@ export class SpotifyAuthUpdateRaspotifyComponent implements OnInit {
     console.log('Updating Raspotify credentials');
     this.updateInCurse = true;
 
-    this.backend.spotifyUpdateRaspotifyCredentials(this.username, this.password).subscribe(ans => {
+    this.restSpotify.spotifyUpdateRaspotifyCredentials(this.username, this.password).subscribe(ans => {
       console.log(ans);
       this.updateInCurse = false;
       this.dialogRef.close('json');

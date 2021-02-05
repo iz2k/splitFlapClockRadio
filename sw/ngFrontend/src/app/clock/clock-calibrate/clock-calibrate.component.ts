@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../../backend.service';
 
 @Component({
   selector: 'app-clock-calibrate',
@@ -8,7 +7,7 @@ import {BackendService} from '../../backend.service';
 })
 export class ClockCalibrateComponent implements OnInit {
 
-  constructor(private backend: BackendService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

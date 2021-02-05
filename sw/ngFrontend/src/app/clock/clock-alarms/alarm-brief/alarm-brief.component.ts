@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AlarmConfigComponent} from "../alarm-config/alarm-config.component";
-import {MatDialog} from "@angular/material/dialog";
-import {BackendService} from "../../../backend.service";
+import {AlarmConfigComponent} from '../alarm-config/alarm-config.component';
+import {MatDialog} from '@angular/material/dialog';
+import {RestAlarmsService} from '../rest-alarms.service';
 
 @Component({
   selector: 'app-alarm-brief',
@@ -15,7 +15,9 @@ export class AlarmBriefComponent implements OnInit {
   @Input()
   idx;
 
-  constructor(public dialog: MatDialog, private backend: BackendService) { }
+  constructor(public dialog: MatDialog,
+              private clockAlarmBackend: RestAlarmsService
+              ) { }
 
   ngOnInit(): void {
   }
@@ -43,13 +45,13 @@ export class AlarmBriefComponent implements OnInit {
 
   delete(): void {
     this.alarm = undefined;
-    this.backend.deleteAlarm(this.idx).subscribe(ans => {
+    this.clockAlarmBackend.deleteAlarm(this.idx).subscribe(ans => {
       console.log(ans);
     });
   }
 
   setAlarmConfig(idxAndAlarm): void {
-    this.backend.setAlarm(idxAndAlarm).subscribe(ans => {
+    this.clockAlarmBackend.setAlarm(idxAndAlarm).subscribe(ans => {
       console.log(ans);
     });
   }

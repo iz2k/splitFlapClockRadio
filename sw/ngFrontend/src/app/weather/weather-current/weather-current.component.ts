@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../../backend.service';
 import {OpenWeatherService} from '../weather-apis/open-weather-map.service';
+import {RestWeatherService} from '../rest-weather.service';
 
 @Component({
   selector: 'app-weather-current',
@@ -14,15 +15,15 @@ export class WeatherCurrentComponent implements OnInit {
 
   openWeatherAPI: any;
 
-  constructor(private backend: BackendService, public openWeather: OpenWeatherService) { }
+  constructor(private backend: BackendService, private restWeather: RestWeatherService, public openWeather: OpenWeatherService) { }
 
   ngOnInit(): void {
-    this.backend.getApiConfig().subscribe(jsApis => {
+    this.restWeather.getApis().subscribe(jsApis => {
       console.log(jsApis);
       this.parseApis(jsApis);
       this.openWeather.setApi(this.openWeatherAPI);
     });
-    this.backend.getWeather().subscribe(json => {
+    this.restWeather.getWeather().subscribe(json => {
       this.parseWeather(json);
     });
     this.backend.ioSocket.on('weatherReport', json => this.parseWeather(json));

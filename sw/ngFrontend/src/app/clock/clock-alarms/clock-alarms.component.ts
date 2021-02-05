@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../../backend.service';
+import {RestAlarmsService} from './rest-alarms.service';
 
 @Component({
   selector: 'app-clock-alarms',
@@ -10,10 +11,11 @@ export class ClockAlarmsComponent implements OnInit {
 
   alarmList: any;
 
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService,
+              private restAlarms: RestAlarmsService) { }
 
   ngOnInit(): void {
-    this.backend.getAlarmList().subscribe(json => {
+    this.restAlarms.getAlarmList().subscribe(json => {
       this.parseAlarmList(json);
     });
   }
