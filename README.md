@@ -71,7 +71,7 @@ The backend is divided in different packages to control specific peripherals of 
 - SpotifyPlayer: activates raspotify device and controls the playback of spotify via spotify-cli.
 - UserInterface: controls the Volume and Media rotary encoders.
 - WeatherStation: gets weather information through OpenWeatherMap API and controls Air Quality sensors.
-- WebServer: integrated Flask webserver to conncet with the frontend via REST requests and/or websockets.
+- WebServer: integrated Flask webserver to connect with the frontend via REST requests and/or websockets.
 
 The backend is by default installed as a system service (autostart enabled), but can be stopped and launched manually to check its output.
 ``` bash
