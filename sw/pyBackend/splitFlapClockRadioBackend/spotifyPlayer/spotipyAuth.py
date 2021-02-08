@@ -3,6 +3,7 @@ import time
 from queue import Queue
 from threading import Thread
 
+from splitFlapClockRadioBackend.spotifyPlayer import BIN_DIR
 from splitFlapClockRadioBackend.tools.osTools import executeOnPTY, execute
 
 
@@ -64,7 +65,7 @@ class SpotipyAuth(Thread):
                 self.authProcess.terminate()
                 self.authProcess.wait()
 
-            cmd = '/home/pi/.local/bin/spotify auth login'
+            cmd = BIN_DIR + 'spotify auth login'
 
             print('[spotify] Start Auth Process')
             [self.authProcess, self.authProcessMaster] = executeOnPTY(cmd)
@@ -104,7 +105,7 @@ class SpotipyAuth(Thread):
                 return 'No Auth Process in curse'
 
             # Delete old configuration
-            execute('rm /home/pi/.config/spotify-cli/credentials.json')
+            execute('rm /root/.config/spotify-cli/credentials.json')
 
             print("[spotify] Setting Auth Code: " + verificationCode)
             # Enter Verification Code

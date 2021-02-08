@@ -1,6 +1,7 @@
 import os
 import time
 
+from splitFlapClockRadioBackend.spotifyPlayer import BIN_DIR
 from splitFlapClockRadioBackend.spotifyPlayer.spotipyAuth import SpotipyAuth
 from splitFlapClockRadioBackend.tools.jsonTools import prettyJson
 from splitFlapClockRadioBackend.tools.osTools import execute, restart_service
@@ -28,8 +29,8 @@ class SpotifyPlayer:
 
 	def check_local_device(self):
 		if self.app.osInfo.report['internet'] == True:
-			output=execute('/home/pi/.local/bin/spotify device')
-			if '* Split-Flap-Clock-Radio' in output:
+			output=execute(BIN_DIR + 'spotify device')
+			if 'raspotify' in output:
 				return True
 			else:
 				restart_service('raspotify')
@@ -41,7 +42,7 @@ class SpotifyPlayer:
 
 	def set_local_device(self):
 		if self.app.osInfo.report['internet'] == True:
-			output=execute('/home/pi/.local/bin/spotify device -s Split-Flap-Clock-Radio')
+			output=execute(BIN_DIR + 'spotify device -s raspotify')
 			if len(output.splitlines())>0:
 				print('[spotify] Setting Spotify device to Raspotify: ' + output.splitlines()[0])
 			else:
@@ -52,7 +53,7 @@ class SpotifyPlayer:
 	def play(self, uri=None):
 		if self.app.osInfo.report['internet'] == True:
 			self.check_local_device()
-			command = '/home/pi/.local/bin/spotify play'
+			command = BIN_DIR + 'spotify play'
 			if (uri != None):
 				command = command + ' --uri ' + uri
 			output=execute(command)
@@ -64,7 +65,7 @@ class SpotifyPlayer:
 
 	def pause(self):
 		if self.app.osInfo.report['internet'] == True:
-			output=execute('/home/pi/.local/bin/spotify pause')
+			output=execute(BIN_DIR + 'spotify pause')
 			self.parse_spotify_status(output)
 			print('[spotify] STOP')
 		else:
@@ -72,7 +73,7 @@ class SpotifyPlayer:
 
 	def next(self):
 		if self.app.osInfo.report['internet'] == True:
-			output=execute('/home/pi/.local/bin/spotify next')
+			output=execute(BIN_DIR + 'spotify next')
 			self.parse_spotify_status(output)
 			print('[spotify] NEXT: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
 		else:
@@ -80,7 +81,7 @@ class SpotifyPlayer:
 
 	def previous(self):
 		if self.app.osInfo.report['internet'] == True:
-			output=execute('/home/pi/.local/bin/spotify previous')
+			output=execute(BIN_DIR + 'spotify previous')
 			self.parse_spotify_status(output)
 			print('[spotify] PREVIOUS: ' + self.getStatus()['currentArtist'] + ' - ' + self.getStatus()['currentTrack'])
 		else:
@@ -118,14 +119,14 @@ class SpotifyPlayer:
 
 	def searchSpotify(self, type, terms):
 		if self.app.osInfo.report['internet'] == True:
-			return execute('/home/pi/.local/bin/spotify search ' + terms + ' --' + type + ' --raw')
+			return execute(BIN_DIR + 'spotify search ' + terms + ' --' + type + ' --raw')
 		else:
 			print('[spotify] No internet connection')
 			return {}
 
 	def getAuth(self):
 		if self.app.osInfo.report['internet'] == True:
-			output=execute('/home/pi/.local/bin/spotify auth status')
+			output=execute(BIN_DIR + 'spotify auth status')
 			if (output == ''):
 				output = 'Not logged in.'
 			return {
