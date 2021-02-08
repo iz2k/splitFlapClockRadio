@@ -1,5 +1,10 @@
 # splitFlapClockRadio
-The splitFlapClockRadio is an old stylish, classic alarm clock with up to date features, such as automatic time adjustment, weather forecast, FM radio or Spotify playback. This is an updated version of the [Flip-Clock](https://github.com/iz2k/flip-clock), with slight modifications on the split-flap mechanics and integrated electronics. This device has been designed for DIY hobbists and can be manufactured for 100$ BOM.
+
+The splitFlapClockRadio is an old stylish, classic alarm clock with up to date features, such as automatic time adjustment, weather forecast, air quality sensors, FM radio or Spotify playback. This is an updated version of the [Flip-Clock](https://github.com/iz2k/flip-clock), with slight modifications on the split-flap mechanics and integrated electronics. This device has been designed for DIY hobbists and can be manufactured for 100$ BOM.
+
+| Outside | Inside |
+|--------|--------|
+|![IMG20210208174947](https://user-images.githubusercontent.com/57298545/107254334-7c888780-6a37-11eb-878e-c54005149593.jpg)|![IMG_20210208_174947](https://user-images.githubusercontent.com/57298545/107254334-7c888780-6a37-11eb-878e-c54005149593.jpg)|
 
 The splitFlapClockRadio features the following characteristics:
 - Local time and weather on 3D printed split-flaps.
@@ -47,8 +52,6 @@ The electronics hardware integrates the following components:
 - Air Quality sensors: 1 x BME680 + 1 x SGP30/SGP40
 
 ![splitFlapClockRadio_3D_Image](https://user-images.githubusercontent.com/57298545/107251257-6f1dce00-6a34-11eb-9b59-c8c990091193.png)
-
-
 ## SplitFlap controller firmware
 
 The firmware runs on a MSP430 MCU and controls the driver of the three integrated stepper motors. The firmware keeps track of the falling flaps based on the reflected IR detector and synchronizes every cycle based on a hall efect sensor. The MCU can be commanded through I2C bus using SMBUS commands.
