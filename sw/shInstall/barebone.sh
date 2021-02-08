@@ -76,7 +76,7 @@ function install_tts() {
 
 function install_latest() {
   echo ">> Install Latest components:"
-  wget -O - https://raw.githubusercontent.com/iz2k/splitFlapClockRadio/master/sw/shUpdate/update.sh | bash
+  wget -O - https://raw.githubusercontent.com/iz2k/splitFlapClockRadio/master/sw/shInstall/update.sh | bash
 }
 
 function setup_i2s() {
