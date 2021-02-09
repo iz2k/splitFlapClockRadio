@@ -1,6 +1,6 @@
 # splitFlapClockRadio
 
->---
+---
 **Table of contents**
 - [DIY brief](#diy-brief)
 - [3D design](#3d-design)
