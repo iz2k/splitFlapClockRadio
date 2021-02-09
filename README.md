@@ -36,6 +36,9 @@ The project is divided in four main sections: 3D design, electronics hardware de
 Each split-flap digit consists of a support structure with two bearings. The axle is placed inside the bearings holding two flap holders. All the flaps are mounted within those holders. The movement of the digit is achieved with a stepper motor and two gears. A reflective IR sensor is used to detect falling flaps, and a hall sensor to synchronize the absolute position of the drum.
 ![image](https://user-images.githubusercontent.com/57298545/107249527-beafca00-6a33-11eb-8ed1-5991706c14ce.png)
 
+In order to get numbers and weather icons painted into the flaps, custom stencils have been designed and printed. The stencil design is avaiable at [iz2k/splitFlap-stencil](https://github.com/iz2k/splitFlap-stencil) repository.
+![stencil](https://github.com/iz2k/splitFlap-stencil/raw/master/_img/palce-in-base.jpg)
+
 ### Cover
 The cover consist on 3 main parts and 2 control wheels:
 - Floor
