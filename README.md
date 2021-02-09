@@ -1,5 +1,7 @@
 # splitFlapClockRadio
 
+[TOC]
+
 The splitFlapClockRadio is an old stylish, classic alarm clock with up to date features, such as automatic time adjustment, weather forecast, air quality sensors, FM radio or Spotify playback. This is an updated version of the [Flip-Clock](https://github.com/iz2k/flip-clock), with slight modifications on the split-flap mechanics and integrated electronics. This device has been designed for DIY hobbists and can be manufactured for 100$ BOM.
 
 | Outside | Inside |
@@ -31,7 +33,7 @@ The project is divided in four main sections: 3D design, electronics hardware de
 
 ## 3D design
 
-### SplitFlapDigit.
+### SplitFlapDigit
 
 Each split-flap digit consists of a support structure with two bearings. The axle is placed inside the bearings holding two flap holders. All the flaps are mounted within those holders. The movement of the digit is achieved with a stepper motor and two gears. A reflective IR sensor is used to detect falling flaps, and a hall sensor to synchronize the absolute position of the drum.
 ![image](https://user-images.githubusercontent.com/57298545/107249527-beafca00-6a33-11eb-8ed1-5991706c14ce.png)
@@ -107,23 +109,38 @@ sudo splitFlapClockRadioBackend
 
 ### Angular Frontend
 The frontend is also divided in different modules:
-#### Dashboard: quik view of current status
+#### Dashboard
+- Quik view of current status
 ![image](https://user-images.githubusercontent.com/57298545/107244658-8e196180-6a2e-11eb-89ed-aa831ceeba2d.png)
 
-#### Clock: current time and alarm configuration
+#### Clock
+- Current time and alarm list
 ![image](https://user-images.githubusercontent.com/57298545/107245531-89a17880-6a2f-11eb-8e75-ae096139154d.png)
+- SplitFlap calibration
+![image](https://user-images.githubusercontent.com/57298545/107338725-2c9fd400-6abc-11eb-9cd0-a662c4163d8c.png)
+- Alarm configuration
+![image](https://user-images.githubusercontent.com/57298545/107338887-59ec8200-6abc-11eb-8fb1-2cb28ecb5442.png)
 
-#### Radio: FM radio tuner control and stored station list.
+#### Radio
+- FM radio tuner control and stored station list.
 ![image](https://user-images.githubusercontent.com/57298545/107244930-ddf82880-6a2e-11eb-8b59-517c98c929c2.png)
 
-#### Spotify: spotify playback control, music search and stored media item list.
-![image](https://user-images.githubusercontent.com/57298545/107245330-519a3580-6a2f-11eb-8480-3cec0bfb6878.png)
+#### Spotify
+- Playback control and stored media item list
+![image](https://user-images.githubusercontent.com/57298545/107339397-f020a800-6abc-11eb-84e3-ada73b83d36d.png)
+- Authentication
+![image](https://user-images.githubusercontent.com/57298545/107339695-4392f600-6abd-11eb-972d-0bc9fde1fe30.png)
+- Music search
+![image](https://user-images.githubusercontent.com/57298545/107339561-1c3c2900-6abd-11eb-8ac3-34a389041a2f.png)
 
-#### Sensors: Air Quality sensor data.
-![image](https://user-images.githubusercontent.com/57298545/107245691-b786bd00-6a2f-11eb-9cd0-655504baf5c8.png)
+#### Sensors
+- Air Quality sensor data and calibration.
+![image](https://user-images.githubusercontent.com/57298545/107339919-7fc65680-6abd-11eb-860f-ada6bd95d3f1.png)
 
-#### Weather: weather data, location configuration and API keys.
+#### Weather
+- Weather data, location configuration and API keys.
 ![image](https://user-images.githubusercontent.com/57298545/107245825-e309a780-6a2f-11eb-8f45-2ad97b1a4df5.png)
 
-#### Historic: logged weather and Air Quality data
-![image](https://user-images.githubusercontent.com/57298545/107245978-0cc2ce80-6a30-11eb-8399-2260215e0d4e.png)
+#### Historic
+- Logged weather and Air Quality data
+![image](https://user-images.githubusercontent.com/57298545/107340168-bb612080-6abd-11eb-91b9-05b793ba30bc.png)
