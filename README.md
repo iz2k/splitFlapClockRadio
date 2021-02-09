@@ -4,7 +4,8 @@ The splitFlapClockRadio is an old stylish, classic alarm clock with up to date f
 
 | Outside | Inside |
 |--------|--------|
-|![IMG_20210209_083859](https://user-images.githubusercontent.com/57298545/107333970-6ff74400-6ab6-11eb-841b-852f1d897690.jpg)|![IMG_20210208_174947](https://user-images.githubusercontent.com/57298545/107254334-7c888780-6a37-11eb-878e-c54005149593.jpg)|
+|![IMG_20210209_083904](https://user-images.githubusercontent.com/57298545/107334415-f90e7b00-6ab6-11eb-870c-04272cc194e6.jpg)|![IMG_20210208_174947 - copia](https://user-images.githubusercontent.com/57298545/107334590-307d2780-6ab7-11eb-8268-aec639bd62d2.jpg)
+|
 
 The splitFlapClockRadio features the following characteristics:
 - Local time and weather on 3D printed split-flaps.
@@ -37,7 +38,26 @@ Each split-flap digit consists of a support structure with two bearings. The axl
 ![image](https://user-images.githubusercontent.com/57298545/107249527-beafca00-6a33-11eb-8ed1-5991706c14ce.png)
 
 ### Cover
-TODO: images of cover
+The cover consist on 3 main parts and 2 control wheels:
+- Floor
+- Top cover
+- Frontal
+- Volume wheel
+- Media wheel
+![image](https://user-images.githubusercontent.com/57298545/107335295-0d9f4300-6ab8-11eb-85b8-67c0990727da.png)
+
+
+| Front Right |
+|--------|
+|![IMG_20210209_083859](https://user-images.githubusercontent.com/57298545/107334414-f875e480-6ab6-11eb-9e04-c3190adce9fc.jpg)|
+
+| Front Left |
+|--------|
+|![IMG_20210209_083912](https://user-images.githubusercontent.com/57298545/107334416-f90e7b00-6ab6-11eb-81c4-429d74a9faec.jpg)|
+
+| Rear |
+|--------|
+|![IMG_20210209_083929](https://user-images.githubusercontent.com/57298545/107334412-f7dd4e00-6ab6-11eb-9475-58213e905a96.jpg)|
 
 ## Electronics hardware
 The electronics hardware integrates the following components:
