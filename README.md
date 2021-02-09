@@ -1,22 +1,24 @@
 # splitFlapClockRadio
 
->**Table of contents**
->- [DIY brief](#diy-brief)
->- [3D design](#3d-design)
->  * [SplitFlapDigit](#splitflapdigit)
->  * [Cover](#cover)
->- [Electronics hardware](#electronics-hardware)
->- [SplitFlap controller firmware](#splitflap-controller-firmware)
->- [Main Control Software](#main-control-software)
->  * [Python backend](#python-backend)
->  * [Angular Frontend](#angular-frontend)
->    + [Dashboard](#dashboard)
->    + [Clock](#clock)
->    + [Radio](#radio)
->    + [Spotify](#spotify)
->    + [Sensors](#sensors)
->    + [Weather](#weather)
->    + [Historic](#historic)
+---
+**Table of contents**
+- [DIY brief](#diy-brief)
+- [3D design](#3d-design)
+  * [SplitFlapDigit](#splitflapdigit)
+  * [Cover](#cover)
+- [Electronics hardware](#electronics-hardware)
+- [SplitFlap controller firmware](#splitflap-controller-firmware)
+- [Main Control Software](#main-control-software)
+  * [Python backend](#python-backend)
+  * [Angular Frontend](#angular-frontend)
+    + [Dashboard](#dashboard)
+    + [Clock](#clock)
+    + [Radio](#radio)
+    + [Spotify](#spotify)
+    + [Sensors](#sensors)
+    + [Weather](#weather)
+    + [Historic](#historic)
+---
 
 The splitFlapClockRadio is an old stylish, classic alarm clock with up to date features, such as automatic time adjustment, weather forecast, air quality sensors, FM radio or Spotify playback. This is an updated version of the [Flip-Clock](https://github.com/iz2k/flip-clock), with slight modifications on the split-flap mechanics and integrated electronics. This device has been designed for DIY hobbists and can be manufactured for 100$ BOM.
 
