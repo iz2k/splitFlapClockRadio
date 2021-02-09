@@ -4,8 +4,7 @@ The splitFlapClockRadio is an old stylish, classic alarm clock with up to date f
 
 | Outside | Inside |
 |--------|--------|
-|![IMG_20210209_083904](https://user-images.githubusercontent.com/57298545/107334415-f90e7b00-6ab6-11eb-870c-04272cc194e6.jpg)|![IMG_20210208_174947 - copia](https://user-images.githubusercontent.com/57298545/107334590-307d2780-6ab7-11eb-8268-aec639bd62d2.jpg)
-|
+|![IMG_20210209_083904](https://user-images.githubusercontent.com/57298545/107334415-f90e7b00-6ab6-11eb-870c-04272cc194e6.jpg)|![IMG_20210208_174947 - copia](https://user-images.githubusercontent.com/57298545/107334590-307d2780-6ab7-11eb-8268-aec639bd62d2.jpg)|
 
 The splitFlapClockRadio features the following characteristics:
 - Local time and weather on 3D printed split-flaps.
